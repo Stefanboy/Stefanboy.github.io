@@ -7,6 +7,14 @@
     </url>
 
     <url>
+        <loc>http://yoursite.com/article/mysqlinstall/</loc>
+        <lastmod>2019-11-23T16:38:40.880Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
         <loc>http://yoursite.com/article/hexoinstall/</loc>
         <lastmod>2019-11-23T16:16:51.845Z</lastmod>
         <changefreq>weekly</changefreq>
