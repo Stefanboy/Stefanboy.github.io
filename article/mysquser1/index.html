@@ -149,14 +149,14 @@
 
                         
                         <li>
-                            <a href="/archive/">Archives</a>
+                            <a href="/tags/">Tags</a>
                         </li>
                         
                     
 
                         
                         <li>
-                            <a href="/tags/">Tags</a>
+                            <a href="/archive/">Archives</a>
                         </li>
                         
                     
@@ -348,7 +348,7 @@ DEFAULT CHARSET=latin1 表示字符集</p>
 `updatetime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 PRIMARY KEY (`id`),
 UNIQUE KEY `rzdata_un` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 </code></pre>
 </li>
 <li>
@@ -395,13 +395,49 @@ select查询时不要写 * ，应该直接加具体字段<br>
 生产数据过过查询时，记得加上limit关键字，限制条数<br>
 如果误删，可以从binlog文件恢复 arch/mysql-bin.000001<br>
 生产上一般是读写分离</p>
-<pre><code>添加到主库，查询在从库中查</code></pre>
+<pre><code>添加到主库，查询在从库中查
+</code></pre>
+<h3 id="datetime-timestamp区别">datetime timestamp区别</h3>
+<ul>
+<li>
+<p>两者的存储方式不一样</p>
+<pre><code>`对于TIMESTAMP：
+它把客户端插入的时间从 当前时区 转化为UTC（世界标准时间）进行存储。
+查询时，将其又转化为客户端当前时区进行返回。
+
+`对于DATETIME：
+不做任何改变，基本上是原样输入和输出。
+</code></pre>
+</li>
+<li>
+<p>两者所能存储的时间范围不一样</p>
+<pre><code>timestamp所能存储的时间范围为：'1970-01-01 00:00:01.000000' 到 '2038-01-19 03:14:07.999999'。
+
+datetime所能存储的时间范围为：'1000-01-01 00:00:00.000000' 到 '9999-12-31 23:59:59.999999'。
+</code></pre>
+</li>
+<li>
+<p>总结：TIMESTAMP和DATETIME除了存储范围和存储方式不一样，没有太大区别。当然，对于跨时区的业务，TIMESTAMP更为合适。</p>
+</li>
+</ul>
+<h3 id="engineinnodb-是什么myisam区别是什么">ENGINE=InnoDB 是什么？MyISAM区别是什么</h3>
+<ul>
+<li>InnoDB<br>
+它提供了事务控制能力功能，它确保一组命令全部执行成功，或者当任何一个命令出现错误时所有命令的结果都被回退，可以想像在电子银行中事务控制能力是非常重要的。支持COMMIT、ROLLBACK和其他事务特性。最新版本的Mysql已经计划移除对BDB的支持，转而全力发展InnoDB。</li>
+<li>区别<br>
+MyISAM类型不支持事务处理等高级处理，而InnoDB类型支持。<br>
+MyISAM类型的表强调的是性能，其执行数度比InnoDB类型更快，但是不提供事务支持，而InnoDB提供事务支持，外键等高级数据库功能。</li>
+</ul>
 
                 
 
                 <hr>
                 <!-- Pager -->
                 <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/article/mysquser2/" data-toggle="tooltip" data-placement="top" title="MySQL使用二">&larr; Previous Post</a>
+                        </li>
                     
                     
                         <li class="next">
@@ -455,7 +491,7 @@ select查询时不要写 * ，应该直接加具体字段<br>
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#欢迎来到stefanboy的博客感谢大家对我的支持"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">&#x6B22;&#x8FCE;&#x6765;&#x5230;Stefanboy&#x7684;&#x535A;&#x5BA2;&#xFF0C;&#x611F;&#x8C22;&#x5927;&#x5BB6;&#x5BF9;&#x6211;&#x7684;&#x652F;&#x6301;.</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#mysql使用"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">MySQL&#x4F7F;&#x7528;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#允许外面机器各种客户端连接mysql"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text">&#x5141;&#x8BB8;&#x5916;&#x9762;&#x673A;&#x5668;&#xFF08;&#x5404;&#x79CD;&#x5BA2;&#x6237;&#x7AEF;&#xFF09;&#x8FDE;&#x63A5;mysql</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#命令行登录mysql"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text">&#x547D;&#x4EE4;&#x884C;&#x767B;&#x5F55;mysql</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#mysql的字段类型"><span class="toc-nav-number">2.3.</span> <span class="toc-nav-text">mysql&#x7684;&#x5B57;&#x6BB5;&#x7C7B;&#x578B;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#sql类型"><span class="toc-nav-number">2.4.</span> <span class="toc-nav-text">sql&#x7C7B;&#x578B;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#建表规划"><span class="toc-nav-number">2.5.</span> <span class="toc-nav-text">&#x5EFA;&#x8868;&#x89C4;&#x5212;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#简单的增删改查"><span class="toc-nav-number">2.6.</span> <span class="toc-nav-text">&#x7B80;&#x5355;&#x7684;&#x589E;&#x5220;&#x6539;&#x67E5;</span></a></li></ol></li></ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#欢迎来到stefanboy的博客感谢大家对我的支持"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">&#x6B22;&#x8FCE;&#x6765;&#x5230;Stefanboy&#x7684;&#x535A;&#x5BA2;&#xFF0C;&#x611F;&#x8C22;&#x5927;&#x5BB6;&#x5BF9;&#x6211;&#x7684;&#x652F;&#x6301;.</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#mysql使用"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">MySQL&#x4F7F;&#x7528;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#允许外面机器各种客户端连接mysql"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text">&#x5141;&#x8BB8;&#x5916;&#x9762;&#x673A;&#x5668;&#xFF08;&#x5404;&#x79CD;&#x5BA2;&#x6237;&#x7AEF;&#xFF09;&#x8FDE;&#x63A5;mysql</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#命令行登录mysql"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text">&#x547D;&#x4EE4;&#x884C;&#x767B;&#x5F55;mysql</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#mysql的字段类型"><span class="toc-nav-number">2.3.</span> <span class="toc-nav-text">mysql&#x7684;&#x5B57;&#x6BB5;&#x7C7B;&#x578B;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#sql类型"><span class="toc-nav-number">2.4.</span> <span class="toc-nav-text">sql&#x7C7B;&#x578B;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#建表规划"><span class="toc-nav-number">2.5.</span> <span class="toc-nav-text">&#x5EFA;&#x8868;&#x89C4;&#x5212;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#简单的增删改查"><span class="toc-nav-number">2.6.</span> <span class="toc-nav-text">&#x7B80;&#x5355;&#x7684;&#x589E;&#x5220;&#x6539;&#x67E5;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#datetime-timestamp区别"><span class="toc-nav-number">2.7.</span> <span class="toc-nav-text">datetime timestamp&#x533A;&#x522B;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#engineinnodb-是什么myisam区别是什么"><span class="toc-nav-number">2.8.</span> <span class="toc-nav-text">ENGINE=InnoDB &#x662F;&#x4EC0;&#x4E48;&#xFF1F;MyISAM&#x533A;&#x522B;&#x662F;&#x4EC0;&#x4E48;</span></a></li></ol></li></ol>
         
         </div>
       </aside>

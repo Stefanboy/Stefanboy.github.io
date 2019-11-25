@@ -7,8 +7,16 @@
     </url>
 
     <url>
+        <loc>http://yoursite.com/article/mysquser2/</loc>
+        <lastmod>2019-11-25T17:07:20.638Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
         <loc>http://yoursite.com/article/mysquser1/</loc>
-        <lastmod>2019-11-24T06:33:55.308Z</lastmod>
+        <lastmod>2019-11-25T11:51:36.252Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
