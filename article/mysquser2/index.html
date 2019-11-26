@@ -142,13 +142,6 @@
 
                         
                         <li>
-                            <a href="/about/">About</a>
-                        </li>
-                        
-                    
-
-                        
-                        <li>
                             <a href="/tags/">Tags</a>
                         </li>
                         
@@ -157,6 +150,13 @@
                         
                         <li>
                             <a href="/archive/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
                         </li>
                         
                     
@@ -372,8 +372,46 @@ group by job
 </code></pre>
 </li>
 <li>
-<p>列出薪金 高于 公司平均薪金的所有员工号，员工姓名，所在部门名称，上级领导，工资，工资等级</p>
-<pre><code>select e.empno,e.ename,d.dname,p.ename,(e.sal+ifnull(e.comm,0)) mon,s.grade
+<p>列出薪金 高于 公司平均薪金的所有员工号，员工姓名，所在部门名称，上级领导，工资，工资等级<br>
+	把需求拆分开：先查询出平均工资，然后找出select的字段，然后在根据需求字段进行关联，然后自己关联自己查询出上级领导</p>
+<pre><code>过程1
+select
+ename,
+deptno,
+mgr,
+sal+ifnull(comm,0) as sal
+
+from emp
+where (sal+ifnull(comm,0)) &gt; (select avg(sal+ifnull(comm,0)) from emp);
+
+
+过程2
+select
+e.ename,
+e.deptno,d.dname,
+e.mgr,
+e.sal+ifnull(e.comm,0) as sal
+
+from emp e
+left join dept d on e.deptno=d.deptno
+where (sal+ifnull(comm,0)) &gt; (select avg(sal+ifnull(comm,0)) from emp);
+
+自己 a 关联自己 b
+select
+e.ename,
+e.deptno,d.dname,
+e.mgr,m.ename,
+e.sal+ifnull(e.comm,0) as sal
+
+from emp e
+left join dept d on e.deptno=d.deptno
+left join emp m on e.mgr=m.empno
+where (e.sal+ifnull(e.comm,0)) &gt; (select avg(sal+ifnull(comm,0)) from emp);
+
+
+最终结果
+关联salgrade表
+select e.empno,e.ename,d.dname,p.ename,(e.sal+ifnull(e.comm,0)) mon,s.grade
 from emp e
 left join dept d
 on e.deptno=d.deptno
@@ -390,7 +428,29 @@ where (e.sal+ifnull(e.comm,0)) &gt; (select avg(sal+ifnull(comm,0)) from emp);
 from emp e
 left join dept d
 on e.empno = d.deptno
-where e.sal+ifnull(e.comm,0) &gt; all(select sal+ifnull(comm,0) from emp where deptno='30');</code></pre>
+where e.sal+ifnull(e.comm,0) &gt; all(select sal+ifnull(comm,0) from emp where deptno='30');
+</code></pre>
+</li>
+<li>
+<p>哪些部门的哪些职业的薪水和，最高的职业是什么<br>
+先按照部门跟职业分组查询出薪水和，然后将查询出的结果作为表，进行查询出最高的职业是什么</p>
+<pre><code>按照部门和职业分组，查询薪水和
+create view sal as select deptno,job,sum(e.sal+ifnull(e.comm,0)) mon
+from emp e
+group by deptno,job
+
+查询出最高的职业是什么
+select a.* 
+
+from sal a  
+
+where
+(
+select count(*) from sal b 
+where a.deptno = b.deptno
+and a.sal &lt; b.sal
+
+)=0</code></pre>
 </li>
 </ul>
 
