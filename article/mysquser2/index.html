@@ -142,7 +142,7 @@
 
                         
                         <li>
-                            <a href="/tags/">Tags</a>
+                            <a href="/about/">About</a>
                         </li>
                         
                     
@@ -156,7 +156,7 @@
 
                         
                         <li>
-                            <a href="/about/">About</a>
+                            <a href="/tags/">Tags</a>
                         </li>
                         
                     
@@ -373,7 +373,7 @@ group by job
 </li>
 <li>
 <p>列出薪金 高于 公司平均薪金的所有员工号，员工姓名，所在部门名称，上级领导，工资，工资等级<br>
-	把需求拆分开：先查询出平均工资，然后找出select的字段，然后在根据需求字段进行关联，然后自己关联自己查询出上级领导</p>
+	把需求拆分开：先查询出平均工资，然后找出select的字段，然后在根据需求字段进行关联，然后自己关联自己查询出上级领导,最后关联工资等级表</p>
 <pre><code>过程1
 select
 ename,
@@ -459,6 +459,10 @@ and a.sal &lt; b.sal
                 <hr>
                 <!-- Pager -->
                 <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/article/rundeck/" data-toggle="tooltip" data-placement="top" title="Rundeck部署使用">&larr; Previous Post</a>
+                        </li>
                     
                     
                         <li class="next">
