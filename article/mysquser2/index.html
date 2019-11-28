@@ -142,6 +142,13 @@
 
                         
                         <li>
+                            <a href="/archive/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
                             <a href="/about/">About</a>
                         </li>
                         
@@ -150,13 +157,6 @@
                         
                         <li>
                             <a href="/tags/">Tags</a>
-                        </li>
-                        
-                    
-
-                        
-                        <li>
-                            <a href="/archive/">Archives</a>
                         </li>
                         
                     
@@ -215,12 +215,22 @@
                 <h2 id="欢迎来到stefanboy的博客感谢大家对我的支持">欢迎来到Stefanboy的博客，感谢大家对我的支持.</h2>
 <h2 id="mysql使用二">MySQL使用二</h2>
 <h3 id="单表查询">单表查询</h3>
-<p>表结构</p>
+<p>*表结构</p>
 <p><img src="/img/mysql2/table1.png" alt="表结构"></p>
 <pre><code>求年龄大于20，各个名称的年龄和
 select name,sum(age) from testdata where age &gt; 20 group by name;
+
 求各个名称的年龄和大于25岁
 select name,sum(age) from testdata group by name having sum(age) &gt; 25;
+第二种写法(将查询结果作为表，进行子查询过滤，还是尽量少用子查询，效率低)
+select * from 
+(select name,sum(age) sumage from testdata group by name) as t 
+where t.sumage &gt; 25
+
+合并两张表（不要重复的）
+select id,aname from a
+union
+select id,bname from b
 </code></pre>
 <h3 id="多表查询">多表查询</h3>
 <ul>
@@ -243,6 +253,10 @@ limit xxx;</p>
 内连接
 两张表都存在的显示，不存在的不显示
 </code></pre>
+</li>
+<li>
+<p>关联时出现笛卡尔积的一种特殊情况<br>
+比如做关联查询  a.aid = b.bid,如果aid有1w个null值，bid有10w个null值，那会产生笛卡尔积 1w * 10w个数据，那还得了，所以关联的时候一定要注意这种情况，排除null值</p>
 </li>
 <li>
 <p>sum(age)和count(*)的区别</p>
