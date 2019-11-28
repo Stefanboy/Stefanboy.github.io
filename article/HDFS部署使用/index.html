@@ -92,7 +92,7 @@
                             
                         </div>
                         <h1>HDFS部署使用</h1>
-                        <h2 class="subheading">How to use Rundeck</h2>
+                        <h2 class="subheading">How to use HDFS</h2>
                         <span class="meta">
                             Posted by Stefanboy on
                             2016-11-28
@@ -142,7 +142,7 @@
 
                         
                         <li>
-                            <a href="/archive/">Archives</a>
+                            <a href="/about/">About</a>
                         </li>
                         
                     
@@ -156,7 +156,7 @@
 
                         
                         <li>
-                            <a href="/about/">About</a>
+                            <a href="/archive/">Archives</a>
                         </li>
                         
                     
@@ -227,6 +227,19 @@ drwxr-xr-x 8 root root      4096 Nov 17 00:24 jdk1.8.0_121
 
 解压
 [root@JD java]# tar -zxvf jdk-8u45-linux-x64.gz
+</code></pre>
+<p><strong>必须修正jdk的用户和用户组权限</strong></p>
+<pre><code>[root@JD java]# ll
+total 355844
+drwxr-xr-x 8   10  143      4096 Apr 11  2015 jdk1.8.0_45
+-rw-r--r-- 1 root root 173271626 Nov 28 14:13 jdk-8u45-linux-x64.gz
+
+修正用户和用户组权限
+[root@JD java]# chown -R root:root jdk1.8.0_45
+[root@JD java]# ll
+total 355844
+drwxr-xr-x 8 root root      4096 Apr 11  2015 jdk1.8.0_45
+-rw-r--r-- 1 root root 173271626 Nov 28 14:13 jdk-8u45-linux-x64.gz
 
 全局配置环境变量
 export JAVA_HOME=/usr/java/jdk1.8.0_45
@@ -562,6 +575,92 @@ secondarynamenode 第二名称节点 老二  h+1<br>
 大数据组件基本都是主从架构 hdfs<br>
 hbase（读写请求<strong>不经过</strong>老大 master进程）</p>
 <p>hdfs的web页面：<a href="http://JD:50070" target="_blank" rel="noopener">http://JD:50070</a></p>
+<h2 id="hadoop-fs的常规命令">hadoop fs的常规命令</h2>
+<pre><code>创建文件
+[hadoop@JD ~]$ echo &quot;111111&quot; &gt; aaa.txt
+[hadoop@JD ~]$ ll
+total 4
+-rw-rw-r-- 1 hadoop hadoop  7 Nov 28 22:06 aaa.txt
+drwxrwxr-x 3 hadoop hadoop 48 Nov 28 17:32 app
+drwxrwxr-x 2 hadoop hadoop  6 Nov 28 17:20 data
+drwxrwxr-x 2 hadoop hadoop  6 Nov 28 17:20 lib
+drwxrwxr-x 2 hadoop hadoop  6 Nov 28 17:20 log
+drwxrwxr-x 2 hadoop hadoop 42 Nov 28 17:22 software
+drwxrwxr-x 2 hadoop hadoop  6 Nov 28 17:20 sourcecode
+drwxrwxr-x 2 hadoop hadoop  6 Nov 28 17:20 tmp
+
+上传文件
+[hadoop@JD ~]$ hadoop fs -put aaa.txt /
+查看文件或文件夹
+[hadoop@JD ~]$ hadoop fs -ls   /   
+-rw-r--r--   1 hadoop supergroup          7 2019-11-28 22:07 /aaa.txt
+
+创建文件夹
+[hadoop@JD ~]$ hadoop fs -mkdir /bigdata
+[hadoop@JD ~]$ hadoop fs -ls /
+-rw-r--r--   1 hadoop supergroup          7 2019-11-28 22:07 /aaa.txt
+drwxr-xr-x   - hadoop supergroup          0 2019-11-28 22:11 /bigdata
+
+下载文件
+[hadoop@JD ~]$ hadoop fs -get /aaa.txt
+
+删除文件
+[hadoop@JD ~]$ hadoop fs -rm /aaa.txt
+[hadoop@JD ~]$ hadoop fs -ls /       
+drwxr-xr-x   - hadoop supergroup          0 2019-11-28 22:11 /bigdata
+</code></pre>
+<h2 id="配置文件的官方网址">配置文件的官方网址</h2>
+<p>hdfs-site.xml文件：<a href="https://hadoop.apache.org/docs/r2.10.0/hadoop-project-dist/hadoop-hdfs/hdfs-default.xml" target="_blank" rel="noopener">https://hadoop.apache.org/docs/r2.10.0/hadoop-project-dist/hadoop-hdfs/hdfs-default.xml</a><br>
+core-site.xml文件：<a href="https://hadoop.apache.org/docs/r2.10.0/hadoop-project-dist/hadoop-common/core-default.xml" target="_blank" rel="noopener">https://hadoop.apache.org/docs/r2.10.0/hadoop-project-dist/hadoop-common/core-default.xml</a></p>
+<h2 id="如何保证数据质量">如何保证数据质量</h2>
+<p>本章节仅仅介绍解决数据量不相同的情况，内容不相同还不会。。。<br>
+<img src="/img/hdfs/1.png" alt="">	<br>
+存储是大数据的基石，如果hdfs不挂，保存的数据真的准确吗？<br>
+sqoop抽数据 无error 丢数据的 概率小<br>
+如果存储disk挂了，数据还准确吗？==》<br>
+如何校验是否准确 ？ 如何让其准确？  机制 是不是必须要有！<br>
+数据质量校验：先校验数量是否相等，再校验内容是否相等<br>
+数据量校验 count<br>
+<strong>数据量相同–》数据量不相同  重刷机制 补or删</strong>  spark 95%–》数据内容相同  5% 抽样<br>
+		  查询出上游所有字段 下游只需查询出主键即可<br>
+mysql    所有的字段 主键 a表<br>
+	      phoenix  主键  b表</p>
+<pre><code>      a full outer join b
+         
+	多                            少
+	1356                         135？
+	135？没有来得及同步到下游    1356 没有来得及删 或者其他bug造成的
+</code></pre>
+<p>a表所有数据</p>
+<pre><code>1	ruoze1	18
+2	ruoze2	19
+3	ruoze3	20
+7   ruoze7  22
+</code></pre>
+<p>b表主键</p>
+<pre><code>1
+3
+5
+6
+</code></pre>
+<p>进行full outer join结果为</p>
+<pre><code>	aid               bid
+	1  ruoze1	 18       1
+	2  ruoze2	 19       null
+	3  ruoze3	 20       3
+	7  ruoze7   22       null 
+	null null   null      5
+	null null   null      6 
+</code></pre>
+<p>然后查询出aid为null的数据来，aid为null证明下游数据比上游数据多，需要删除下游数据</p>
+<pre><code>select from t where aid=null  下游数据多的  需要根据bid 构建 
+delete from b where bid=5     
+delete from b where bid=6
+</code></pre>
+<p>查询出bid为null的数据来，bid为null证明下游数据比上游数据少，需要根据上游数据补充下游数据</p>
+<pre><code>select from t where bid=null  下游数据少的  需要根据上游的所有字段补充
+insert into 2	 ruoze2	 19 
+insert into 7   ruoze7  22</code></pre>
 
                 
 
@@ -621,7 +720,7 @@ hbase（读写请求<strong>不经过</strong>老大 master进程）</p>
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#欢迎来到stefanboy的博客感谢大家对我的支持"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">&#x6B22;&#x8FCE;&#x6765;&#x5230;Stefanboy&#x7684;&#x535A;&#x5BA2;&#xFF0C;&#x611F;&#x8C22;&#x5927;&#x5BB6;&#x5BF9;&#x6211;&#x7684;&#x652F;&#x6301;.</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#安装配置jdk-hosts-ssh"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">&#x5B89;&#x88C5;&#x914D;&#x7F6E;jdk&#x3001;hosts&#x3001;ssh</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#安装配置jdk"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text">&#x5B89;&#x88C5;&#x914D;&#x7F6E;jdk</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#配置hosts"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text">&#x914D;&#x7F6E;hosts</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#配置ssh"><span class="toc-nav-number">2.3.</span> <span class="toc-nav-text">&#x914D;&#x7F6E;ssh</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#hadoop介绍"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">hadoop&#x4ECB;&#x7ECD;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#简单介绍"><span class="toc-nav-number">3.1.</span> <span class="toc-nav-text">&#x7B80;&#x5355;&#x4ECB;&#x7ECD;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#hadoop软件"><span class="toc-nav-number">3.2.</span> <span class="toc-nav-text">hadoop&#x8F6F;&#x4EF6;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#hdfs的伪分布式部署"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">hdfs&#x7684;&#x4F2A;&#x5206;&#x5E03;&#x5F0F;&#x90E8;&#x7F72;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#配置hadoop的个人环境变量"><span class="toc-nav-number">4.1.</span> <span class="toc-nav-text">&#x914D;&#x7F6E;hadoop&#x7684;&#x4E2A;&#x4EBA;&#x73AF;&#x5883;&#x53D8;&#x91CF;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#格式化"><span class="toc-nav-number">4.2.</span> <span class="toc-nav-text">&#x683C;&#x5F0F;&#x5316;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#第一次启动"><span class="toc-nav-number">4.3.</span> <span class="toc-nav-text">&#x7B2C;&#x4E00;&#x6B21;&#x542F;&#x52A8;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#配置dn-snn都以-ruozedata001启动"><span class="toc-nav-number">4.4.</span> <span class="toc-nav-text">&#x914D;&#x7F6E;DN SNN&#x90FD;&#x4EE5; ruozedata001&#x542F;&#x52A8;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#312官网的参数文件-在哪里找"><span class="toc-nav-number">4.5.</span> <span class="toc-nav-text">3.12&#x5B98;&#x7F51;&#x7684;&#x53C2;&#x6570;&#x6587;&#x4EF6; &#x5728;&#x54EA;&#x91CC;&#x627E;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#介绍三个节点和web登录路径"><span class="toc-nav-number">4.6.</span> <span class="toc-nav-text">&#x4ECB;&#x7ECD;&#x4E09;&#x4E2A;&#x8282;&#x70B9;&#x548C;web&#x767B;&#x5F55;&#x8DEF;&#x5F84;</span></a></li></ol></li></ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#欢迎来到stefanboy的博客感谢大家对我的支持"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">&#x6B22;&#x8FCE;&#x6765;&#x5230;Stefanboy&#x7684;&#x535A;&#x5BA2;&#xFF0C;&#x611F;&#x8C22;&#x5927;&#x5BB6;&#x5BF9;&#x6211;&#x7684;&#x652F;&#x6301;.</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#安装配置jdk-hosts-ssh"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">&#x5B89;&#x88C5;&#x914D;&#x7F6E;jdk&#x3001;hosts&#x3001;ssh</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#安装配置jdk"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text">&#x5B89;&#x88C5;&#x914D;&#x7F6E;jdk</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#配置hosts"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text">&#x914D;&#x7F6E;hosts</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#配置ssh"><span class="toc-nav-number">2.3.</span> <span class="toc-nav-text">&#x914D;&#x7F6E;ssh</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#hadoop介绍"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">hadoop&#x4ECB;&#x7ECD;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#简单介绍"><span class="toc-nav-number">3.1.</span> <span class="toc-nav-text">&#x7B80;&#x5355;&#x4ECB;&#x7ECD;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#hadoop软件"><span class="toc-nav-number">3.2.</span> <span class="toc-nav-text">hadoop&#x8F6F;&#x4EF6;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#hdfs的伪分布式部署"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">hdfs&#x7684;&#x4F2A;&#x5206;&#x5E03;&#x5F0F;&#x90E8;&#x7F72;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#配置hadoop的个人环境变量"><span class="toc-nav-number">4.1.</span> <span class="toc-nav-text">&#x914D;&#x7F6E;hadoop&#x7684;&#x4E2A;&#x4EBA;&#x73AF;&#x5883;&#x53D8;&#x91CF;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#格式化"><span class="toc-nav-number">4.2.</span> <span class="toc-nav-text">&#x683C;&#x5F0F;&#x5316;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#第一次启动"><span class="toc-nav-number">4.3.</span> <span class="toc-nav-text">&#x7B2C;&#x4E00;&#x6B21;&#x542F;&#x52A8;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#配置dn-snn都以-ruozedata001启动"><span class="toc-nav-number">4.4.</span> <span class="toc-nav-text">&#x914D;&#x7F6E;DN SNN&#x90FD;&#x4EE5; ruozedata001&#x542F;&#x52A8;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#312官网的参数文件-在哪里找"><span class="toc-nav-number">4.5.</span> <span class="toc-nav-text">3.12&#x5B98;&#x7F51;&#x7684;&#x53C2;&#x6570;&#x6587;&#x4EF6; &#x5728;&#x54EA;&#x91CC;&#x627E;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#介绍三个节点和web登录路径"><span class="toc-nav-number">4.6.</span> <span class="toc-nav-text">&#x4ECB;&#x7ECD;&#x4E09;&#x4E2A;&#x8282;&#x70B9;&#x548C;web&#x767B;&#x5F55;&#x8DEF;&#x5F84;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#hadoop-fs的常规命令"><span class="toc-nav-number">5.</span> <span class="toc-nav-text">hadoop fs&#x7684;&#x5E38;&#x89C4;&#x547D;&#x4EE4;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#配置文件的官方网址"><span class="toc-nav-number">6.</span> <span class="toc-nav-text">&#x914D;&#x7F6E;&#x6587;&#x4EF6;&#x7684;&#x5B98;&#x65B9;&#x7F51;&#x5740;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#如何保证数据质量"><span class="toc-nav-number">7.</span> <span class="toc-nav-text">&#x5982;&#x4F55;&#x4FDD;&#x8BC1;&#x6570;&#x636E;&#x8D28;&#x91CF;</span></a></li></ol>
         
         </div>
       </aside>
