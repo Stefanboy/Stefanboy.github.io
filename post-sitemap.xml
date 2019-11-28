@@ -7,6 +7,14 @@
     </url>
 
     <url>
+        <loc>http://yoursite.com/article/HDFS%E9%83%A8%E7%BD%B2%E4%BD%BF%E7%94%A8/</loc>
+        <lastmod>2019-11-28T10:28:16.974Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
         <loc>http://yoursite.com/article/mysquser2/</loc>
         <lastmod>2019-11-27T10:32:03.336Z</lastmod>
         <changefreq>weekly</changefreq>

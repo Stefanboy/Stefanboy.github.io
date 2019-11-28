@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/ironman-draw.png">
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <title>
+        
+          HDFS部署使用 - Stefanboy | Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://yoursite.com/article/HDFS部署使用/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS --> 
+    <link rel="stylesheet" href="/css/beantech.min.css">
+
+    <link rel="stylesheet" href="/css/donate.css">
+    
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <link rel="stylesheet" href="/css/widget.css">
+
+    <link rel="stylesheet" href="/css/rocket.css">
+
+    <link rel="stylesheet" href="/css/signature.css">
+
+    <link rel="stylesheet" href="/css/toc.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+	<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        
+            background-image: url('/img/article_header/article_header.png')
+            /*post*/
+        
+    }
+    
+</style>
+
+<header class="intro-header" >
+    <!-- Signature -->
+    <div id="signature">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                
+                    <div class="post-heading">
+                        <div class="tags">
+                            
+                              <a class="tag" href="/tags/#Hadoop" title="Hadoop">Hadoop</a>
+                            
+                        </div>
+                        <h1>HDFS部署使用</h1>
+                        <h2 class="subheading">How to use Rundeck</h2>
+                        <span class="meta">
+                            Posted by Stefanboy on
+                            2016-11-28
+                        </span>
+                    </div>
+                
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+	
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">StefanboyBlog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archive/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Modify by Yu-Hsuan Yen -->
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h2 id="欢迎来到stefanboy的博客感谢大家对我的支持">欢迎来到Stefanboy的博客，感谢大家对我的支持.</h2>
+<h2 id="安装配置jdk-hosts-ssh">安装配置jdk、hosts、ssh</h2>
+<h3 id="安装配置jdk">安装配置jdk</h3>
+<pre><code>上传tar.gz包
+[root@JD /]# cd /usr/java
+[root@JD java]# ll
+total 355840
+drwxr-xr-x 8 root root      4096 Nov 17 00:24 jdk1.8.0_121
+-rw-r--r-- 1 root root 191100510 Nov 14 01:25 jdk1.8.0_121.zip
+-rw-r--r-- 1 root root 173271626 Nov 28 14:13 jdk-8u45-linux-x64.gz
+[root@JD java]# pwd
+/usr/java
+
+解压
+[root@JD java]# tar -zxvf jdk-8u45-linux-x64.gz
+
+全局配置环境变量
+export JAVA_HOME=/usr/java/jdk1.8.0_45
+export PATH=$JAVA_HOME/bin:$PATH
+
+使环境变量生效
+[root@JD java]# source /etc/profile
+
+查看是否生效
+[root@JD java]# which java
+/usr/java/jdk1.8.0_45/bin/java
+</code></pre>
+<h3 id="配置hosts">配置hosts</h3>
+<p>切记，<strong>前两行</strong>系统自带的千万<strong>不要删</strong></p>
+<pre><code>[root@JD java]# cat /etc/hosts
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+
+
+192.168.0.3 JD
+</code></pre>
+<h3 id="配置ssh">配置ssh</h3>
+<p>使用<strong>root用户</strong>配置ssh时，<strong>不需要</strong>给authorized_keys赋权限；使用<strong>非root用户</strong>配置ssh时，<strong>必须</strong>要给authorized_keys赋<strong>0600权限</strong>，否则配置的ssh不生效</p>
+<pre><code>创建用户
+[root@JD /]# useradd hadoop 
+[root@JD /]# id hadoop
+uid=1002(hadoop) gid=1003(hadoop) groups=1003(hadoop)
+
+切换用户
+[root@JD ~]# su - hadoop
+Last failed login: Thu Nov 28 12:17:14 CST 2019 from 40.76.65.78 on ssh:notty
+There were 114 failed login attempts since the last successful login.
+[hadoop@JD ~]$ pwd
+/home/hadoop
+
+生成公私钥
+[hadoop@JD ~]$ ssh-keygen
+Generating public/private rsa key pair.
+Enter file in which to save the key (/home/hadoop/.ssh/id_rsa): 
+Created directory '/home/hadoop/.ssh'.
+Enter passphrase (empty for no passphrase): 
+Enter same passphrase again: 
+Your identification has been saved in /home/hadoop/.ssh/id_rsa.
+Your public key has been saved in /home/hadoop/.ssh/id_rsa.pub.
+The key fingerprint is:
+SHA256:saXNfI0OAlf988yUl7lv0mwHjOaOzFpIdUjo6KOyXz8 hadoop@JD
+The key's randomart image is:
++---[RSA 2048]----+
+|         .o.     |
+|        .o ..    |
+|      .oo + ..  +|
+|      .o.X . oo+o|
+|     .  S = oo.*o|
+|      o. o +o o.+|
+|     .... .o.  +.|
+|  . .. .E+ .. . B|
+|  .+.   oo+..  +.|
++----[SHA256]-----+
+
+查看隐藏文件
+[hadoop@JD ~]$ ll -a
+total 12
+drwx------  3 hadoop hadoop  70 Nov 28 15:30 .
+drwxr-xr-x. 5 root   root    43 Nov 28 15:08 ..
+-rw-r--r--  1 hadoop hadoop  18 Apr 11  2018 .bash_logout
+-rw-r--r--  1 hadoop hadoop 193 Apr 11  2018 .bash_profile
+-rw-r--r--  1 hadoop hadoop 231 Apr 11  2018 .bashrc
+drwx------  2 hadoop hadoop  36 Nov 28 15:30 .ssh
+
+进入.ssh文件
+[hadoop@JD ~]$ cd .ssh
+查看生成的公私钥
+[hadoop@JD .ssh]$ ll
+total 8
+-rw------- 1 hadoop hadoop 1675 Nov 28 15:30 id_rsa
+-rw-r--r-- 1 hadoop hadoop  391 Nov 28 15:30 id_rsa.pub
+
+将公钥放置到对方机器的用户目录下
+[hadoop@JD .ssh]$ cat id_rsa.pub &gt;&gt; authorized_keys
+[hadoop@JD .ssh]$ ll
+total 12
+-rw-rw-r-- 1 hadoop hadoop  391 Nov 28 15:32 authorized_keys
+-rw------- 1 hadoop hadoop 1675 Nov 28 15:30 id_rsa
+-rw-r--r-- 1 hadoop hadoop  391 Nov 28 15:30 id_rsa.pub
+
+测试ssh是否生效，我们看到还是需要输入密码，也就没生效，因为是非root用户，需要给authorized_keys赋0600权限
+
+[hadoop@JD .ssh]$ ssh JD date
+The authenticity of host 'jd (192.168.0.3)' can't be established.
+ECDSA key fingerprint is SHA256:OLqoaMxlGFbCq4sC9pYgF+FdbcXHbEbtSrnMiGGFbVw.
+ECDSA key fingerprint is MD5:d3:5b:4a:ef:8e:00:41:a0:5e:80:ef:75:76:8a:a3:49.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added 'jd,192.168.0.3' (ECDSA) to the list of known hosts.
+hadoop@jd's password: 
+Permission denied, please try again.
+hadoop@jd's password: 
+Permission denied, please try again.
+hadoop@jd's password: 
+Permission denied (publickey,gssapi-keyex,gssapi-with-mic,password).
+
+赋0600权限
+[hadoop@JD .ssh]$ chmod 0600 authorized_keys  
+测试ssh，成功
+[hadoop@JD .ssh]$ ssh JD date               
+Thu Nov 28 15:37:31 CST 2019
+</code></pre>
+<h2 id="hadoop介绍">hadoop介绍</h2>
+<h3 id="简单介绍">简单介绍</h3>
+<ul>
+<li>
+<p>地址<br>
+<a href="http://hadoop.apache.org" target="_blank" rel="noopener">hadoop.apache.org</a><br>
+安装部署地址：<a href="https://hadoop.apache.org/docs/r2.10.0/hadoop-project-dist/hadoop-common/SingleCluster.html" target="_blank" rel="noopener">https://hadoop.apache.org/docs/r2.10.0/hadoop-project-dist/hadoop-common/SingleCluster.html</a><br>
+配置文件地址：<a href="https://hadoop.apache.org/docs/r2.10.0/hadoop-project-dist/hadoop-hdfs/hdfs-default.xml" target="_blank" rel="noopener">https://hadoop.apache.org/docs/r2.10.0/hadoop-project-dist/hadoop-hdfs/hdfs-default.xml</a><br>
+apache的项目都是 <a href="http://xxx.apache.org" target="_blank" rel="noopener">xxx.apache.org</a>，例如 <a href="http://spark.apache.org" target="_blank" rel="noopener">spark.apache.org</a> <a href="http://kafka.apache.org" target="_blank" rel="noopener">kafka.apache.org</a></p>
+</li>
+<li>
+<p>什么是hadoop</p>
+<pre><code>广义:以apache hadoop软件为主的生态圈(hive sqoop flume spark flink hbase 。。。。)
+狭义:apache hadoop软件  开源的
+</code></pre>
+</li>
+<li>
+<p>apache hadoop软件:</p>
+<pre><code>1.x 基本不用
+2.x 企业主流==》CDH5.x系列
+3.x 尝试使用==》CDH6.x系列
+</code></pre>
+</li>
+<li>
+<p>tar包地址</p>
+</li>
+</ul>
+<p><a href="http://archive.cloudera.com/cdh5/cdh/5/" target="_blank" rel="noopener">http://archive.cloudera.com/cdh5/cdh/5/</a><br>
+<a href="http://archive.cloudera.com/cdh5/cdh/5/hadoop-2.6.0-cdh5.16.2.tar.gz" target="_blank" rel="noopener">http://archive.cloudera.com/cdh5/cdh/5/hadoop-2.6.0-cdh5.16.2.tar.gz</a></p>
+<pre><code>hadoop-2.6.0-cdh5.16.2.tar.gz 这个tar包，并不仅仅指的对应的是hadoop2.6.0，是apache hadoop2.6.0 + 以后的patch==apache hadoop2.9的版本
+</code></pre>
+<p>cdh对版本升级的日志</p>
+<p><a href="http://archive.cloudera.com/cdh5/cdh/5/hadoop-2.6.0-cdh5.16.2-changes.log" target="_blank" rel="noopener">http://archive.cloudera.com/cdh5/cdh/5/hadoop-2.6.0-cdh5.16.2-changes.log</a><br>
+<a href="http://archive.cloudera.com/cdh5/cdh/5/hbase-1.2.0-cdh5.16.2-changes.log" target="_blank" rel="noopener">http://archive.cloudera.com/cdh5/cdh/5/hbase-1.2.0-cdh5.16.2-changes.log</a></p>
+<p>选择cdh的好处:<strong>版本兼容性 不必考虑</strong></p>
+<h3 id="hadoop软件">hadoop软件</h3>
+<ul>
+<li>
+<p>hdfs<br>
+负责存储</p>
+</li>
+<li>
+<p>mapreduce<br>
+负责计算，作业，有价值的数据挖掘<br>
+但是由于开发难度大、复杂度高、代码量大、维护困难、计算速度慢，都使用hive sql 、spark、flink</p>
+</li>
+<li>
+<p>yarn<br>
+资源调度和作业调度</p>
+</li>
+</ul>
+<h2 id="hdfs的伪分布式部署">hdfs的伪分布式部署</h2>
+<ul>
+<li>
+<p>上传文件并修改用户、用户组</p>
+<pre><code>使用root用户
+[root@JD /]# ll
+total 522100
+-rw-r--r--    1 root root 434354462 Nov 28 14:15 hadoop-2.6.0-cdh5.16.2.tar.gz
+[root@JD /]# mv hadoop-2.6.0-cdh5.16.2.tar.gz  /home/hadoop/software/
+
+修改用户用户组
+[root@JD /]# chown hadoop:hadoop /home/hadoop/software/*
+
+查看是否修改成功
+[root@JD /]# ll /home/hadoop/software
+total 424176
+-rw-r--r-- 1 hadoop hadoop 434354462 Nov 28 14:15 hadoop-2.6.0-cdh5.16.2.tar.gz
+</code></pre>
+</li>
+<li>
+<p>创建文件夹并解压tar包</p>
+<pre><code>切换hadoop用户
+[root@JD ~]# su - hadoop
+Last login: Thu Nov 28 15:27:14 CST 2019 on pts/1
+Last failed login: Thu Nov 28 15:36:02 CST 2019 from 192.168.0.3 on ssh:notty
+There were 4 failed login attempts since the last successful login.
+[hadoop@JD ~]$ ll
+total 0
+[hadoop@JD ~]$ pwd
+/home/hadoop
+
+创建文件夹
+[hadoop@JD ~]$ mkdir app software data sourcecode log tmp lib
+[hadoop@JD ~]$ ll
+total 0
+drwxrwxr-x 2 hadoop hadoop 6 Nov 28 17:20 app#解压的文件夹 软连接
+drwxrwxr-x 2 hadoop hadoop 6 Nov 28 17:20 data#存放数据
+drwxrwxr-x 2 hadoop hadoop 6 Nov 28 17:20 lib#存放第三方jar
+drwxrwxr-x 2 hadoop hadoop 6 Nov 28 17:20 log#存放日志文件
+drwxrwxr-x 2 hadoop hadoop 6 Nov 28 17:20 software#存放tar包
+drwxrwxr-x 2 hadoop hadoop 6 Nov 28 17:20 sourcecode#源代码编译
+drwxrwxr-x 2 hadoop hadoop 6 Nov 28 17:20 tmp#临时文件
+
+解压tar包
+[hadoop@JD software]$ tar -zxvf hadoop-2.6.0-cdh5.16.2.tar.gz  -C ../app/
+
+[hadoop@JD software]$ cd ../app
+[hadoop@JD app]$ ll
+total 4
+drwxr-xr-x 14 hadoop hadoop 4096 Jun  3 19:11 hadoop-2.6.0-cdh5.16.2
+
+建立软连接
+[hadoop@JD app]$ ln -s hadoop-2.6.0-cdh5.16.2 hadoop 
+[hadoop@JD app]$ ll
+total 4
+lrwxrwxrwx  1 hadoop hadoop   22 Nov 28 17:32 hadoop -&gt; hadoop-2.6.0-cdh5.16.2
+drwxr-xr-x 14 hadoop hadoop 4096 Jun  3 19:11 hadoop-2.6.0-cdh5.16.2
+</code></pre>
+</li>
+<li>
+<p>配置jdk</p>
+<pre><code>[hadoop@JD app]$ cd hadoop/etc/hadoop/
+[hadoop@JD hadoop]$ vi hadoop-env.sh
+export JAVA_HOME=/usr/java/jdk1.8.0_45
+</code></pre>
+</li>
+<li>
+<p>配置文件<br>
+配置core-site.xml</p>
+<pre><code>	&lt;configuration&gt;
+		&lt;property&gt;
+			&lt;name&gt;fs.defaultFS&lt;/name&gt;
+			&lt;value&gt;hdfs://JD:9000&lt;/value&gt;
+		&lt;/property&gt;
+	&lt;/configuration&gt;
+</code></pre>
+<p>配置hdfs-site.xml</p>
+<pre><code>    &lt;configuration&gt;
+		&lt;property&gt;
+			&lt;name&gt;dfs.replication&lt;/name&gt;
+			&lt;value&gt;1&lt;/value&gt;
+		&lt;/property&gt;
+	&lt;/configuration&gt;
+</code></pre>
+</li>
+</ul>
+<h3 id="配置hadoop的个人环境变量">配置hadoop的个人环境变量</h3>
+<pre><code>[hadoop@JD ~]$ pwd
+/home/hadoop
+
+编辑.bashrc文件，配置hadoop环境变量
+[hadoop@JD ~]$ vi .bashrc
+export HADOOP_HOME=/home/hadoop/app/hadoop
+export PATH=${HADOOP_HOME}/bin:${HADOOP_HOME}/sbin:$PATH
+
+使环境变量生效
+[hadoop@JD ~]$ source .bashrc
+查看是否生效
+[hadoop@JD ~]$ which hadoop
+~/app/hadoop/bin/hadoop
+</code></pre>
+<h3 id="格式化">格式化</h3>
+<pre><code>格式化（看到successfully成功）
+[hadoop@JD ~]$ hdfs namenode -format	 
+ INFO common.Storage: Storage directory /tmp/hadoop-hadoop/dfs/name has been successfully formatted.
+</code></pre>
+<h3 id="第一次启动">第一次启动</h3>
+<p><strong>第一次启动时，我们发现还需要输入yes，并没有使用配置的JD主机名启动，而是使用localhost和0.0.0.0启动，所以我们要修改datanode和secondarynamenode的配置</strong></p>
+<p><strong>启动</strong><br>
+[hadoop@JD ~]$ <a href="http://start-dfs.sh" target="_blank" rel="noopener">start-dfs.sh</a></p>
+<p>19/11/28 17:59:52 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform… using builtin-java classes where applicable<br>
+Starting namenodes on [JD]<br>
+JD: starting namenode, logging to /home/hadoop/app/hadoop-2.6.0-cdh5.16.2/logs/hadoop-hadoop-namenode-JD.out<br>
+The authenticity of host ‘localhost (::1)’ can’t be established.<br>
+ECDSA key fingerprint is SHA256:OLqoaMxlGFbCq4sC9pYgF+FdbcXHbEbtSrnMiGGFbVw.<br>
+ECDSA key fingerprint is MD5:d3:5b:4a:ef:8e:00:41:a0:5e:80:ef:75:76:8a:a3:49.<br>
+<strong>Are you sure you want to continue connecting (yes/no)? yes</strong><br>
+<strong>localhost</strong>: Warning: Permanently added ‘localhost’ (ECDSA) to the list of known hosts.<br>
+localhost: starting <strong>datanode</strong>, logging to /home/hadoop/app/hadoop-2.6.0-cdh5.16.2/logs/hadoop-hadoop-datanode-JD.out<br>
+Starting secondary namenodes [0.0.0.0]<br>
+The authenticity of host ‘0.0.0.0 (0.0.0.0)’ can’t be established.<br>
+ECDSA key fingerprint is SHA256:OLqoaMxlGFbCq4sC9pYgF+FdbcXHbEbtSrnMiGGFbVw.<br>
+ECDSA key fingerprint is MD5:d3:5b:4a:ef:8e:00:41:a0:5e:80:ef:75:76:8a:a3:49.<br>
+<strong>Are you sure you want to continue connecting (yes/no)? yes</strong><br>
+<strong>0.0.0.0</strong>: Warning: Permanently added ‘0.0.0.0’ (ECDSA) to the list of known hosts.<br>
+0.0.0.0: starting <strong>secondarynamenode</strong>, logging to /home/hadoop/app/hadoop-2.6.0-cdh5.16.2/logs/hadoop-hadoop-secondarynamenode-JD.out<br>
+19/11/28 18:00:13 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform… using builtin-java classes where applicable<br>
+[hadoop@JD ~]$ jps<br>
+27185 NameNode<br>
+27467 SecondaryNameNode<br>
+27309 DataNode<br>
+27583 Jps</p>
+<h3 id="配置dn-snn都以-ruozedata001启动">配置DN SNN都以 ruozedata001启动</h3>
+<p>NN：JD  fs.defaultFS控制的在core-site.xml文件中<br>
+DN: slaves文件配置<br>
+SNN: hdfs-site.xml文件配置</p>
+<pre><code>[hadoop@JD hadoop]$ pwd
+/home/hadoop/app/hadoop/etc/hadoop
+删除localhost，替换为JD
+[hadoop@JD hadoop]$ vi slaves 
+JD
+
+添加属性
+[hadoop@JD hadoop]$ vi hdfs-site.xml 
+ &lt;property&gt;
+    &lt;name&gt;dfs.namenode.secondary.http-address&lt;/name&gt;
+    &lt;value&gt;JD:50090&lt;/value&gt;
+&lt;/property&gt;
+&lt;property&gt;
+    &lt;name&gt;dfs.namenode.secondary.https-address&lt;/name&gt;
+    &lt;value&gt;JD:50091&lt;/value&gt;
+&lt;/property&gt;
+</code></pre>
+<p>重新启动，都是使用JD启动，并且不用输入yes，jps发现进程都起来了，成功</p>
+<pre><code>[hadoop@JD ~]$ start-dfs.sh
+19/11/28 18:16:48 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Starting namenodes on [JD]
+JD: starting namenode, logging to /home/hadoop/app/hadoop-2.6.0-cdh5.16.2/logs/hadoop-hadoop-namenode-JD.out
+JD: starting datanode, logging to /home/hadoop/app/hadoop-2.6.0-cdh5.16.2/logs/hadoop-hadoop-datanode-JD.out
+Starting secondary namenodes [JD]
+JD: starting secondarynamenode, logging to /home/hadoop/app/hadoop-2.6.0-cdh5.16.2/logs/hadoop-hadoop-secondarynamenode-JD.out
+19/11/28 18:17:03 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+[hadoop@JD ~]$ jps
+30343 Jps
+30027 DataNode
+29886 NameNode
+30190 SecondaryNameNode
+</code></pre>
+<h3 id="312官网的参数文件-在哪里找">3.12官网的参数文件 在哪里找</h3>
+<p>路径：<a href="https://hadoop.apache.org/docs/r2.10.0/hadoop-project-dist/hadoop-common/core-default.xml" target="_blank" rel="noopener">https://hadoop.apache.org/docs/r2.10.0/hadoop-project-dist/hadoop-common/core-default.xml</a></p>
+<p><a href="https://hadoop.apache.org/docs/r2.10.0/hadoop-project-dist/hadoop-hdfs/hdfs-default.xml" target="_blank" rel="noopener">https://hadoop.apache.org/docs/r2.10.0/hadoop-project-dist/hadoop-hdfs/hdfs-default.xml</a></p>
+<h3 id="介绍三个节点和web登录路径">介绍三个节点和web登录路径</h3>
+<p>namenode 名称节点 老大  读写请求先经过它   主节点<br>
+datanode 数据节点 小弟  存储数据 检索数据  从节点<br>
+secondarynamenode 第二名称节点 老二  h+1<br>
+大数据组件基本都是主从架构 hdfs<br>
+hbase（读写请求<strong>不经过</strong>老大 master进程）</p>
+<p>hdfs的web页面：<a href="http://JD:50070" target="_blank" rel="noopener">http://JD:50070</a></p>
+
+                
+
+                <hr>
+                <!-- Pager -->
+                <ul class="pager">
+                    
+                    
+                        <li class="next">
+                            <a href="/article/rundeck/" data-toggle="tooltip" data-placement="top" title="Rundeck部署使用">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                <br>
+
+                <!--打赏-->
+                
+                <!--打赏-->
+
+                <br>
+                <!--分享-->
+                
+                    <div class="social-share"  data-wechat-qrcode-helper="" align="center"></div>
+                    <!--  css & js -->
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+                
+                <!--分享-->
+                <br>                       
+                
+                <!-- require APlayer -->
+                
+
+                <!-- duoshuo Share start -->
+                
+                <!-- 多说 Share end-->
+
+                <!-- 多说评论框 start -->
+                
+                <!-- 多说评论框 end -->
+
+                <!-- disqus comment start -->
+                
+                <!-- disqus comment end -->
+
+                
+
+            </div>
+            
+            <!-- Tabe of Content -->
+            <!-- Table of Contents -->
+
+  
+    
+      <aside id="sidebar">
+        <div id="toc" class="toc-article">
+        <strong class="toc-title">Contents</strong>
+        
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#欢迎来到stefanboy的博客感谢大家对我的支持"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">&#x6B22;&#x8FCE;&#x6765;&#x5230;Stefanboy&#x7684;&#x535A;&#x5BA2;&#xFF0C;&#x611F;&#x8C22;&#x5927;&#x5BB6;&#x5BF9;&#x6211;&#x7684;&#x652F;&#x6301;.</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#安装配置jdk-hosts-ssh"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">&#x5B89;&#x88C5;&#x914D;&#x7F6E;jdk&#x3001;hosts&#x3001;ssh</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#安装配置jdk"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text">&#x5B89;&#x88C5;&#x914D;&#x7F6E;jdk</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#配置hosts"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text">&#x914D;&#x7F6E;hosts</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#配置ssh"><span class="toc-nav-number">2.3.</span> <span class="toc-nav-text">&#x914D;&#x7F6E;ssh</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#hadoop介绍"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">hadoop&#x4ECB;&#x7ECD;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#简单介绍"><span class="toc-nav-number">3.1.</span> <span class="toc-nav-text">&#x7B80;&#x5355;&#x4ECB;&#x7ECD;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#hadoop软件"><span class="toc-nav-number">3.2.</span> <span class="toc-nav-text">hadoop&#x8F6F;&#x4EF6;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#hdfs的伪分布式部署"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">hdfs&#x7684;&#x4F2A;&#x5206;&#x5E03;&#x5F0F;&#x90E8;&#x7F72;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#配置hadoop的个人环境变量"><span class="toc-nav-number">4.1.</span> <span class="toc-nav-text">&#x914D;&#x7F6E;hadoop&#x7684;&#x4E2A;&#x4EBA;&#x73AF;&#x5883;&#x53D8;&#x91CF;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#格式化"><span class="toc-nav-number">4.2.</span> <span class="toc-nav-text">&#x683C;&#x5F0F;&#x5316;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#第一次启动"><span class="toc-nav-number">4.3.</span> <span class="toc-nav-text">&#x7B2C;&#x4E00;&#x6B21;&#x542F;&#x52A8;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#配置dn-snn都以-ruozedata001启动"><span class="toc-nav-number">4.4.</span> <span class="toc-nav-text">&#x914D;&#x7F6E;DN SNN&#x90FD;&#x4EE5; ruozedata001&#x542F;&#x52A8;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#312官网的参数文件-在哪里找"><span class="toc-nav-number">4.5.</span> <span class="toc-nav-text">3.12&#x5B98;&#x7F51;&#x7684;&#x53C2;&#x6570;&#x6587;&#x4EF6; &#x5728;&#x54EA;&#x91CC;&#x627E;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#介绍三个节点和web登录路径"><span class="toc-nav-number">4.6.</span> <span class="toc-nav-text">&#x4ECB;&#x7ECD;&#x4E09;&#x4E2A;&#x8282;&#x70B9;&#x548C;web&#x767B;&#x5F55;&#x8DEF;&#x5F84;</span></a></li></ol></li></ol>
+        
+        </div>
+      </aside>
+    
+
+                
+            <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#Hadoop" title="Hadoop">Hadoop</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                        <li><a href="" target="_blank"></a></li>
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'hover',
+          placement: 'left',
+          icon: 'rz'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+<!-- chrome Firefox 中文锚点定位失效-->
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+<!-- smooth scroll behavior polyfill  -->
+<script type="text/javascript" src="/js/smoothscroll.js"></script>
+<script>
+        $('#toc').on('click','a',function(a){
+            // var isChrome = window.navigator.userAgent.indexOf("Chrome") !== -1;
+            // console.log(window.navigator.userAgent,isChrome)
+                // if(isChrome) {
+                    // console.log(a.currentTarget.outerHTML);
+                    // console.log($(a.currentTarget).attr("href"));
+                    //跳转到指定锚点
+                    // document.getElementById(a.target.innerText.toLowerCase()).scrollIntoView(true);
+                    document.getElementById($(a.currentTarget).attr("href").replace("#","")).scrollIntoView({behavior: 'smooth' });
+                // }
+        })  
+</script>
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/Stefanboy">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Stefanboy 2019 
+                    By <a href="#">Stefanboy</a> | BigData
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=ruozedata&repo=Bigdata&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://yoursite.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-XXXXXXXX-X';
+    var _gaDomain = 'yoursite';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    var _baId = 'xxx';
+
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+
+
+
+
+	<a id="rocket" href="#top" class=""></a>
+	<script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+    <script type="text/javascript" src="/js/toc.js?v=1.0.0" async=""></script>
+<!-- Image to hack wechat -->
+<img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>
