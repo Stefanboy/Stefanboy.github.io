@@ -142,6 +142,13 @@
 
                         
                         <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
                             <a href="/archive/">Archives</a>
                         </li>
                         
@@ -150,13 +157,6 @@
                         
                         <li>
                             <a href="/tags/">Tags</a>
-                        </li>
-                        
-                    
-
-                        
-                        <li>
-                            <a href="/about/">About</a>
                         </li>
                         
                     
@@ -416,7 +416,7 @@ Commands:
 [root@JD ~]#  hostnamectl  set-hostname xxx
 
 修改成功后，配置hosts文件
-[root@ruozedata001 ~]# vi /etc/hosts
+[root@JD ~]# vi /etc/hosts
 127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
 ::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
 
@@ -489,18 +489,18 @@ drwxr-xr-x 2 root   root   17 Dec  1 17:47 hsperfdata_root
 <h3 id="真假进程判断">真假进程判断</h3>
 <pre><code>有可能jps查看到某一进程存在，但是使用ps -ef |grep xxx查看不存在，以ps 查看的为准
 真假判断 : 
-[root@ruozedata001 hsperfdata_ruoze]# ps -ef|grep 31488
+[root@JD hsperfdata_ruoze]# ps -ef|grep 31488
 root       5291   3912  0 21:32 pts/1    00:00:00 grep --color=auto 31488
-[root@ruozedata001 hsperfdata_ruoze]# 
+[root@JD hsperfdata_ruoze]# 
 
 该进程不存在
-[root@ruozedata001 hsperfdata_ruoze]# ps -ef|grep 31488 | grep -v grep | wc -l
+[root@JD hsperfdata_ruoze]# ps -ef|grep 31488 | grep -v grep | wc -l
 0
 
 该进程存在
-[root@ruozedata001 hsperfdata_ruoze]# ps -ef|grep 2594 | grep -v grep | wc -l
+[root@JD hsperfdata_ruoze]# ps -ef|grep 2594 | grep -v grep | wc -l
 1
-[root@ruozedata001 hsperfdata_ruoze]# 
+[root@JD hsperfdata_ruoze]# 
 </code></pre>
 <h3 id="tmphsperfdata_xxx下的进程文件是否影响进程启动">/tmp/hsperfdata_xxx下的进程文件是否影响进程启动</h3>
 <pre><code>删除/tmp/hsperfdata_xxx的某一个进程文件,不会影响进程的启动和停止，但是会影响jps命令查看进程，如果删除或移动文件，jps查看进程时，不会查出该进程
