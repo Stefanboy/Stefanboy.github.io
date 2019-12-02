@@ -198,15 +198,15 @@
             <!-- 标签云 -->
             <div id='tag_cloud' class="tags">
                 
-                    <a href="#Hadoop" title="Hadoop" rel="1">Hadoop</a>
+                    <a href="#Hadoop" title="Hadoop" rel="2">Hadoop</a>
                 
-                    <a href="#Hadoop Linux" title="Hadoop Linux" rel="2">Hadoop Linux</a>
-                
-                    <a href="#Hexo" title="Hexo" rel="2">Hexo</a>
+                    <a href="#Hadoop Linux" title="Hadoop Linux" rel="1">Hadoop Linux</a>
                 
                     <a href="#MySQL" title="MySQL" rel="3">MySQL</a>
                 
                     <a href="#Rundeck" title="Rundeck" rel="1">Rundeck</a>
+                
+                    <a href="#Hexo" title="Hexo" rel="2">Hexo</a>
                 
             </div>
 
@@ -223,9 +223,28 @@
                   <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
                   </li> -->
                  <div class="post-preview">
+                     <a href="/article/hadoop3/">
+                        <h2 class="post-title">
+                            块&HDFS架构&小文件&配置修改存储目录
+                        </h2>
+                        
+                            <h3 class="post-subtitle">
+                                How to use Hadoop
+                            </h3>
+                        
+                    </a>
+                    <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
+                </div>
+                <hr>
+                
+                  <!-- <li class="listing-item">
+                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
+                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
+                  </li> -->
+                 <div class="post-preview">
                      <a href="/article/hadoop1/">
                         <h2 class="post-title">
-                            HDFS部署使用
+                            配置hosts和jdk和ssh&HDFS部署使用&如何保证数据质量
                         </h2>
                         
                             <h3 class="post-subtitle">
@@ -249,77 +268,13 @@
                   <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
                   </li> -->
                  <div class="post-preview">
-                     <a href="/article/hadoop3/">
-                        <h2 class="post-title">
-                            块&HDFS架构
-                        </h2>
-                        
-                            <h3 class="post-subtitle">
-                                How to use YARN
-                            </h3>
-                        
-                    </a>
-                    <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
-                </div>
-                <hr>
-                
-                  <!-- <li class="listing-item">
-                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
-                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
-                  </li> -->
-                 <div class="post-preview">
                      <a href="/article/hadoop2/">
                         <h2 class="post-title">
-                            YARN部署使用和jps和Linux的oom及过期清理
+                            YARN部署&jps&Linux的oom及过期清理
                         </h2>
                         
                             <h3 class="post-subtitle">
                                 How to use YARN
-                            </h3>
-                        
-                    </a>
-                    <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
-                </div>
-                <hr>
-                
-            </div>
-            
-            <div class="one-tag-list">
-                <span class="fa fa-tag listing-seperator" id="Hexo">
-                    <span class="tag-text">Hexo</span>
-                </span>
-                
-                  <!-- <li class="listing-item">
-                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
-                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
-                  </li> -->
-                 <div class="post-preview">
-                     <a href="/article/hexoinstall/">
-                        <h2 class="post-title">
-                            Hexo安装部署和使用
-                        </h2>
-                        
-                            <h3 class="post-subtitle">
-                                how to use hexo
-                            </h3>
-                        
-                    </a>
-                    <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
-                </div>
-                <hr>
-                
-                  <!-- <li class="listing-item">
-                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
-                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
-                  </li> -->
-                 <div class="post-preview">
-                     <a href="/article/hexo-theme-jepson/">
-                        <h2 class="post-title">
-                            [Hexo] Theme Jepson
-                        </h2>
-                        
-                            <h3 class="post-subtitle">
-                                This is hexo theme Demo.
                             </h3>
                         
                     </a>
@@ -410,6 +365,51 @@
                         
                             <h3 class="post-subtitle">
                                 How to use Rundeck
+                            </h3>
+                        
+                    </a>
+                    <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
+                </div>
+                <hr>
+                
+            </div>
+            
+            <div class="one-tag-list">
+                <span class="fa fa-tag listing-seperator" id="Hexo">
+                    <span class="tag-text">Hexo</span>
+                </span>
+                
+                  <!-- <li class="listing-item">
+                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
+                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
+                  </li> -->
+                 <div class="post-preview">
+                     <a href="/article/hexoinstall/">
+                        <h2 class="post-title">
+                            Hexo安装部署和使用
+                        </h2>
+                        
+                            <h3 class="post-subtitle">
+                                how to use hexo
+                            </h3>
+                        
+                    </a>
+                    <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
+                </div>
+                <hr>
+                
+                  <!-- <li class="listing-item">
+                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
+                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
+                  </li> -->
+                 <div class="post-preview">
+                     <a href="/article/hexo-theme-jepson/">
+                        <h2 class="post-title">
+                            [Hexo] Theme Jepson
+                        </h2>
+                        
+                            <h3 class="post-subtitle">
+                                This is hexo theme Demo.
                             </h3>
                         
                     </a>

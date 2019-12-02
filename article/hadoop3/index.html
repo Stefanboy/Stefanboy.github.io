@@ -14,7 +14,7 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <title>
         
-          块&amp;HDFS架构 - Stefanboy | Blog
+          块&amp;HDFS架构&amp;小文件&amp;配置修改存储目录 - Stefanboy | Blog
         
     </title>
 
@@ -88,14 +88,14 @@
                     <div class="post-heading">
                         <div class="tags">
                             
-                              <a class="tag" href="/tags/#Hadoop Linux" title="Hadoop Linux">Hadoop Linux</a>
+                              <a class="tag" href="/tags/#Hadoop" title="Hadoop">Hadoop</a>
                             
                         </div>
-                        <h1>块&amp;HDFS架构</h1>
-                        <h2 class="subheading">How to use YARN</h2>
+                        <h1>块&amp;HDFS架构&amp;小文件&amp;配置修改存储目录</h1>
+                        <h2 class="subheading">How to use Hadoop</h2>
                         <span class="meta">
                             Posted by Stefanboy on
-                            2016-12-01
+                            2016-12-02
                         </span>
                     </div>
                 
@@ -213,6 +213,8 @@
                 post-container">
 
                 <h2 id="欢迎来到stefanboy的博客感谢大家对我的支持">欢迎来到Stefanboy的博客，感谢大家对我的支持.</h2>
+<h2 id="机架和刀片机">机架和刀片机</h2>
+<p><img src="/img/hadoop3/4.png" alt=""></p>
 <h2 id="块-副本数">块 副本数</h2>
 <h3 id="块的理解">块的理解</h3>
 <ul>
@@ -239,6 +241,7 @@ b.未满一个block块的大小，也会占用一个block文件</p>
 </li>
 </ul>
 <h2 id="hdfs架构">HDFS架构</h2>
+<p><img src="/img/hadoop3/1.png" alt=""></p>
 <h3 id="namenode">Namenode</h3>
 <ul>
 <li>概念和作用<br>
@@ -253,10 +256,119 @@ d.文件对应切割为那些的block块和副本数==》数据分布在那些dn
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@JD current]# pwd</span><br><span class="line">/tmp/hadoop-hadoop/dfs/name/current</span><br><span class="line">[root@JD current]# ll</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> hadoop hadoop      <span class="number">42</span> Dec  <span class="number">2</span> <span class="number">17</span>:<span class="number">39</span> edits_0000000000000000328<span class="number">-0000000000000000329</span></span><br><span class="line">-rw-rw-r-- <span class="number">1</span> hadoop hadoop <span class="number">1048576</span> Dec  <span class="number">2</span> <span class="number">17</span>:<span class="number">39</span> edits_inprogress_0000000000000000330</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> hadoop hadoop    <span class="number">1744</span> Dec  <span class="number">2</span> <span class="number">16</span>:<span class="number">39</span> fsimage_0000000000000000327</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> hadoop hadoop      <span class="number">62</span> Dec  <span class="number">2</span> <span class="number">16</span>:<span class="number">39</span> fsimage_0000000000000000327.md5</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> hadoop hadoop    <span class="number">1744</span> Dec  <span class="number">2</span> <span class="number">17</span>:<span class="number">39</span> fsimage_0000000000000000329</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> hadoop hadoop      <span class="number">62</span> Dec  <span class="number">2</span> <span class="number">17</span>:<span class="number">39</span> fsimage_0000000000000000329.md5</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> hadoop hadoop       <span class="number">4</span> Dec  <span class="number">2</span> <span class="number">17</span>:<span class="number">39</span> seen_txid</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> hadoop hadoop     <span class="number">202</span> Nov <span class="number">28</span> <span class="number">17</span>:<span class="number">55</span> VERSION</span><br></pre></td></tr></table></figure>
 <h3 id="datanode">Datanode</h3>
 <ul>
-<li>概念和作用<br>
-datanode是hdfs的从节点，也称为数据节点，主要存储数据块和数据块校验和（.meta文件，主要是校验文件是否损坏）</li>
+<li>
+<p>概念和作用<br>
+datanode是hdfs的从节点，也称为数据节点，主要存储数据块和数据块校验和（.meta文件，主要是校验文件是否损坏）</p>
+</li>
+<li>
+<p>dn文件存储路径</p>
+<pre><code>[root@JD subdir0]# pwd
+/tmp/hadoop-hadoop/dfs/data/current/BP-497769727-192.168.0.3-1574934933514/current/finalized/subdir0/subdir0
+[root@JD subdir0]# ll
+-rw-rw-r-- 1 hadoop hadoop  33K Dec  1 17:24 blk_1073741838 #数据块
+-rw-rw-r-- 1 hadoop hadoop  271 Dec  1 17:24 blk_1073741838_1014.meta #数据块校验和
+-rw-rw-r-- 1 hadoop hadoop 138K Dec  1 17:24 blk_1073741839
+-rw-rw-r-- 1 hadoop hadoop 1.1K Dec  1 17:24 blk_1073741839_1015.meta
+</code></pre>
+</li>
+<li>
+<p>nn的心跳和报告<br>
+a. nn每隔3s向dn发送心跳，告诉dn我还健康，是在配置文件hdfs-site.xml文件中匹配值，属性和值为</p>
+</li>
 </ul>
+<table>
+<thead>
+<tr>
+<th>key</th>
+<th>value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>dfs.heartbeat.interval</td>
+<td>3</td>
+</tr>
+</tbody>
+</table>
+<p>b. dn每隔6h扫描块，并向nn发送blockreport，生产上根据数据量大小，建议配置3小时即可,在配置文件hdfs-site.xml文件中匹配值，属性和值为</p>
+<table>
+<thead>
+<tr>
+<th>key</th>
+<th>value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>dfs.blockreport.intervalMsec</td>
+<td>21600000</td>
+</tr>
+<tr>
+<td>dfs.datanode.directoryscan.interval</td>
+<td>21600</td>
+</tr>
+</tbody>
+</table>
 <h3 id="secondarynamenode">SecondaryNamenode</h3>
+<ul>
+<li>概念<br>
+snn也称为元数据节点，是hdfs中的备用节点，主要作用是合并fsimage和editlog作为一个新的fsimage，并推送到nn，该过程也称为checkpoint</li>
+<li>配置合并的参数<br>
+在hdfs-site.xml中，有两个参数可以控制文件合并是由时间还是次数决定，其中这两个参数的默认值为1小时或者Editlog操作日志记录满 1000000条，两者满足一条就会合并文件</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>key</th>
+<th>value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>dfs.namenode.checkpoint.period</td>
+<td>3600</td>
+</tr>
+<tr>
+<td>dfs.namenode.checkpoint.txns</td>
+<td>1000000</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>snn的缺点<br>
+虽然snn能解决单点故障，但是还是会有风险的，因为如图所示，还有40分钟的数据是恢复不了的<br>
+<img src="/img/hadoop3/2.png" alt=""></li>
+</ul>
+<h3 id="nn和snn交互的流程">nn和snn交互的流程</h3>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">NN</span><br><span class="line">edits_0000000000000000306<span class="number">-0000000000000000307</span></span><br><span class="line">edits_0000000000000000308<span class="number">-0000000000000000324</span></span><br><span class="line">edits_inprogress_0000000000000000325</span><br><span class="line">fsimage_0000000000000000307</span><br><span class="line">fsimage_0000000000000000307.md5</span><br><span class="line">fsimage_0000000000000000324</span><br><span class="line">fsimage_0000000000000000324.md5</span><br><span class="line"></span><br><span class="line">SNN</span><br><span class="line">edits_0000000000000000302<span class="number">-0000000000000000303</span></span><br><span class="line">edits_0000000000000000304<span class="number">-0000000000000000305</span></span><br><span class="line">edits_0000000000000000306<span class="number">-0000000000000000307</span></span><br><span class="line">edits_0000000000000000308<span class="number">-0000000000000000324</span></span><br><span class="line">fsimage_0000000000000000307</span><br><span class="line">fsimage_0000000000000000307.md5</span><br><span class="line">fsimage_0000000000000000324</span><br><span class="line">fsimage_0000000000000000324.md5</span><br><span class="line"></span><br><span class="line">fsimage_0000000000000000307 + edits_0000000000000000308<span class="number">-0000000000000000324</span></span><br><span class="line">==&gt;fsimage_0000000000000000324</span><br></pre></td></tr></table></figure>
+<p><img src="/img/hadoop3/3.png" alt=""></p>
+<p>a. fsimage和edits文件合并时，在nn生成一份新的edit.new文件<br>
+b. 复制fsimage和edits文件到snn，在snn进行合并，生成fsimage.ckpt<br>
+c.snn将fsimage.ckpt文件推送到nn，然后将fsimage.ckpt替换为fsimage文件，同时将edits.new文件替换为edits文件</p>
+<h2 id="手动自动修复损坏的文件">手动自动修复损坏的文件</h2>
+<ul>
+<li>
+<p>hadoop中有个命令是可以手动修复损坏的块，前提是多副本的情况下</p>
+<pre><code>[hadoop@JD hadoop]$ hdfs debug
+Usage: hdfs debug &lt;command&gt; [arguments]
+
+These commands are for advanced users only.
+
+Incorrect usages may result in data loss. Use at your own risk.
+
+verifyMeta -meta &lt;metadata-file&gt; [-block &lt;block-file&gt;]
+computeMeta -block &lt;block-file&gt; -out &lt;output-metadata-file&gt;
+recoverLease -path &lt;path&gt; [-retries &lt;num-retries&gt;]
+
+执行手动修复指定块命令（xxx指的是块或副本的路径）
+[hadoop@JD hadoop]$ hdfs debug recoverLease -path xxx -retries 10
+</code></pre>
+</li>
+<li>
+<p>自动修复</p>
+</li>
+</ul>
+<p><a href="https://ruozedata.github.io/2019/06/06/%E7%94%9F%E4%BA%A7HDFS%20Block%E6%8D%9F%E5%9D%8F%E6%81%A2%E5%A4%8D%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5(%E5%90%AB%E6%80%9D%E8%80%83%E9%A2%98)/" target="_blank" rel="noopener">https://ruozedata.github.io/2019/06/06/生产HDFS Block损坏恢复最佳实践(含思考题)/</a></p>
 <h2 id="小文件的理解">小文件的理解</h2>
 <h3 id="hdfs适合存储小文件吗">hdfs适合存储小文件吗</h3>
 <p>不适合</p>
@@ -264,7 +376,9 @@ datanode是hdfs的从节点，也称为数据节点，主要存储数据块和�
 <p>因为hdfs的一个block块的大小是128M，虽然传上的文件小，但是也会占用一个block文件，如果存储上千万、上亿个小文件，Namenode需要维护的源数据信息越多，nn的压力会很大，也有可能撑爆nn的大小（生产上配置的4G）</p>
 <h3 id="假如上传文件都是小文件-比如-3m-5m-6m-10m四个文件怎么办">假如上传文件都是小文件 比如 3m 5m 6m 10m四个文件怎么办</h3>
 <p>有两种解决方式，第一种是在上传之前进行文件的合并，第二种是在hdfs中进行文件的合并</p>
-
+<h2 id="改变hdfs的存储目录">改变hdfs的存储目录</h2>
+<p>hdfs的存储目录是在/tmp目录下的，但是linux有30天清理不在规则内的未访问的文件，所以为了防止文件被误删，我们将存储目录放到/home/hadoop/tmp目录下</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line">切换为hadoop用户</span><br><span class="line">[root@JD ~]# su - hadoop</span><br><span class="line">Last login: Mon Dec  <span class="number">2</span> <span class="number">21</span>:<span class="number">11</span>:<span class="number">59</span> CST <span class="number">2019</span> on pts/<span class="number">1</span></span><br><span class="line">[hadoop@JD ~]$ pwd</span><br><span class="line">/home/hadoop</span><br><span class="line"></span><br><span class="line">移动之前已生成的文件到新目录下</span><br><span class="line">[hadoop@JD ~]$ mv /tmp/hadoop-hadoop/dfs/ <span class="regexp">/home/</span>hadoop/tmp</span><br><span class="line"></span><br><span class="line">修改配置文件core-site.xml</span><br><span class="line">[hadoop@JD ~]$ cd app/hadoop/etc/hadoop</span><br><span class="line">[hadoop@JD hadoop]$ vi core-site.xml </span><br><span class="line"> &lt;property&gt;</span><br><span class="line">        &lt;name&gt;hadoop.tmp.dir&lt;<span class="regexp">/name&gt;</span></span><br><span class="line"><span class="regexp">        &lt;value&gt;/</span>home/hadoop/tmp&lt;<span class="regexp">/value&gt;</span></span><br><span class="line"><span class="regexp">    &lt;/</span>property&gt;</span><br><span class="line"></span><br><span class="line">重启hdfs</span><br><span class="line">上传文件测试是否存在于新配置的目录里</span><br><span class="line">进入dn目录</span><br><span class="line">[hadoop@JD subdir0]$ pwd</span><br><span class="line">/home/hadoop/tmp/dfs/data/current/BP<span class="number">-497769727</span><span class="number">-192.168</span><span class="number">.0</span><span class="number">.3</span><span class="number">-1574934933514</span>/current/finalized/subdir0/subdir0</span><br><span class="line"></span><br><span class="line">查看文件</span><br><span class="line">[hadoop@JD subdir0]$ ll</span><br><span class="line">total <span class="number">216</span></span><br><span class="line">-rw-rw-r-- <span class="number">1</span> hadoop hadoop      <span class="number">7</span> Nov <span class="number">28</span> <span class="number">22</span>:<span class="number">26</span> blk_1073741826</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> hadoop hadoop     <span class="number">11</span> Nov <span class="number">28</span> <span class="number">22</span>:<span class="number">26</span> blk_1073741826_1002.meta</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> hadoop hadoop     <span class="number">29</span> Dec  <span class="number">1</span> <span class="number">17</span>:<span class="number">14</span> blk_1073741827</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> hadoop hadoop     <span class="number">11</span> Dec  <span class="number">1</span> <span class="number">17</span>:<span class="number">14</span> blk_1073741827_1003.meta</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> hadoop hadoop     <span class="number">30</span> Dec  <span class="number">1</span> <span class="number">17</span>:<span class="number">24</span> blk_1073741836</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> hadoop hadoop     <span class="number">11</span> Dec  <span class="number">1</span> <span class="number">17</span>:<span class="number">24</span> blk_1073741836_1012.meta</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> hadoop hadoop    <span class="number">349</span> Dec  <span class="number">1</span> <span class="number">17</span>:<span class="number">24</span> blk_1073741837</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> hadoop hadoop     <span class="number">11</span> Dec  <span class="number">1</span> <span class="number">17</span>:<span class="number">24</span> blk_1073741837_1013.meta</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> hadoop hadoop  <span class="number">33508</span> Dec  <span class="number">1</span> <span class="number">17</span>:<span class="number">24</span> blk_1073741838</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> hadoop hadoop    <span class="number">271</span> Dec  <span class="number">1</span> <span class="number">17</span>:<span class="number">24</span> blk_1073741838_1014.meta</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> hadoop hadoop <span class="number">141014</span> Dec  <span class="number">1</span> <span class="number">17</span>:<span class="number">24</span> blk_1073741839</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> hadoop hadoop   <span class="number">1111</span> Dec  <span class="number">1</span> <span class="number">17</span>:<span class="number">24</span> blk_1073741839_1015.meta</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">执行上传</span><br><span class="line">[hadoop@JD subdir0]$ hadoop fs -put /home/hadoop/bbb.txt /</span><br><span class="line"><span class="number">19</span>/<span class="number">12</span>/<span class="number">02</span> <span class="number">22</span>:<span class="number">50</span>:<span class="number">44</span> WARN util.NativeCodeLoader: Unable to load native-hadoop library <span class="keyword">for</span> your platform... using builtin-java classes where applicable</span><br><span class="line"></span><br><span class="line">再次查看发现有我们刚才上传的文件，成功</span><br><span class="line">[hadoop@JD subdir0]$ ll</span><br><span class="line">total <span class="number">224</span></span><br><span class="line">-rw-rw-r-- <span class="number">1</span> hadoop hadoop      <span class="number">7</span> Nov <span class="number">28</span> <span class="number">22</span>:<span class="number">26</span> blk_1073741826</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> hadoop hadoop     <span class="number">11</span> Nov <span class="number">28</span> <span class="number">22</span>:<span class="number">26</span> blk_1073741826_1002.meta</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> hadoop hadoop     <span class="number">29</span> Dec  <span class="number">1</span> <span class="number">17</span>:<span class="number">14</span> blk_1073741827</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> hadoop hadoop     <span class="number">11</span> Dec  <span class="number">1</span> <span class="number">17</span>:<span class="number">14</span> blk_1073741827_1003.meta</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> hadoop hadoop     <span class="number">30</span> Dec  <span class="number">1</span> <span class="number">17</span>:<span class="number">24</span> blk_1073741836</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> hadoop hadoop     <span class="number">11</span> Dec  <span class="number">1</span> <span class="number">17</span>:<span class="number">24</span> blk_1073741836_1012.meta</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> hadoop hadoop    <span class="number">349</span> Dec  <span class="number">1</span> <span class="number">17</span>:<span class="number">24</span> blk_1073741837</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> hadoop hadoop     <span class="number">11</span> Dec  <span class="number">1</span> <span class="number">17</span>:<span class="number">24</span> blk_1073741837_1013.meta</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> hadoop hadoop  <span class="number">33508</span> Dec  <span class="number">1</span> <span class="number">17</span>:<span class="number">24</span> blk_1073741838</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> hadoop hadoop    <span class="number">271</span> Dec  <span class="number">1</span> <span class="number">17</span>:<span class="number">24</span> blk_1073741838_1014.meta</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> hadoop hadoop <span class="number">141014</span> Dec  <span class="number">1</span> <span class="number">17</span>:<span class="number">24</span> blk_1073741839</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> hadoop hadoop   <span class="number">1111</span> Dec  <span class="number">1</span> <span class="number">17</span>:<span class="number">24</span> blk_1073741839_1015.meta</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> hadoop hadoop      <span class="number">7</span> Dec  <span class="number">2</span> <span class="number">22</span>:<span class="number">50</span> blk_1073741840</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> hadoop hadoop     <span class="number">11</span> Dec  <span class="number">2</span> <span class="number">22</span>:<span class="number">50</span> blk_1073741840_1016.meta</span><br></pre></td></tr></table></figure>
                 
 
                 <hr>
@@ -273,7 +387,7 @@ datanode是hdfs的从节点，也称为数据节点，主要存储数据块和�
                     
                     
                         <li class="next">
-                            <a href="/article/hadoop2/" data-toggle="tooltip" data-placement="top" title="YARN部署使用和jps和Linux的oom及过期清理">Next Post &rarr;</a>
+                            <a href="/article/hadoop2/" data-toggle="tooltip" data-placement="top" title="YARN部署&jps&Linux的oom及过期清理">Next Post &rarr;</a>
                         </li>
                     
                 </ul>
@@ -323,7 +437,7 @@ datanode是hdfs的从节点，也称为数据节点，主要存储数据块和�
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#欢迎来到stefanboy的博客感谢大家对我的支持"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">&#x6B22;&#x8FCE;&#x6765;&#x5230;Stefanboy&#x7684;&#x535A;&#x5BA2;&#xFF0C;&#x611F;&#x8C22;&#x5927;&#x5BB6;&#x5BF9;&#x6211;&#x7684;&#x652F;&#x6301;.</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#块-副本数"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">&#x5757; &#x526F;&#x672C;&#x6570;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#块的理解"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text">&#x5757;&#x7684;&#x7406;&#x89E3;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#副本数的理解"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text">&#x526F;&#x672C;&#x6570;&#x7684;&#x7406;&#x89E3;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#hdfs架构"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">HDFS&#x67B6;&#x6784;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#namenode"><span class="toc-nav-number">3.1.</span> <span class="toc-nav-text">Namenode</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#datanode"><span class="toc-nav-number">3.2.</span> <span class="toc-nav-text">Datanode</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#secondarynamenode"><span class="toc-nav-number">3.3.</span> <span class="toc-nav-text">SecondaryNamenode</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#小文件的理解"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">&#x5C0F;&#x6587;&#x4EF6;&#x7684;&#x7406;&#x89E3;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#hdfs适合存储小文件吗"><span class="toc-nav-number">4.1.</span> <span class="toc-nav-text">hdfs&#x9002;&#x5408;&#x5B58;&#x50A8;&#x5C0F;&#x6587;&#x4EF6;&#x5417;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#假如不适合是为什么"><span class="toc-nav-number">4.2.</span> <span class="toc-nav-text">&#x5047;&#x5982;&#x4E0D;&#x9002;&#x5408;&#x662F;&#x4E3A;&#x4EC0;&#x4E48;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#假如上传文件都是小文件-比如-3m-5m-6m-10m四个文件怎么办"><span class="toc-nav-number">4.3.</span> <span class="toc-nav-text">&#x5047;&#x5982;&#x4E0A;&#x4F20;&#x6587;&#x4EF6;&#x90FD;&#x662F;&#x5C0F;&#x6587;&#x4EF6; &#x6BD4;&#x5982; 3m 5m 6m 10m&#x56DB;&#x4E2A;&#x6587;&#x4EF6;&#x600E;&#x4E48;&#x529E;</span></a></li></ol></li></ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#欢迎来到stefanboy的博客感谢大家对我的支持"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">&#x6B22;&#x8FCE;&#x6765;&#x5230;Stefanboy&#x7684;&#x535A;&#x5BA2;&#xFF0C;&#x611F;&#x8C22;&#x5927;&#x5BB6;&#x5BF9;&#x6211;&#x7684;&#x652F;&#x6301;.</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#机架和刀片机"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">&#x673A;&#x67B6;&#x548C;&#x5200;&#x7247;&#x673A;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#块-副本数"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">&#x5757; &#x526F;&#x672C;&#x6570;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#块的理解"><span class="toc-nav-number">3.1.</span> <span class="toc-nav-text">&#x5757;&#x7684;&#x7406;&#x89E3;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#副本数的理解"><span class="toc-nav-number">3.2.</span> <span class="toc-nav-text">&#x526F;&#x672C;&#x6570;&#x7684;&#x7406;&#x89E3;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#hdfs架构"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">HDFS&#x67B6;&#x6784;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#namenode"><span class="toc-nav-number">4.1.</span> <span class="toc-nav-text">Namenode</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#datanode"><span class="toc-nav-number">4.2.</span> <span class="toc-nav-text">Datanode</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#secondarynamenode"><span class="toc-nav-number">4.3.</span> <span class="toc-nav-text">SecondaryNamenode</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#nn和snn交互的流程"><span class="toc-nav-number">4.4.</span> <span class="toc-nav-text">nn&#x548C;snn&#x4EA4;&#x4E92;&#x7684;&#x6D41;&#x7A0B;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#手动自动修复损坏的文件"><span class="toc-nav-number">5.</span> <span class="toc-nav-text">&#x624B;&#x52A8;&#x81EA;&#x52A8;&#x4FEE;&#x590D;&#x635F;&#x574F;&#x7684;&#x6587;&#x4EF6;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#小文件的理解"><span class="toc-nav-number">6.</span> <span class="toc-nav-text">&#x5C0F;&#x6587;&#x4EF6;&#x7684;&#x7406;&#x89E3;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#hdfs适合存储小文件吗"><span class="toc-nav-number">6.1.</span> <span class="toc-nav-text">hdfs&#x9002;&#x5408;&#x5B58;&#x50A8;&#x5C0F;&#x6587;&#x4EF6;&#x5417;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#假如不适合是为什么"><span class="toc-nav-number">6.2.</span> <span class="toc-nav-text">&#x5047;&#x5982;&#x4E0D;&#x9002;&#x5408;&#x662F;&#x4E3A;&#x4EC0;&#x4E48;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#假如上传文件都是小文件-比如-3m-5m-6m-10m四个文件怎么办"><span class="toc-nav-number">6.3.</span> <span class="toc-nav-text">&#x5047;&#x5982;&#x4E0A;&#x4F20;&#x6587;&#x4EF6;&#x90FD;&#x662F;&#x5C0F;&#x6587;&#x4EF6; &#x6BD4;&#x5982; 3m 5m 6m 10m&#x56DB;&#x4E2A;&#x6587;&#x4EF6;&#x600E;&#x4E48;&#x529E;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#改变hdfs的存储目录"><span class="toc-nav-number">7.</span> <span class="toc-nav-text">&#x6539;&#x53D8;hdfs&#x7684;&#x5B58;&#x50A8;&#x76EE;&#x5F55;</span></a></li></ol>
         
         </div>
       </aside>
@@ -343,7 +457,7 @@ datanode是hdfs的从节点，也称为数据节点，主要存储数据块和�
                     <h5><a href="/tags/">FEATURED TAGS</a></h5>
                     <div class="tags">
                        
-                          <a class="tag" href="/tags/#Hadoop Linux" title="Hadoop Linux">Hadoop Linux</a>
+                          <a class="tag" href="/tags/#Hadoop" title="Hadoop">Hadoop</a>
                         
                     </div>
                 </section>
