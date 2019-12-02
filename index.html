@@ -134,13 +134,6 @@
 
                         
                         <li>
-                            <a href="/about/">About</a>
-                        </li>
-                        
-                    
-
-                        
-                        <li>
                             <a href="/archive/">Archives</a>
                         </li>
                         
@@ -149,6 +142,13 @@
                         
                         <li>
                             <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
                         </li>
                         
                     
@@ -211,7 +211,45 @@
 
 <div class="post-preview">
 
-    <a href="/article/YARN部署使用/">
+    <a href="/article/hadoop3/">
+        <h2 class="post-title">
+                                 
+            块&HDFS架构
+        </h2>
+        <h3 class="post-subtitle">
+            How to use YARN
+        </h3>
+        <div class="post-content-preview">
+            欢迎来到Stefanboy的博客，感谢大家对我的支持.
+块 副本数
+块的理解
+
+存储处理数据的最小单元，其中在hadoop1.x中默认大小为64M，hadoop2.0默认大小为128M，块的大小是由hdfs-site.xml文件中的dfs.blocksize 属性控制
+
+1dfs.blocksize  134217728(128M)
+
+块大小为什么要设置成128M？（参考其他人的博客）
+是为......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by Stefanboy on
+            2016-12-01
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#Hadoop Linux" title="Hadoop Linux">Hadoop Linux</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/article/hadoop2/">
         <h2 class="post-title">
                                  
             YARN部署使用和jps和Linux的oom及过期清理
@@ -253,7 +291,7 @@ Last login: Sun Dec  1 15:09:50 CST 2019 on pts/0
 
 <div class="post-preview">
 
-    <a href="/article/HDFS部署使用/">
+    <a href="/article/hadoop1/">
         <h2 class="post-title">
                                  
             HDFS部署使用
@@ -548,7 +586,11 @@ Install Node.js  and Git
     <div class="tags">
         
             
-            <a href="/tags/#Hadoop Linux" title="Hadoop Linux" rel="1">Hadoop Linux</a>
+            <a href="/tags/#Hadoop" title="Hadoop" rel="1">Hadoop</a>
+            
+        
+            
+            <a href="/tags/#Hadoop Linux" title="Hadoop Linux" rel="2">Hadoop Linux</a>
             
         
             
@@ -557,10 +599,6 @@ Install Node.js  and Git
         
             
             <a href="/tags/#MySQL" title="MySQL" rel="3">MySQL</a>
-            
-        
-            
-            <a href="/tags/#Hadoop" title="Hadoop" rel="1">Hadoop</a>
             
         
             
@@ -620,11 +658,15 @@ Install Node.js  and Git
     <ul>
       
         <li>
-          <a href="/article/YARN部署使用/">YARN部署使用和jps和Linux的oom及过期清理</a>
+          <a href="/article/hadoop3/">块&amp;HDFS架构</a>
         </li>
       
         <li>
-          <a href="/article/HDFS部署使用/">HDFS部署使用</a>
+          <a href="/article/hadoop2/">YARN部署使用和jps和Linux的oom及过期清理</a>
+        </li>
+      
+        <li>
+          <a href="/article/hadoop1/">HDFS部署使用</a>
         </li>
       
         <li>
@@ -633,10 +675,6 @@ Install Node.js  and Git
       
         <li>
           <a href="/article/mysquser2/">MySQL使用二</a>
-        </li>
-      
-        <li>
-          <a href="/article/mysquser1/">MySQL使用一</a>
         </li>
       
     </ul>
@@ -659,7 +697,7 @@ Install Node.js  and Git
         
     <h5>ARCHIVES</h5>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">1</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">1</span></li></ul>
     </div>
 
         <hr>

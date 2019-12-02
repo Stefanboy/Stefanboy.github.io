@@ -14,11 +14,11 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <title>
         
-          [Hexo] Theme Jepson - Stefanboy | Blog
+          块&amp;HDFS架构 - Stefanboy | Blog
         
     </title>
 
-    <link rel="canonical" href="http://yoursite.com/article/hexo-theme-jepson/">
+    <link rel="canonical" href="http://yoursite.com/article/hadoop3/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -88,14 +88,14 @@
                     <div class="post-heading">
                         <div class="tags">
                             
-                              <a class="tag" href="/tags/#Hexo" title="Hexo">Hexo</a>
+                              <a class="tag" href="/tags/#Hadoop Linux" title="Hadoop Linux">Hadoop Linux</a>
                             
                         </div>
-                        <h1>[Hexo] Theme Jepson</h1>
-                        <h2 class="subheading">This is hexo theme Demo.</h2>
+                        <h1>块&amp;HDFS架构</h1>
+                        <h2 class="subheading">How to use YARN</h2>
                         <span class="meta">
                             Posted by Stefanboy on
-                            2015-07-10
+                            2016-12-01
                         </span>
                     </div>
                 
@@ -212,51 +212,58 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-                <h1 id="install-hexo">Install Hexo</h1>
-<p>Install Node.js  and Git</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#For window</span><br><span class="line">Node.js https://nodejs.org/dist/v12.13.0/node-v12.13.0-x64.msi</span><br><span class="line">Git https://github.com/git-for-windows/git/releases/download/v2.24.0.windows.2/Git-2.24.0.2-64-bit.exe</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#For Mac</span><br><span class="line">brew install node</span><br><span class="line">brew install git</span><br></pre></td></tr></table></figure>
-<p>Install hexo</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-cli -g</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span>For more:https://hexo.io/zh-cn/index.html</span><br></pre></td></tr></table></figure>
-<h1 id="theme-usage">Theme Usage</h1>
-<h2 id="init">Init</h2>
-<hr>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/hackeruncle/hackeruncle-hexo.git ./hackeruncle-hexo</span><br><span class="line"><span class="built_in">cd</span> hackeruncle-hexo</span><br><span class="line">npm install</span><br></pre></td></tr></table></figure>
-<h2 id="modify">Modify</h2>
-<hr>
-<p>Modify <code>_config.yml</code> file with your own info.<br>
-Especially the section:</p>
-<h3 id="deployment">Deployment</h3>
-<p>Replace to your own repo, the name is the same as github user name!</p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">deploy:</span></span><br><span class="line"><span class="attr">  type:</span> <span class="string">git</span></span><br><span class="line"><span class="attr">  repo:</span> <span class="string">git@github.com:&lt;git</span> <span class="string">user</span> <span class="string">name&gt;/&lt;git</span> <span class="string">user</span> <span class="string">name&gt;.github.io.git</span></span><br><span class="line"><span class="attr">  branch:</span> <span class="string">master</span></span><br></pre></td></tr></table></figure>
-<h3 id="sidebar-settings">Sidebar settings</h3>
-<p>Copy your avatar image to <code>&lt;root&gt;/img/</code> and modify the <code>_config.yml</code>:</p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">sidebar:</span> <span class="literal">true</span>    <span class="comment"># whether or not using Sidebar.</span></span><br><span class="line"><span class="attr">sidebar-about-description:</span> <span class="string">"&lt;your description&gt;"</span></span><br><span class="line"><span class="attr">sidebar-avatar:</span> <span class="string">img/&lt;your</span> <span class="string">avatar</span> <span class="string">path&gt;</span></span><br></pre></td></tr></table></figure>
-<p>and activate your personal widget you like</p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">widgets:</span>         <span class="comment"># here are widget you can use, you can comment out</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">featured-tags</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">short-about</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">recent-posts</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">friends-blog</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">archive</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">category</span></span><br></pre></td></tr></table></figure>
-<p>if you want to add sidebar widget, please add at <code>layout/_widget</code>.</p>
-<h3 id="signature-setup">Signature Setup</h3>
-<p>Copy your signature image to <code>&lt;root&gt;/img/signature</code> and modify the <code>_config.yml</code>:</p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">signature:</span> <span class="literal">true</span>   <span class="comment"># show signature</span></span><br><span class="line"><span class="attr">signature-img:</span> <span class="string">img/signature/&lt;your-signature-ID&gt;</span></span><br></pre></td></tr></table></figure>
-<h3 id="go-to-top-icon-setup">Go to top icon Setup</h3>
-<p>My icon is using iron man, you can change to your own icon at <code>css/image</code>.</p>
-<h3 id="post-tag">Post tag</h3>
-<p>You can decide to show post tags or not.</p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">home_posts_tag:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
-<h3 id="markdown-render">Markdown render</h3>
-<p>My markdown render engine plugin is <a href="https://github.com/celsomiranda/hexo-renderer-markdown-it" target="_blank" rel="noopener">hexo-renderer-markdown-it</a>.</p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Markdown-it config</span></span><br><span class="line"><span class="comment">## Docs: https://github.com/celsomiranda/hexo-renderer-markdown-it/wiki</span></span><br><span class="line"><span class="attr">markdown:</span></span><br><span class="line"><span class="attr">  render:</span></span><br><span class="line"><span class="attr">    html:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">    xhtmlOut:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">    breaks:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">    linkify:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">    typographer:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">    quotes:</span> <span class="string">'“”‘’'</span></span><br></pre></td></tr></table></figure>
-<p>and if you want to change the header anchor ‘ℬ’, you can go to <code>layout/post.ejs</code> to change it.</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span>(<span class="string">"https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js"</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        anchors.options = &#123;</span><br><span class="line">          visible: <span class="string">'hover'</span>,</span><br><span class="line">          placement: <span class="string">'left'</span>,</span><br><span class="line">          icon: ℬ <span class="comment">// this is the header anchor "unicode" icon</span></span><br><span class="line">        &#125;;</span><br></pre></td></tr></table></figure>
-<h2 id="hexo-basics">Hexo Basics</h2>
-<hr>
-<h3 id="push-hexo-file-to-github">Push hexo file to github:</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git add .</span><br><span class="line">git commit -m <span class="string">'init'</span></span><br><span class="line">git push -u origin master</span><br></pre></td></tr></table></figure>
-<h3 id="push-hexo-blog-html-to-local">Push hexo blog html to local :</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo clean &amp;&amp; hexo generate &amp;&amp; hexo server</span><br></pre></td></tr></table></figure>
-<p>open web: <a href="http://localhost:4000" target="_blank" rel="noopener">http://localhost:4000</a></p>
-<h3 id="push-hexo-blog-html-to-github">Push hexo blog html to github :</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo clean &amp;&amp; hexo deploy</span><br></pre></td></tr></table></figure>
-<p>open web: <a href="https://hackeruncle.github.io" target="_blank" rel="noopener">https://hackeruncle.github.io</a></p>
+                <h2 id="欢迎来到stefanboy的博客感谢大家对我的支持">欢迎来到Stefanboy的博客，感谢大家对我的支持.</h2>
+<h2 id="块-副本数">块 副本数</h2>
+<h3 id="块的理解">块的理解</h3>
+<ul>
+<li>存储处理数据的最小单元，其中在hadoop1.x中默认大小为64M，hadoop2.0默认大小为128M，块的大小是由hdfs-site.xml文件中的dfs.blocksize 属性控制</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dfs.blocksize  <span class="number">134217728</span>(<span class="number">128</span>M)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>块大小为什么要设置成128M？（参考其他人的博客）<br>
+是为了最小化寻址时间，目前磁盘的传输速率普遍是在100M/S左右，所以设计成128M每块</li>
+</ul>
+<h3 id="副本数的理解">副本数的理解</h3>
+<p>副本数的设置使hdfs具有高可靠，数据不会丢失，<strong>一个dn只能存储一个块的一份副本</strong>，伪分布式部署只能为1个副本，因为只有一个dn；集群部署一般情况下设置3个副本即可，配置在hdfs-site.xml文件中</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dfs.replication		<span class="number">3</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>
+<p>面试题<br>
+一个文件160M，块大小128M ，副本数2份，请问:实际存储多少块，实际多少存储空间？<br>
+回答之前有两个概念需要搞清楚：<br>
+a.数据上传到hdfs上，大小不会凭空增加<br>
+b.未满一个block块的大小，也会占用一个block文件</p>
+<pre><code>160/128=1...32
+因为副本数为2，所以存储4块，空间占160*2=320M
+</code></pre>
+</li>
+</ul>
+<h2 id="hdfs架构">HDFS架构</h2>
+<h3 id="namenode">Namenode</h3>
+<ul>
+<li>概念和作用<br>
+namenode是hdfs的主节点，也是元数据节点，维护着文件系统的命名空间，元数据信息，维护文件系统树的所有文件和文件夹；这些信息以两个文件永久存储在磁盘上，一个是镜像文件fsimage，另一个是	编辑日志文件editlog</li>
+<li>文件系统的命名空间构成<br>
+a.文件的名称<br>
+b.文件的属性 权限 创建时间 副本数<br>
+c.文件的目录结构<br>
+d.文件对应切割为那些的block块和副本数==》数据分布在那些dn节点，当然nn不会持久化存储着写映射关系，是通过集群启动和运行时，dn定期向nn发送blockreport，nn在内存中维护这种关系</li>
+<li>nn数据存储路径和内容</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@JD current]# pwd</span><br><span class="line">/tmp/hadoop-hadoop/dfs/name/current</span><br><span class="line">[root@JD current]# ll</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> hadoop hadoop      <span class="number">42</span> Dec  <span class="number">2</span> <span class="number">17</span>:<span class="number">39</span> edits_0000000000000000328<span class="number">-0000000000000000329</span></span><br><span class="line">-rw-rw-r-- <span class="number">1</span> hadoop hadoop <span class="number">1048576</span> Dec  <span class="number">2</span> <span class="number">17</span>:<span class="number">39</span> edits_inprogress_0000000000000000330</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> hadoop hadoop    <span class="number">1744</span> Dec  <span class="number">2</span> <span class="number">16</span>:<span class="number">39</span> fsimage_0000000000000000327</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> hadoop hadoop      <span class="number">62</span> Dec  <span class="number">2</span> <span class="number">16</span>:<span class="number">39</span> fsimage_0000000000000000327.md5</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> hadoop hadoop    <span class="number">1744</span> Dec  <span class="number">2</span> <span class="number">17</span>:<span class="number">39</span> fsimage_0000000000000000329</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> hadoop hadoop      <span class="number">62</span> Dec  <span class="number">2</span> <span class="number">17</span>:<span class="number">39</span> fsimage_0000000000000000329.md5</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> hadoop hadoop       <span class="number">4</span> Dec  <span class="number">2</span> <span class="number">17</span>:<span class="number">39</span> seen_txid</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> hadoop hadoop     <span class="number">202</span> Nov <span class="number">28</span> <span class="number">17</span>:<span class="number">55</span> VERSION</span><br></pre></td></tr></table></figure>
+<h3 id="datanode">Datanode</h3>
+<ul>
+<li>概念和作用<br>
+datanode是hdfs的从节点，也称为数据节点，主要存储数据块和数据块校验和（.meta文件，主要是校验文件是否损坏）</li>
+</ul>
+<h3 id="secondarynamenode">SecondaryNamenode</h3>
+<h2 id="小文件的理解">小文件的理解</h2>
+<h3 id="hdfs适合存储小文件吗">hdfs适合存储小文件吗</h3>
+<p>不适合</p>
+<h3 id="假如不适合是为什么">假如不适合是为什么</h3>
+<p>因为hdfs的一个block块的大小是128M，虽然传上的文件小，但是也会占用一个block文件，如果存储上千万、上亿个小文件，Namenode需要维护的源数据信息越多，nn的压力会很大，也有可能撑爆nn的大小（生产上配置的4G）</p>
+<h3 id="假如上传文件都是小文件-比如-3m-5m-6m-10m四个文件怎么办">假如上传文件都是小文件 比如 3m 5m 6m 10m四个文件怎么办</h3>
+<p>有两种解决方式，第一种是在上传之前进行文件的合并，第二种是在hdfs中进行文件的合并</p>
 
                 
 
@@ -264,10 +271,10 @@ Especially the section:</p>
                 <!-- Pager -->
                 <ul class="pager">
                     
-                        <li class="previous">
-                            <a href="/article/mysqlinstall/" data-toggle="tooltip" data-placement="top" title="MySQL安装部署">&larr; Previous Post</a>
-                        </li>
                     
+                        <li class="next">
+                            <a href="/article/hadoop2/" data-toggle="tooltip" data-placement="top" title="YARN部署使用和jps和Linux的oom及过期清理">Next Post &rarr;</a>
+                        </li>
                     
                 </ul>
 
@@ -316,7 +323,7 @@ Especially the section:</p>
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#install-hexo"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">Install Hexo</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#theme-usage"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">Theme Usage</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#init"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text">Init</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#modify"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text">Modify</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#deployment"><span class="toc-nav-number">2.2.1.</span> <span class="toc-nav-text">Deployment</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#sidebar-settings"><span class="toc-nav-number">2.2.2.</span> <span class="toc-nav-text">Sidebar settings</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#signature-setup"><span class="toc-nav-number">2.2.3.</span> <span class="toc-nav-text">Signature Setup</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#go-to-top-icon-setup"><span class="toc-nav-number">2.2.4.</span> <span class="toc-nav-text">Go to top icon Setup</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#post-tag"><span class="toc-nav-number">2.2.5.</span> <span class="toc-nav-text">Post tag</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#markdown-render"><span class="toc-nav-number">2.2.6.</span> <span class="toc-nav-text">Markdown render</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#hexo-basics"><span class="toc-nav-number">2.3.</span> <span class="toc-nav-text">Hexo Basics</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#push-hexo-file-to-github"><span class="toc-nav-number">2.3.1.</span> <span class="toc-nav-text">Push hexo file to github:</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#push-hexo-blog-html-to-local"><span class="toc-nav-number">2.3.2.</span> <span class="toc-nav-text">Push hexo blog html to local :</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#push-hexo-blog-html-to-github"><span class="toc-nav-number">2.3.3.</span> <span class="toc-nav-text">Push hexo blog html to github :</span></a></li></ol></li></ol></li></ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#欢迎来到stefanboy的博客感谢大家对我的支持"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">&#x6B22;&#x8FCE;&#x6765;&#x5230;Stefanboy&#x7684;&#x535A;&#x5BA2;&#xFF0C;&#x611F;&#x8C22;&#x5927;&#x5BB6;&#x5BF9;&#x6211;&#x7684;&#x652F;&#x6301;.</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#块-副本数"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">&#x5757; &#x526F;&#x672C;&#x6570;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#块的理解"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text">&#x5757;&#x7684;&#x7406;&#x89E3;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#副本数的理解"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text">&#x526F;&#x672C;&#x6570;&#x7684;&#x7406;&#x89E3;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#hdfs架构"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">HDFS&#x67B6;&#x6784;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#namenode"><span class="toc-nav-number">3.1.</span> <span class="toc-nav-text">Namenode</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#datanode"><span class="toc-nav-number">3.2.</span> <span class="toc-nav-text">Datanode</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#secondarynamenode"><span class="toc-nav-number">3.3.</span> <span class="toc-nav-text">SecondaryNamenode</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#小文件的理解"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">&#x5C0F;&#x6587;&#x4EF6;&#x7684;&#x7406;&#x89E3;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#hdfs适合存储小文件吗"><span class="toc-nav-number">4.1.</span> <span class="toc-nav-text">hdfs&#x9002;&#x5408;&#x5B58;&#x50A8;&#x5C0F;&#x6587;&#x4EF6;&#x5417;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#假如不适合是为什么"><span class="toc-nav-number">4.2.</span> <span class="toc-nav-text">&#x5047;&#x5982;&#x4E0D;&#x9002;&#x5408;&#x662F;&#x4E3A;&#x4EC0;&#x4E48;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#假如上传文件都是小文件-比如-3m-5m-6m-10m四个文件怎么办"><span class="toc-nav-number">4.3.</span> <span class="toc-nav-text">&#x5047;&#x5982;&#x4E0A;&#x4F20;&#x6587;&#x4EF6;&#x90FD;&#x662F;&#x5C0F;&#x6587;&#x4EF6; &#x6BD4;&#x5982; 3m 5m 6m 10m&#x56DB;&#x4E2A;&#x6587;&#x4EF6;&#x600E;&#x4E48;&#x529E;</span></a></li></ol></li></ol>
         
         </div>
       </aside>
@@ -336,7 +343,7 @@ Especially the section:</p>
                     <h5><a href="/tags/">FEATURED TAGS</a></h5>
                     <div class="tags">
                        
-                          <a class="tag" href="/tags/#Hexo" title="Hexo">Hexo</a>
+                          <a class="tag" href="/tags/#Hadoop Linux" title="Hadoop Linux">Hadoop Linux</a>
                         
                     </div>
                 </section>
