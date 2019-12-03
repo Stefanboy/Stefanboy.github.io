@@ -149,14 +149,14 @@
 
                         
                         <li>
-                            <a href="/archive/">Archives</a>
+                            <a href="/tags/">Tags</a>
                         </li>
                         
                     
 
                         
                         <li>
-                            <a href="/tags/">Tags</a>
+                            <a href="/archive/">Archives</a>
                         </li>
                         
                     
@@ -220,14 +220,40 @@
 <ul>
 <li>存储处理数据的最小单元，其中在hadoop1.x中默认大小为64M，hadoop2.0默认大小为128M，块的大小是由hdfs-site.xml文件中的dfs.blocksize 属性控制</li>
 </ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dfs.blocksize  <span class="number">134217728</span>(<span class="number">128</span>M)</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>key</th>
+<th>value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>dfs.blocksize</td>
+<td>134217728</td>
+</tr>
+</tbody>
+</table>
 <ul>
 <li>块大小为什么要设置成128M？（参考其他人的博客）<br>
 是为了最小化寻址时间，目前磁盘的传输速率普遍是在100M/S左右，所以设计成128M每块</li>
 </ul>
 <h3 id="副本数的理解">副本数的理解</h3>
 <p>副本数的设置使hdfs具有高可靠，数据不会丢失，<strong>一个dn只能存储一个块的一份副本</strong>，伪分布式部署只能为1个副本，因为只有一个dn；集群部署一般情况下设置3个副本即可，配置在hdfs-site.xml文件中</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dfs.replication		<span class="number">3</span></span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>key</th>
+<th>value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>dfs.replication</td>
+<td>3</td>
+</tr>
+</tbody>
+</table>
 <ul>
 <li>
 <p>面试题<br>
@@ -254,6 +280,29 @@ d.文件对应切割为那些的block块和副本数==》数据分布在那些dn
 <li>nn数据存储路径和内容</li>
 </ul>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@JD current]# pwd</span><br><span class="line">/tmp/hadoop-hadoop/dfs/name/current</span><br><span class="line">[root@JD current]# ll</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> hadoop hadoop      <span class="number">42</span> Dec  <span class="number">2</span> <span class="number">17</span>:<span class="number">39</span> edits_0000000000000000328<span class="number">-0000000000000000329</span></span><br><span class="line">-rw-rw-r-- <span class="number">1</span> hadoop hadoop <span class="number">1048576</span> Dec  <span class="number">2</span> <span class="number">17</span>:<span class="number">39</span> edits_inprogress_0000000000000000330</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> hadoop hadoop    <span class="number">1744</span> Dec  <span class="number">2</span> <span class="number">16</span>:<span class="number">39</span> fsimage_0000000000000000327</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> hadoop hadoop      <span class="number">62</span> Dec  <span class="number">2</span> <span class="number">16</span>:<span class="number">39</span> fsimage_0000000000000000327.md5</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> hadoop hadoop    <span class="number">1744</span> Dec  <span class="number">2</span> <span class="number">17</span>:<span class="number">39</span> fsimage_0000000000000000329</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> hadoop hadoop      <span class="number">62</span> Dec  <span class="number">2</span> <span class="number">17</span>:<span class="number">39</span> fsimage_0000000000000000329.md5</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> hadoop hadoop       <span class="number">4</span> Dec  <span class="number">2</span> <span class="number">17</span>:<span class="number">39</span> seen_txid</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> hadoop hadoop     <span class="number">202</span> Nov <span class="number">28</span> <span class="number">17</span>:<span class="number">55</span> VERSION</span><br></pre></td></tr></table></figure>
+<ul>
+<li>NN的fsimage的个数默认是保留2个	<br>
+<img src="/img/hadoop3/5.png" alt=""><br>
+是在hdfs-site文件进行配置，属性为</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>key</th>
+<th>value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>dfs.namenode.num.checkpoints.retained</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>NN的editlog文件不会保留所有的,如生产上的文件第一个edit文件就没了<br>
+<img src="/img/hadoop3/6.png" alt=""></li>
+</ul>
 <h3 id="datanode">Datanode</h3>
 <ul>
 <li>
