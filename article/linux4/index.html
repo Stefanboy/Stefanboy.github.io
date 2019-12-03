@@ -14,11 +14,11 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <title>
         
-          [Hexo] Theme Jepson - Stefanboy | Blog
+          linux基本命令四 - Stefanboy | Blog
         
     </title>
 
-    <link rel="canonical" href="http://yoursite.com/article/hexo-theme-jepson/">
+    <link rel="canonical" href="http://yoursite.com/article/linux4/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -88,14 +88,14 @@
                     <div class="post-heading">
                         <div class="tags">
                             
-                              <a class="tag" href="/tags/#Hexo" title="Hexo">Hexo</a>
+                              <a class="tag" href="/tags/#Linux" title="Linux">Linux</a>
                             
                         </div>
-                        <h1>[Hexo] Theme Jepson</h1>
-                        <h2 class="subheading">This is hexo theme Demo.</h2>
+                        <h1>linux基本命令四</h1>
+                        <h2 class="subheading">How to use Linux</h2>
                         <span class="meta">
                             Posted by Stefanboy on
-                            2015-07-10
+                            2016-11-19
                         </span>
                     </div>
                 
@@ -212,51 +212,225 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-                <h1 id="install-hexo">Install Hexo</h1>
-<p>Install Node.js  and Git</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#For window</span><br><span class="line">Node.js https://nodejs.org/dist/v12.13.0/node-v12.13.0-x64.msi</span><br><span class="line">Git https://github.com/git-for-windows/git/releases/download/v2.24.0.windows.2/Git-2.24.0.2-64-bit.exe</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#For Mac</span><br><span class="line">brew install node</span><br><span class="line">brew install git</span><br></pre></td></tr></table></figure>
-<p>Install hexo</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-cli -g</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span>For more:https://hexo.io/zh-cn/index.html</span><br></pre></td></tr></table></figure>
-<h1 id="theme-usage">Theme Usage</h1>
-<h2 id="init">Init</h2>
-<hr>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/hackeruncle/hackeruncle-hexo.git ./hackeruncle-hexo</span><br><span class="line"><span class="built_in">cd</span> hackeruncle-hexo</span><br><span class="line">npm install</span><br></pre></td></tr></table></figure>
-<h2 id="modify">Modify</h2>
-<hr>
-<p>Modify <code>_config.yml</code> file with your own info.<br>
-Especially the section:</p>
-<h3 id="deployment">Deployment</h3>
-<p>Replace to your own repo, the name is the same as github user name!</p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">deploy:</span></span><br><span class="line"><span class="attr">  type:</span> <span class="string">git</span></span><br><span class="line"><span class="attr">  repo:</span> <span class="string">git@github.com:&lt;git</span> <span class="string">user</span> <span class="string">name&gt;/&lt;git</span> <span class="string">user</span> <span class="string">name&gt;.github.io.git</span></span><br><span class="line"><span class="attr">  branch:</span> <span class="string">master</span></span><br></pre></td></tr></table></figure>
-<h3 id="sidebar-settings">Sidebar settings</h3>
-<p>Copy your avatar image to <code>&lt;root&gt;/img/</code> and modify the <code>_config.yml</code>:</p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">sidebar:</span> <span class="literal">true</span>    <span class="comment"># whether or not using Sidebar.</span></span><br><span class="line"><span class="attr">sidebar-about-description:</span> <span class="string">"&lt;your description&gt;"</span></span><br><span class="line"><span class="attr">sidebar-avatar:</span> <span class="string">img/&lt;your</span> <span class="string">avatar</span> <span class="string">path&gt;</span></span><br></pre></td></tr></table></figure>
-<p>and activate your personal widget you like</p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">widgets:</span>         <span class="comment"># here are widget you can use, you can comment out</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">featured-tags</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">short-about</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">recent-posts</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">friends-blog</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">archive</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">category</span></span><br></pre></td></tr></table></figure>
-<p>if you want to add sidebar widget, please add at <code>layout/_widget</code>.</p>
-<h3 id="signature-setup">Signature Setup</h3>
-<p>Copy your signature image to <code>&lt;root&gt;/img/signature</code> and modify the <code>_config.yml</code>:</p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">signature:</span> <span class="literal">true</span>   <span class="comment"># show signature</span></span><br><span class="line"><span class="attr">signature-img:</span> <span class="string">img/signature/&lt;your-signature-ID&gt;</span></span><br></pre></td></tr></table></figure>
-<h3 id="go-to-top-icon-setup">Go to top icon Setup</h3>
-<p>My icon is using iron man, you can change to your own icon at <code>css/image</code>.</p>
-<h3 id="post-tag">Post tag</h3>
-<p>You can decide to show post tags or not.</p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">home_posts_tag:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
-<h3 id="markdown-render">Markdown render</h3>
-<p>My markdown render engine plugin is <a href="https://github.com/celsomiranda/hexo-renderer-markdown-it" target="_blank" rel="noopener">hexo-renderer-markdown-it</a>.</p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Markdown-it config</span></span><br><span class="line"><span class="comment">## Docs: https://github.com/celsomiranda/hexo-renderer-markdown-it/wiki</span></span><br><span class="line"><span class="attr">markdown:</span></span><br><span class="line"><span class="attr">  render:</span></span><br><span class="line"><span class="attr">    html:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">    xhtmlOut:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">    breaks:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">    linkify:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">    typographer:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">    quotes:</span> <span class="string">'“”‘’'</span></span><br></pre></td></tr></table></figure>
-<p>and if you want to change the header anchor ‘ℬ’, you can go to <code>layout/post.ejs</code> to change it.</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span>(<span class="string">"https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js"</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        anchors.options = &#123;</span><br><span class="line">          visible: <span class="string">'hover'</span>,</span><br><span class="line">          placement: <span class="string">'left'</span>,</span><br><span class="line">          icon: ℬ <span class="comment">// this is the header anchor "unicode" icon</span></span><br><span class="line">        &#125;;</span><br></pre></td></tr></table></figure>
-<h2 id="hexo-basics">Hexo Basics</h2>
-<hr>
-<h3 id="push-hexo-file-to-github">Push hexo file to github:</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git add .</span><br><span class="line">git commit -m <span class="string">'init'</span></span><br><span class="line">git push -u origin master</span><br></pre></td></tr></table></figure>
-<h3 id="push-hexo-blog-html-to-local">Push hexo blog html to local :</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo clean &amp;&amp; hexo generate &amp;&amp; hexo server</span><br></pre></td></tr></table></figure>
-<p>open web: <a href="http://localhost:4000" target="_blank" rel="noopener">http://localhost:4000</a></p>
-<h3 id="push-hexo-blog-html-to-github">Push hexo blog html to github :</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo clean &amp;&amp; hexo deploy</span><br></pre></td></tr></table></figure>
-<p>open web: <a href="https://hackeruncle.github.io" target="_blank" rel="noopener">https://hackeruncle.github.io</a></p>
+                <h2 id="欢迎来到stefanboy的博客感谢大家对我的支持">欢迎来到Stefanboy的博客，感谢大家对我的支持.</h2>
+<p>该文章内容包括四部分，分别为<br>
+1.vi命令<br>
+2.系统信息 进程 ps -ef|grep xxx 端口号 netstat -nlp |grep xxx<br>
+3.连接拒绝 (权限受限 ping telnet )<br>
+4.高危命令 rm -rf /<br>
+5.常用的命令 wget yum rpm  压缩解压</p>
+<h2 id="vi命令">vi命令</h2>
+<p><img src="/img/linux4/1.png" alt=""></p>
+<p>1.1命令模式<br>
+常见快捷键</p>
+<pre><code>删除当前行：dd
+删除当前和以下的所有行：dG
+删除当前行和以下的n行：ndd
+跳转到第一行的第一个字母：gg
+跳转到最后一行：G
+跳转到当前行的行尾：shift+$
+</code></pre>
+<p>1.1.1<br>
+	案例场景: 从另外一个文本拷贝内容去覆盖这个文件，注意覆盖前一定要用<strong>cp命令进行备份</strong>一下</p>
+<pre><code>先使用gg+dG清除全部内容或者使用cat /dev/null &gt; xxx.log 将该文件置空，然后i进行编辑模式，进行内容复制
+</code></pre>
+<p>1.2编辑模式<br>
+	1.2.1粘贴内容</p>
+<pre><code>在vi编辑文件时，如需要粘贴内容进来，需要**先按i进入编辑模式**，然后再进行粘贴
+</code></pre>
+<p>1.3尾行模式<br>
+	按：进入尾行模式<br>
+	1.3.1找error</p>
+<pre><code>进入尾行模式后，输入 /关键字 进行匹配，然后按N键找下一个关键字
+</code></pre>
+<p>1.3.2设置行号</p>
+<pre><code>设置行号：进入尾行模式，输入 set nu
+去除行号：进入尾行模式，输入 set nonu
+</code></pre>
+<h2 id="系统命令">系统命令</h2>
+<p>2.1查看磁盘信息</p>
+<pre><code>[root@JD tmp]# df -h
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/vda1        40G  3.1G   37G   8% / #系统盘
+/dev/vdb4        1T   10G    XXX   X% /data04 数据盘，有规律
+/dev/vdb5        1T   10G    XXX   X% /data05 数据盘，有规律
+devtmpfs        3.9G     0  3.9G   0% /dev 
+tmpfs           3.9G   16K  3.9G   1% /dev/shm
+tmpfs           3.9G  115M  3.8G   3% /run
+tmpfs           3.9G     0  3.9G   0% /sys/fs/cgroup
+tmpfs           783M     0  783M   0% /run/user/0
+</code></pre>
+<p>2.2查看内存信息</p>
+<pre><code>[root@JD tmp]# free -m #该命令展示字节信息
+total        used        free      shared  buff/cache   available
+Mem:      	 7823         191        6385         114        1246        7289
+Swap:         0           0           0
+[root@JD tmp]# free -g #该命令会展示内存信息
+total        used        free      shared  buff/cache   available
+Mem:         7           0           6           0           1           7
+Swap:        0           0           0
+</code></pre>
+<p>2.3查看系统负载信息<br>
+	分析系统信息<br>
+<strong>load average: 0.00, 0.01, 0.05</strong><br>
+0.00, 0.01, 0.05：这三个值，根据经验，不要超过10，否则会有问题</p>
+<pre><code>查看系统负载信息时，如果看到cpu或内存占得比例很大，需要去查看下该进程的对应程序的原因，也有可能是硬件坏了，比如内存条坏了
+例如：
+
+   PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND
+177 root      20   0       0      0      0 S   50%  70%     0:34.13 xxxx   去看看xxx这个进程是做什么
+1777 root      20   0       0      0     0 S  3908% 80%     0:34.13 hbase regionserver  夯住 有问题 代码级别 硬件级别 内存条坏了
+</code></pre>
+<p>查看负载命令</p>
+<pre><code>[root@JD tmp]# top
+top - 15:09:47 up 5 days,  5:39,  1 user,  load average: 0.00, 0.01, 0.05
+Tasks:  92 total,   1 running,  91 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  0.2 us,  0.3 sy,  0.0 ni, 99.5 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+KiB Mem :  8011076 total,  6537620 free,   197100 used,  1276356 buff/cache
+KiB Swap:        0 total,        0 free,        0 used.  7463344 avail Mem 
+
+  PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND                                                                                         
+  557 root      20   0  161844   2196   1552 R   0.3  0.0   0:00.01 top                                                                                             
+    1 root      20   0  190944   3740   2484 S   0.0  0.0   1:09.90 systemd                                                                                         
+    2 root      20   0       0      0      0 S   0.0  0.0   0:00.00 kthreadd                                                                                        
+    3 root      20   0       0      0      0 S   0.0  0.0   0:00.02 ksoftirqd/0                                                                                     
+    5 root       0 -20       0      0      0 S   0.0  0.0   0:00.00 kworker/0:0H                                                                                    
+    6 root      20   0       0      0      0 S   0.0  0.0   0:00.00 kworker/u4:0                                                                                    
+    7 root      rt   0       0      0      0 S   0.0  0.0   0:00.68 migration/0                                                                                     
+    8 root      20   0       0      0      0 S   0.0  0.0   0:00.00 rcu_bh                                                                                          
+    9 root      20   0       0      0      0 S   0.0  0.0   0:00.00 rcuob/0                                                                                         
+   10 root      20   0       0      0      0 S   0.0  0.0   0:00.00 rcuob/1   
+</code></pre>
+<h2 id="进程端口号">进程端口号</h2>
+<p>3.1查看进程</p>
+<pre><code>[root@JD ~]# ps -ef |grep ssh
+root       732     1  0 Nov14 ?        00:00:08 /usr/sbin/sshd -D
+root      7703   732  0 16:15 ?        00:00:00 sshd: root@pts/1
+root      7729  7706  0 16:15 pts/1    00:00:00 grep --color=auto ssh
+root     29339   732  0 14:35 ?        00:00:00 sshd: root@pts/0
+[root@JD ~]# ps -ef |grep ssh | grep -v grep
+root       732     1  0 Nov14 ?        00:00:08 /usr/sbin/sshd -D
+root      7703   732  0 16:15 ?        00:00:00 sshd: root@pts/1
+root     29339   732  0 14:35 ?        00:00:00 sshd: root@pts/0
+进程用户 进程pid 父id                                     进程用户的内容（进程所属的目录 log -Xmx -Xms）
+[root@JD ~]# 
+</code></pre>
+<p>3.2查看端口号<br>
+一个服务有可能没有端口号	<br>
+最好根据进程号查询端口号，因为如果要使用服务名的话，有可能找不到</p>
+<pre><code>[root@JD ~]# netstat -nlp | grep 732 
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      732/sshd            
+tcp6       0      0 :::22                   :::*                    LISTEN      732/sshd            
+[root@JD ~]# 
+</code></pre>
+<p>3.3安装http服务，打开web<br>
+	service httpd start ：centos6.x 7.x都可以使用该命令<br>
+	systemctl start httpd：centos7.x使用该命令（建议使用该命令），因为该命令可以启动多个服务<br>
+	http协议  80<br>
+	https协议 443</p>
+<pre><code>[root@JD ~]# yum install httpd
+启动http服务
+[root@JD ~]# systemctl start httpd 
+查看状态
+[root@JD ~]# systemctl status httpd
+● httpd.service - The Apache HTTP Server
+   Loaded: loaded (/usr/lib/systemd/system/httpd.service; disabled; vendor preset: disabled)
+   Active: active (running) since Tue 2019-11-19 16:42:54 CST; 14s ago
+  。。。。。。。
+ 查看进程
+[root@JD ~]# ps -ef |grep http
+root     10597     1  0 16:42 ?        00:00:00 /usr/sbin/httpd -DFOREGROUND
+apache   10598 10597  0 16:42 ?        00:00:00 /usr/sbin/httpd -DFOREGROUND
+apache   10599 10597  0 16:42 ?        00:00:00 /usr/sbin/httpd -DFOREGROUND
+apache   10600 10597  0 16:42 ?        00:00:00 /usr/sbin/httpd -DFOREGROUND
+apache   10601 10597  0 16:42 ?        00:00:00 /usr/sbin/httpd -DFOREGROUND
+apache   10602 10597  0 16:42 ?        00:00:00 /usr/sbin/httpd -DFOREGROUND
+root     11160  7706  0 16:47 pts/1    00:00:00 grep --color=auto http
+根据进程号查看端口
+[root@JD ~]# netstat -nlp |grep 10597
+tcp6       0      0 :::80                   :::*                    LISTEN      10597/httpd    
+</code></pre>
+<p>3.4 场景<br>
+	在centos部署大数据组件，发现一个错误 Connection refused，一般连接错误先使用ping跟telnet查看一下通不通，然后再看防火墙<br>
+	ping ip<br>
+	 telnet ip port<br>
+	 3.4.1 不是telnet<br>
+	 	windows部署：<br>
+	 	<img src="https://img-blog.csdnimg.cn/20191119165309936.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2NzZG5fbXljc2Ru,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>
+linux部署</p>
+<pre><code>[root@JD ~]# yum install -y telnet #安装
+[root@JD ~]# which telnet
+/usr/bin/telnet
+[root@JD ~]# telent 114.67.225.210 80
+-bash: telent: command not found
+[root@JD ~]# telnet 114.67.225.210 80  #能通
+Trying 114.67.225.210...
+Connected to 114.67.225.210.
+Escape character is '^]'.	 		  
+</code></pre>
+<p>3.4.2面试题: 老板说去A服务器login，打开xxx软件的web界面？</p>
+<pre><code>	查看ip
+	windows：ipconfig
+	linux：ifconfig
+	查看端口号
+	ps -ef |grep xxx
+	netstat -nlp |grep pid
+</code></pre>
+<p>3.4.3关于本地ip<br>
+	配置前三种，自己跟其他服务器都可以用，后面的两种只能自己访问自己</p>
+<pre><code>0.0.0.0:22 当前的ip
+:::22      当前的ip
+192.168.0.3:22 当前的ip
+----------------------------
+127.0.0.1:22 本地自己访问自己  window和其他服务器无法进行访问
+localhost:22
+</code></pre>
+<h2 id="高危命令kill-rm-rf">高危命令（kill rm -rf /）</h2>
+<p>rm -rf /命令要慎用，删除前可以先备份<br>
+kill -9 xxx：杀掉某一服务进程，慎用，要搞清楚该进程有没有用，再删除<br>
+ps 进程 xxx，top命令查询夯住的 / 删除xxx进程<br>
+kill -9 进程pid<br>
+kill -9 进程pid 进程pid 进程pid<br>
+kill -9 $(pgrep -f 匹配关键词)</p>
+<pre><code>[root@JD ~]# echo $(pgrep -f http)             
+10597 10598 10599 10600 10601 10602 11876
+批量删除进程
+[root@JD ~]# kill -9  $(pgrep -f http)
+</code></pre>
+<h2 id="安装yum软件">安装yum软件</h2>
+<p>yum search xxx:查找yum命令安装的xxx软件<br>
+yum install -y xxx:下载并安装xxx<br>
+yum remove xxx:删除yum安装的软件</p>
+<pre><code>[root@JD ~]# rpm -qa | grep http
+httpd-tools-2.4.6-90.el7.centos.x86_64
+httpd-2.4.6-90.el7.centos.x86_6
+删除rpm包失败，因为删除的rpm包有依赖，所以先删除依赖包
+[root@JD ~]# rpm -e httpd-tools-2.4.6-90.el7.centos.x86_64
+error: Failed dependencies:
+httpd-tools = 2.4.6-90.el7.centos is needed by (installed) httpd-2.4.6-90.el7.centos.x86_64
+加上--nodeps，就不会，直接删除
+[root@JD ~]# rpm -e --nodeps httpd-tools-2.4.6-90.el7.centos.x86_64
+</code></pre>
+<h2 id="wget下载安装包">wget下载安装包</h2>
+<pre><code>wget xxx
+</code></pre>
+<h2 id="压缩解压">压缩解压</h2>
+<p>7.1zip</p>
+<pre><code>压缩
+zip -r xxx.zip ./*  将在文件夹里面的内容压缩，不包括文件夹
+zip -r xxx.zip xxx/* 将文件夹包括里面的内容压缩，包括文件夹
+解压缩
+unzip xxx.zip
+</code></pre>
+<p>7.2tar<br>
+解压tar包</p>
+<pre><code>解压到当前目录
+tar -zxvf xxx.tar.gz
+解压到指定文件夹
+tar -zxvf xxx.tar.ge xxx/*
+压缩文件
+将文件abcd打包为test.tar并gzip压缩
+tar -zcvf test.tar.gz a b c d</code></pre>
 
                 
 
@@ -265,9 +439,13 @@ Especially the section:</p>
                 <ul class="pager">
                     
                         <li class="previous">
-                            <a href="/article/linux1/" data-toggle="tooltip" data-placement="top" title="linux基本命令一">&larr; Previous Post</a>
+                            <a href="/article/linux5/" data-toggle="tooltip" data-placement="top" title="linux基本命令五">&larr; Previous Post</a>
                         </li>
                     
+                    
+                        <li class="next">
+                            <a href="/article/linux3/" data-toggle="tooltip" data-placement="top" title="linux基本命令三">Next Post &rarr;</a>
+                        </li>
                     
                 </ul>
 
@@ -316,7 +494,7 @@ Especially the section:</p>
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#install-hexo"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">Install Hexo</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#theme-usage"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">Theme Usage</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#init"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text">Init</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#modify"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text">Modify</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#deployment"><span class="toc-nav-number">2.2.1.</span> <span class="toc-nav-text">Deployment</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#sidebar-settings"><span class="toc-nav-number">2.2.2.</span> <span class="toc-nav-text">Sidebar settings</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#signature-setup"><span class="toc-nav-number">2.2.3.</span> <span class="toc-nav-text">Signature Setup</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#go-to-top-icon-setup"><span class="toc-nav-number">2.2.4.</span> <span class="toc-nav-text">Go to top icon Setup</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#post-tag"><span class="toc-nav-number">2.2.5.</span> <span class="toc-nav-text">Post tag</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#markdown-render"><span class="toc-nav-number">2.2.6.</span> <span class="toc-nav-text">Markdown render</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#hexo-basics"><span class="toc-nav-number">2.3.</span> <span class="toc-nav-text">Hexo Basics</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#push-hexo-file-to-github"><span class="toc-nav-number">2.3.1.</span> <span class="toc-nav-text">Push hexo file to github:</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#push-hexo-blog-html-to-local"><span class="toc-nav-number">2.3.2.</span> <span class="toc-nav-text">Push hexo blog html to local :</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#push-hexo-blog-html-to-github"><span class="toc-nav-number">2.3.3.</span> <span class="toc-nav-text">Push hexo blog html to github :</span></a></li></ol></li></ol></li></ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#欢迎来到stefanboy的博客感谢大家对我的支持"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">&#x6B22;&#x8FCE;&#x6765;&#x5230;Stefanboy&#x7684;&#x535A;&#x5BA2;&#xFF0C;&#x611F;&#x8C22;&#x5927;&#x5BB6;&#x5BF9;&#x6211;&#x7684;&#x652F;&#x6301;.</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#vi命令"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">vi&#x547D;&#x4EE4;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#系统命令"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">&#x7CFB;&#x7EDF;&#x547D;&#x4EE4;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#进程端口号"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">&#x8FDB;&#x7A0B;&#x7AEF;&#x53E3;&#x53F7;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#高危命令kill-rm-rf"><span class="toc-nav-number">5.</span> <span class="toc-nav-text">&#x9AD8;&#x5371;&#x547D;&#x4EE4;&#xFF08;kill rm -rf /&#xFF09;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#安装yum软件"><span class="toc-nav-number">6.</span> <span class="toc-nav-text">&#x5B89;&#x88C5;yum&#x8F6F;&#x4EF6;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#wget下载安装包"><span class="toc-nav-number">7.</span> <span class="toc-nav-text">wget&#x4E0B;&#x8F7D;&#x5B89;&#x88C5;&#x5305;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#压缩解压"><span class="toc-nav-number">8.</span> <span class="toc-nav-text">&#x538B;&#x7F29;&#x89E3;&#x538B;</span></a></li></ol>
         
         </div>
       </aside>
@@ -336,7 +514,7 @@ Especially the section:</p>
                     <h5><a href="/tags/">FEATURED TAGS</a></h5>
                     <div class="tags">
                        
-                          <a class="tag" href="/tags/#Hexo" title="Hexo">Hexo</a>
+                          <a class="tag" href="/tags/#Linux" title="Linux">Linux</a>
                         
                     </div>
                 </section>

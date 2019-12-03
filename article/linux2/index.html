@@ -14,11 +14,11 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <title>
         
-          [Hexo] Theme Jepson - Stefanboy | Blog
+          linux基本命令二 - Stefanboy | Blog
         
     </title>
 
-    <link rel="canonical" href="http://yoursite.com/article/hexo-theme-jepson/">
+    <link rel="canonical" href="http://yoursite.com/article/linux2/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -88,14 +88,14 @@
                     <div class="post-heading">
                         <div class="tags">
                             
-                              <a class="tag" href="/tags/#Hexo" title="Hexo">Hexo</a>
+                              <a class="tag" href="/tags/#Linux" title="Linux">Linux</a>
                             
                         </div>
-                        <h1>[Hexo] Theme Jepson</h1>
-                        <h2 class="subheading">This is hexo theme Demo.</h2>
+                        <h1>linux基本命令二</h1>
+                        <h2 class="subheading">How to use Linux</h2>
                         <span class="meta">
                             Posted by Stefanboy on
-                            2015-07-10
+                            2016-11-17
                         </span>
                     </div>
                 
@@ -212,51 +212,144 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-                <h1 id="install-hexo">Install Hexo</h1>
-<p>Install Node.js  and Git</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#For window</span><br><span class="line">Node.js https://nodejs.org/dist/v12.13.0/node-v12.13.0-x64.msi</span><br><span class="line">Git https://github.com/git-for-windows/git/releases/download/v2.24.0.windows.2/Git-2.24.0.2-64-bit.exe</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#For Mac</span><br><span class="line">brew install node</span><br><span class="line">brew install git</span><br></pre></td></tr></table></figure>
-<p>Install hexo</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-cli -g</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span>For more:https://hexo.io/zh-cn/index.html</span><br></pre></td></tr></table></figure>
-<h1 id="theme-usage">Theme Usage</h1>
-<h2 id="init">Init</h2>
-<hr>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/hackeruncle/hackeruncle-hexo.git ./hackeruncle-hexo</span><br><span class="line"><span class="built_in">cd</span> hackeruncle-hexo</span><br><span class="line">npm install</span><br></pre></td></tr></table></figure>
-<h2 id="modify">Modify</h2>
-<hr>
-<p>Modify <code>_config.yml</code> file with your own info.<br>
-Especially the section:</p>
-<h3 id="deployment">Deployment</h3>
-<p>Replace to your own repo, the name is the same as github user name!</p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">deploy:</span></span><br><span class="line"><span class="attr">  type:</span> <span class="string">git</span></span><br><span class="line"><span class="attr">  repo:</span> <span class="string">git@github.com:&lt;git</span> <span class="string">user</span> <span class="string">name&gt;/&lt;git</span> <span class="string">user</span> <span class="string">name&gt;.github.io.git</span></span><br><span class="line"><span class="attr">  branch:</span> <span class="string">master</span></span><br></pre></td></tr></table></figure>
-<h3 id="sidebar-settings">Sidebar settings</h3>
-<p>Copy your avatar image to <code>&lt;root&gt;/img/</code> and modify the <code>_config.yml</code>:</p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">sidebar:</span> <span class="literal">true</span>    <span class="comment"># whether or not using Sidebar.</span></span><br><span class="line"><span class="attr">sidebar-about-description:</span> <span class="string">"&lt;your description&gt;"</span></span><br><span class="line"><span class="attr">sidebar-avatar:</span> <span class="string">img/&lt;your</span> <span class="string">avatar</span> <span class="string">path&gt;</span></span><br></pre></td></tr></table></figure>
-<p>and activate your personal widget you like</p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">widgets:</span>         <span class="comment"># here are widget you can use, you can comment out</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">featured-tags</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">short-about</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">recent-posts</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">friends-blog</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">archive</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">category</span></span><br></pre></td></tr></table></figure>
-<p>if you want to add sidebar widget, please add at <code>layout/_widget</code>.</p>
-<h3 id="signature-setup">Signature Setup</h3>
-<p>Copy your signature image to <code>&lt;root&gt;/img/signature</code> and modify the <code>_config.yml</code>:</p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">signature:</span> <span class="literal">true</span>   <span class="comment"># show signature</span></span><br><span class="line"><span class="attr">signature-img:</span> <span class="string">img/signature/&lt;your-signature-ID&gt;</span></span><br></pre></td></tr></table></figure>
-<h3 id="go-to-top-icon-setup">Go to top icon Setup</h3>
-<p>My icon is using iron man, you can change to your own icon at <code>css/image</code>.</p>
-<h3 id="post-tag">Post tag</h3>
-<p>You can decide to show post tags or not.</p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">home_posts_tag:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
-<h3 id="markdown-render">Markdown render</h3>
-<p>My markdown render engine plugin is <a href="https://github.com/celsomiranda/hexo-renderer-markdown-it" target="_blank" rel="noopener">hexo-renderer-markdown-it</a>.</p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Markdown-it config</span></span><br><span class="line"><span class="comment">## Docs: https://github.com/celsomiranda/hexo-renderer-markdown-it/wiki</span></span><br><span class="line"><span class="attr">markdown:</span></span><br><span class="line"><span class="attr">  render:</span></span><br><span class="line"><span class="attr">    html:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">    xhtmlOut:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">    breaks:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">    linkify:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">    typographer:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">    quotes:</span> <span class="string">'“”‘’'</span></span><br></pre></td></tr></table></figure>
-<p>and if you want to change the header anchor ‘ℬ’, you can go to <code>layout/post.ejs</code> to change it.</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span>(<span class="string">"https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js"</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        anchors.options = &#123;</span><br><span class="line">          visible: <span class="string">'hover'</span>,</span><br><span class="line">          placement: <span class="string">'left'</span>,</span><br><span class="line">          icon: ℬ <span class="comment">// this is the header anchor "unicode" icon</span></span><br><span class="line">        &#125;;</span><br></pre></td></tr></table></figure>
-<h2 id="hexo-basics">Hexo Basics</h2>
-<hr>
-<h3 id="push-hexo-file-to-github">Push hexo file to github:</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git add .</span><br><span class="line">git commit -m <span class="string">'init'</span></span><br><span class="line">git push -u origin master</span><br></pre></td></tr></table></figure>
-<h3 id="push-hexo-blog-html-to-local">Push hexo blog html to local :</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo clean &amp;&amp; hexo generate &amp;&amp; hexo server</span><br></pre></td></tr></table></figure>
-<p>open web: <a href="http://localhost:4000" target="_blank" rel="noopener">http://localhost:4000</a></p>
-<h3 id="push-hexo-blog-html-to-github">Push hexo blog html to github :</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo clean &amp;&amp; hexo deploy</span><br></pre></td></tr></table></figure>
-<p>open web: <a href="https://hackeruncle.github.io" target="_blank" rel="noopener">https://hackeruncle.github.io</a></p>
+                <h2 id="欢迎来到stefanboy的博客感谢大家对我的支持">欢迎来到Stefanboy的博客，感谢大家对我的支持.</h2>
+<p>该文章内容包括四部分，分别为<br>
+1、全局环境变量，个人环境变量，which理解<br>
+2、别名<br>
+3、删除<br>
+4、history</p>
+<h2 id="echo打印">echo打印</h2>
+<pre><code>[root@JD ~]# echo &quot;hello world&quot;
+hello world
+</code></pre>
+<p>查看配置好的环境变量名称</p>
+<pre><code>[root@JD ~]# echo $PATH
+/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin
+</code></pre>
+<p>查询命令所属的路径在那，去$PATH里去找，找到第一个就返回</p>
+<pre><code>[root@JD ~]# which ls
+alias ls='ls --color=auto'
+  		 /usr/bin/ls
+[root@JD ~]# which lsl
+/usr/bin/which: no lsl in (/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin)
+</code></pre>
+<p>如果将PATH置为空，当前session中的环境变量则为空，当然了，不会全局生效，只在当前session起作用</p>
+<pre><code>[root@JD ~]# PATH=&quot;&quot;
+[root@JD ~]# echo $PATH
+[root@JD ~]# which ls
+alias ls='ls --color=auto'
+[root@JD ~]# ls
+-bash: ls: No such file or directory
+[root@JD ~]# 
+</code></pre>
+<h2 id="环境变量">环境变量</h2>
+<p>1、所在位置：</p>
+<pre><code>全局：/etc/profile
+个人(只对当前用户起作用)：~/.bash_profile或者 ~/.bashrc（建议个人环境变量配置这个文件中）
+</code></pre>
+<p>2、设置完环境变量后，使之起作用命令为</p>
+<pre><code>source xxx
+</code></pre>
+<p>3、创建统一放置文件目录</p>
+<pre><code>[root@JD /]# mkdir -p /usr/java
+[root@JD /]# cd /usr/java
+</code></pre>
+<p>4、安装uzip命令（解压缩）</p>
+<pre><code>[root@JD java]# yum install -y unzip
+[root@JD java]# unzip jdk1.8.0_121.zip
+[root@JD java]# ll
+total 186628
+drwxr-xr-x 8 root root      4096 Nov 17 00:24 jdk1.8.0_121
+-rw-r--r-- 1 root root 191100510 Nov 14 01:25 jdk1.8.0_121.zip
+</code></pre>
+<p>5、赋用户和用户组权限</p>
+<pre><code>[root@JD java]# chown -R root:root /usr/java/*
+</code></pre>
+<p>6、配置环境变量</p>
+<pre><code>环境变量是指的什么
+K=V  前后不能有空格
+使用时 $K
+vi /etc/profile
+a. 上下键 移动光标
+b. 按 i键insert 进入 编辑模式
+c. 开始编辑
+d. 按 esc键退出 编辑模式，进入命令行模式
+e. 按 shift+: 键，进入尾行模式
+f. 输入 wq 保存退出
+
+[root@JD java]# vi /etc/profile
+export JAVA_HOME=/usr/java/jdk1.8.0_121/bin
+export PATH=$JAVA_HOME:$PATH
+[root@JD java]# source /etc/profile
+[root@JD java]# which java
+/usr/java/jdk1.8.0_121/bin/java
+</code></pre>
+<p>总结:<br>
+1.command not found<br>
+没有部署安装包，部署了没有配置环境变量<br>
+2.习惯<br>
+当我们以后部署一个软件，bin目录的可执行文件 比如java<br>
+习惯 当生效环境变量文件，习惯做 <strong>which java</strong>看一下是否配置成功</p>
+<h2 id="别名alias">别名（alias）</h2>
+<p>作用：简化我们自己的操作</p>
+<pre><code>[root@JD java]# vi ~/.bashrc
+# .bashrc
+ User specific aliases and functions
+
+alias rm='rm -i'
+alias cp='cp -i'
+alias mv='mv -i'
+
+ Source global definitions
+if [ -f /etc/bashrc ]; then
+    . /etc/bashrc
+fi
+**alias j='cd /usr/java'**
+~
+
+[root@JD java]# source ~/.bashrc
+[root@JD java]# cd ../
+[root@JD usr]# j
+[root@JD java]#
+</code></pre>
+<h2 id="history查看历史输入的命令">history（查看历史输入的命令）</h2>
+<p>直连<br>
+跳板机 没有关系  A–》B 没有web界面的 可视化的<br>
+堡垒机 log文件 记录 xxx  A–》B web界面的 可视化的 审计</p>
+<p>清空历史操作命令</p>
+<pre><code>[root@JD java]# history -c
+[root@JD usr]# history
+1  history
+2  cd ../
+3  echo
+4  uzip
+5  uzip --help
+6  unzip --help
+7  history
+</code></pre>
+<p>执行历史指定的命令</p>
+<pre><code>[root@JD java]# !2
+cd ../
+[root@JD usr]# 
+</code></pre>
+<p>history 看看这个账号之前做过哪些操作吧 有可能发现password</p>
+<h2 id="删除">删除</h2>
+<p>生成新文件:</p>
+<pre><code>touch xxx.log
+cat /dev/null &gt; xxx.log 创建新文件
+cat /dev/null &gt;&gt; xxx.log 如果有该文件，会追加内容，否则创建新文件
+vi命令 也会生成新文件
+</code></pre>
+<p>创建文件夹: mkdir</p>
+<pre><code>rm -f rz.log11  直接删除文件
+rm -rf 1        直接删除文件夹
+</code></pre>
+<p>风险:<br>
+rm -rf /  跑路  高危命令<br>
+什么场景会发生 shell脚本:<br>
+K=’/home/jepson’<br>
+K=’'<br>
+这种情况如果K为空，会发生删除所有linux目录情况，需判断 $K命令是否存在，然后执行rm -rf $K/*</p>
 
                 
 
@@ -265,9 +358,13 @@ Especially the section:</p>
                 <ul class="pager">
                     
                         <li class="previous">
-                            <a href="/article/linux1/" data-toggle="tooltip" data-placement="top" title="linux基本命令一">&larr; Previous Post</a>
+                            <a href="/article/linux3/" data-toggle="tooltip" data-placement="top" title="linux基本命令三">&larr; Previous Post</a>
                         </li>
                     
+                    
+                        <li class="next">
+                            <a href="/article/linux1/" data-toggle="tooltip" data-placement="top" title="linux基本命令一">Next Post &rarr;</a>
+                        </li>
                     
                 </ul>
 
@@ -316,7 +413,7 @@ Especially the section:</p>
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#install-hexo"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">Install Hexo</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#theme-usage"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">Theme Usage</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#init"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text">Init</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#modify"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text">Modify</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#deployment"><span class="toc-nav-number">2.2.1.</span> <span class="toc-nav-text">Deployment</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#sidebar-settings"><span class="toc-nav-number">2.2.2.</span> <span class="toc-nav-text">Sidebar settings</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#signature-setup"><span class="toc-nav-number">2.2.3.</span> <span class="toc-nav-text">Signature Setup</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#go-to-top-icon-setup"><span class="toc-nav-number">2.2.4.</span> <span class="toc-nav-text">Go to top icon Setup</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#post-tag"><span class="toc-nav-number">2.2.5.</span> <span class="toc-nav-text">Post tag</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#markdown-render"><span class="toc-nav-number">2.2.6.</span> <span class="toc-nav-text">Markdown render</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#hexo-basics"><span class="toc-nav-number">2.3.</span> <span class="toc-nav-text">Hexo Basics</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#push-hexo-file-to-github"><span class="toc-nav-number">2.3.1.</span> <span class="toc-nav-text">Push hexo file to github:</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#push-hexo-blog-html-to-local"><span class="toc-nav-number">2.3.2.</span> <span class="toc-nav-text">Push hexo blog html to local :</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#push-hexo-blog-html-to-github"><span class="toc-nav-number">2.3.3.</span> <span class="toc-nav-text">Push hexo blog html to github :</span></a></li></ol></li></ol></li></ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#欢迎来到stefanboy的博客感谢大家对我的支持"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">&#x6B22;&#x8FCE;&#x6765;&#x5230;Stefanboy&#x7684;&#x535A;&#x5BA2;&#xFF0C;&#x611F;&#x8C22;&#x5927;&#x5BB6;&#x5BF9;&#x6211;&#x7684;&#x652F;&#x6301;.</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#echo打印"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">echo&#x6253;&#x5370;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#环境变量"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">&#x73AF;&#x5883;&#x53D8;&#x91CF;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#别名alias"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">&#x522B;&#x540D;&#xFF08;alias&#xFF09;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#history查看历史输入的命令"><span class="toc-nav-number">5.</span> <span class="toc-nav-text">history&#xFF08;&#x67E5;&#x770B;&#x5386;&#x53F2;&#x8F93;&#x5165;&#x7684;&#x547D;&#x4EE4;&#xFF09;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#删除"><span class="toc-nav-number">6.</span> <span class="toc-nav-text">&#x5220;&#x9664;</span></a></li></ol>
         
         </div>
       </aside>
@@ -336,7 +433,7 @@ Especially the section:</p>
                     <h5><a href="/tags/">FEATURED TAGS</a></h5>
                     <div class="tags">
                        
-                          <a class="tag" href="/tags/#Hexo" title="Hexo">Hexo</a>
+                          <a class="tag" href="/tags/#Linux" title="Linux">Linux</a>
                         
                     </div>
                 </section>

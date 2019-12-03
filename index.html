@@ -482,36 +482,40 @@ total 43856
 
 <div class="post-preview">
 
-    <a href="/article/hexoinstall/">
+    <a href="/article/linux5/">
         <h2 class="post-title">
                                  
-            Hexo安装部署和使用
+            linux基本命令五
         </h2>
         <h3 class="post-subtitle">
-            how to use hexo
+            How to use Linux
         </h3>
         <div class="post-content-preview">
             欢迎来到Stefanboy的博客，感谢大家对我的支持.
-nodejs部署
-安装nodejs
-必须部署nodejs8.6以上版本
-C:\Users\Administrator&gt;node -v
-v8.11.1
-C:\Users\Administrator&gt;npm -v
-5.6.0
+该文章内容包括四部分，分别为
+1、调度工具crontab
+2、后台执行nohup
+3、软连接
+调度工具
+现在主要的调度工具有
+1、airflow
+2、azkaban
+3、rundeck
+4、linux自带的crontab
 
-永久设置淘宝源:
-npm config set registry http://registry.np......
+crontab介绍
+	1.1在编写脚本的时候，按照规范；执行脚本的时候，注意要有执行x权限
+	第一行写上解释器 #......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by Stefanboy on
-            2016-11-23
+            2016-11-21
         </p>
         <div class="tags">
             
-              <a href="/tags/#Hexo" title="Hexo">Hexo</a>
+              <a href="/tags/#Linux" title="Linux">Linux</a>
             
         </div>
     
@@ -521,28 +525,76 @@ npm config set registry http://registry.np......
 
 <div class="post-preview">
 
-    <a href="/article/hexo-theme-jepson/">
+    <a href="/article/linux4/">
         <h2 class="post-title">
                                  
-            [Hexo] Theme Jepson
+            linux基本命令四
         </h2>
         <h3 class="post-subtitle">
-            This is hexo theme Demo.
+            How to use Linux
         </h3>
         <div class="post-content-preview">
-            Install Hexo
-Install Node.js  and Git
-12345678#For windowNode.js https://nodejs.org/dist/v12.13.0/node-v12.13.0-x64.msiGit https://github.com/git-for-windows/git/releases/download/v2.24.0.windows.2......
+            欢迎来到Stefanboy的博客，感谢大家对我的支持.
+该文章内容包括四部分，分别为
+1.vi命令
+2.系统信息 进程 ps -ef|grep xxx 端口号 netstat -nlp |grep xxx
+3.连接拒绝 (权限受限 ping telnet )
+4.高危命令 rm -rf /
+5.常用的命令 wget yum rpm  压缩解压
+vi命令
+
+1.1命令模式
+常见快捷键
+删除当前......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by Stefanboy on
-            2015-07-10
+            2016-11-19
         </p>
         <div class="tags">
             
-              <a href="/tags/#Hexo" title="Hexo">Hexo</a>
+              <a href="/tags/#Linux" title="Linux">Linux</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/article/linux3/">
+        <h2 class="post-title">
+                                 
+            linux基本命令三
+        </h2>
+        <h3 class="post-subtitle">
+            How to use Linux
+        </h3>
+        <div class="post-content-preview">
+            欢迎来到Stefanboy的博客，感谢大家对我的支持.
+该文章内容包括四部分，分别为
+1、用户和用户组
+2、sudo命令
+3、用户无法登录	 passwd文件
+4、权限 chmod chown
+5、其他命令 su find du 命令
+用户和用户组
+1.1查看用户命令的目录
+[root@JD ~]# ll /usr/sbin/user*
+-rwxr-x--- 1 root root 1181......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by Stefanboy on
+            2016-11-18
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#Linux" title="Linux">Linux</a>
             
         </div>
     
@@ -556,6 +608,10 @@ Install Node.js  and Git
 
 <ul class="pager">
     
+    
+        <li class="next">
+            <a href="/page/2/">Older Posts &rarr;</a>
+        </li>
     
 </ul>
 
@@ -587,11 +643,19 @@ Install Node.js  and Git
     <div class="tags">
         
             
+            <a href="/tags/#Hadoop Linux" title="Hadoop Linux" rel="1">Hadoop Linux</a>
+            
+        
+            
             <a href="/tags/#Hadoop" title="Hadoop" rel="2">Hadoop</a>
             
         
             
-            <a href="/tags/#Hadoop Linux" title="Hadoop Linux" rel="1">Hadoop Linux</a>
+            <a href="/tags/#Hexo" title="Hexo" rel="2">Hexo</a>
+            
+        
+            
+            <a href="/tags/#Linux" title="Linux" rel="5">Linux</a>
             
         
             
@@ -600,10 +664,6 @@ Install Node.js  and Git
         
             
             <a href="/tags/#Rundeck" title="Rundeck" rel="1">Rundeck</a>
-            
-        
-            
-            <a href="/tags/#Hexo" title="Hexo" rel="2">Hexo</a>
             
         
     </div>
@@ -698,7 +758,7 @@ Install Node.js  and Git
         
     <h5>ARCHIVES</h5>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">1</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">1</span></li></ul>
     </div>
 
         <hr>
