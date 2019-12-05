@@ -141,14 +141,14 @@
 
                         
                         <li>
-                            <a href="/tags/">Tags</a>
+                            <a href="/about/">About</a>
                         </li>
                         
                     
 
                         
                         <li>
-                            <a href="/about/">About</a>
+                            <a href="/tags/">Tags</a>
                         </li>
                         
                     
@@ -211,6 +211,48 @@
 
 <div class="post-preview">
 
+    <a href="/article/hadoop4/">
+        <h2 class="post-title">
+                                 
+            HDFS的副本放置策略&读写流程&pid文件&多节点和单节点磁盘均衡&安全模式&常用命令和设置回收站
+        </h2>
+        <h3 class="post-subtitle">
+            How to use Hadoop
+        </h3>
+        <div class="post-content-preview">
+            欢迎来到Stefanboy的博客，感谢大家对我的支持.
+HDFS副本放置策略
+客户端：执行put命令所在的机器称为客户端
+
+
+第一副本
+假如上传节点为dn节点，优先放置在本节点；否则会随机找一个磁盘不太慢、CPU不太繁忙的节点
+第二副本
+放置于第一副本不同的机架上
+第三副本
+放置于第二副本的相同机架的不同节点上
+
+CDH机架有一个默认的机架，虚拟的概念，CDH一般不调整这种默认机架
+HDFS......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by Stefanboy on
+            2016-12-05
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#Hadoop" title="Hadoop">Hadoop</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
     <a href="/article/hadoop3/">
         <h2 class="post-title">
                                  
@@ -244,48 +286,6 @@ dfs.blocksize
 
 
 块大小为什么要设......
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by Stefanboy on
-            2016-12-02
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#Hadoop" title="Hadoop">Hadoop</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/article/hadoop4/">
-        <h2 class="post-title">
-                                 
-            块&HDFS架构&小文件&配置修改存储目录
-        </h2>
-        <h3 class="post-subtitle">
-            How to use Hadoop
-        </h3>
-        <div class="post-content-preview">
-            欢迎来到Stefanboy的博客，感谢大家对我的支持.
-HDFS副本放置策略
-客户端：执行put命令所在的机器称为客户端
-
-
-第一副本
-假如上传节点为dn节点，优先放置在本节点；否则会随机找一个磁盘不太慢、CPU不太繁忙的节点
-第二副本
-放置于第一副本不同的机架上
-第三副本
-放置于第二副本的相同机架的不同节点上
-
-CDH机架有一个默认的机架，虚拟的概念，CDH一般不调整这种默认机架
-HDFS......
         </div>
     </a>
     
@@ -502,45 +502,6 @@ Query OK, 0 rows......
 
 <div class="post-preview">
 
-    <a href="/article/hexoinstall/">
-        <h2 class="post-title">
-                                 
-            Hexo安装部署和使用
-        </h2>
-        <h3 class="post-subtitle">
-            how to use hexo
-        </h3>
-        <div class="post-content-preview">
-            欢迎来到Stefanboy的博客，感谢大家对我的支持.
-nodejs部署
-安装nodejs
-必须部署nodejs8.6以上版本
-C:\Users\Administrator&gt;node -v
-v8.11.1
-C:\Users\Administrator&gt;npm -v
-5.6.0
-
-永久设置淘宝源:
-npm config set registry http://registry.np......
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by Stefanboy on
-            2016-11-23
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#Hexo" title="Hexo">Hexo</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
-<div class="post-preview">
-
     <a href="/article/mysqlinstall/">
         <h2 class="post-title">
                                  
@@ -617,6 +578,46 @@ crontab介绍
 </div>
 <hr>
 
+<div class="post-preview">
+
+    <a href="/article/linux4/">
+        <h2 class="post-title">
+                                 
+            linux基本命令四
+        </h2>
+        <h3 class="post-subtitle">
+            How to use Linux
+        </h3>
+        <div class="post-content-preview">
+            欢迎来到Stefanboy的博客，感谢大家对我的支持.
+该文章内容包括四部分，分别为
+1.vi命令
+2.系统信息 进程 ps -ef|grep xxx 端口号 netstat -nlp |grep xxx
+3.连接拒绝 (权限受限 ping telnet )
+4.高危命令 rm -rf /
+5.常用的命令 wget yum rpm  压缩解压
+vi命令
+
+1.1命令模式
+常见快捷键
+删除当前......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by Stefanboy on
+            2016-11-19
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#Linux" title="Linux">Linux</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
 
 
 <!-- Pager -->
@@ -625,7 +626,7 @@ crontab介绍
     
     
         <li class="next">
-            <a href="/archives/2/">Older Posts &rarr;</a>
+            <a href="/page/2/">Older Posts &rarr;</a>
         </li>
     
 </ul>
@@ -734,11 +735,11 @@ crontab介绍
     <ul>
       
         <li>
-          <a href="/article/hadoop3/">块&amp;HDFS架构&amp;小文件&amp;配置修改存储目录</a>
+          <a href="/article/hadoop4/">HDFS的副本放置策略&amp;读写流程&amp;pid文件&amp;多节点和单节点磁盘均衡&amp;安全模式&amp;常用命令和设置回收站</a>
         </li>
       
         <li>
-          <a href="/article/hadoop4/">块&amp;HDFS架构&amp;小文件&amp;配置修改存储目录</a>
+          <a href="/article/hadoop3/">块&amp;HDFS架构&amp;小文件&amp;配置修改存储目录</a>
         </li>
       
         <li>
