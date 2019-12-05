@@ -134,7 +134,7 @@
 
                         
                         <li>
-                            <a href="/about/">About</a>
+                            <a href="/archive/">Archives</a>
                         </li>
                         
                     
@@ -148,7 +148,7 @@
 
                         
                         <li>
-                            <a href="/archive/">Archives</a>
+                            <a href="/about/">About</a>
                         </li>
                         
                     
@@ -244,6 +244,48 @@ dfs.blocksize
 
 
 块大小为什么要设......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by Stefanboy on
+            2016-12-02
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#Hadoop" title="Hadoop">Hadoop</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/article/hadoop4/">
+        <h2 class="post-title">
+                                 
+            块&HDFS架构&小文件&配置修改存储目录
+        </h2>
+        <h3 class="post-subtitle">
+            How to use Hadoop
+        </h3>
+        <div class="post-content-preview">
+            欢迎来到Stefanboy的博客，感谢大家对我的支持.
+HDFS副本放置策略
+客户端：执行put命令所在的机器称为客户端
+
+
+第一副本
+假如上传节点为dn节点，优先放置在本节点；否则会随机找一个磁盘不太慢、CPU不太繁忙的节点
+第二副本
+放置于第一副本不同的机架上
+第三副本
+放置于第二副本的相同机架的不同节点上
+
+CDH机架有一个默认的机架，虚拟的概念，CDH一般不调整这种默认机架
+HDFS......
         </div>
     </a>
     
@@ -460,6 +502,45 @@ Query OK, 0 rows......
 
 <div class="post-preview">
 
+    <a href="/article/hexoinstall/">
+        <h2 class="post-title">
+                                 
+            Hexo安装部署和使用
+        </h2>
+        <h3 class="post-subtitle">
+            how to use hexo
+        </h3>
+        <div class="post-content-preview">
+            欢迎来到Stefanboy的博客，感谢大家对我的支持.
+nodejs部署
+安装nodejs
+必须部署nodejs8.6以上版本
+C:\Users\Administrator&gt;node -v
+v8.11.1
+C:\Users\Administrator&gt;npm -v
+5.6.0
+
+永久设置淘宝源:
+npm config set registry http://registry.np......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by Stefanboy on
+            2016-11-23
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#Hexo" title="Hexo">Hexo</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
     <a href="/article/mysqlinstall/">
         <h2 class="post-title">
                                  
@@ -536,85 +617,6 @@ crontab介绍
 </div>
 <hr>
 
-<div class="post-preview">
-
-    <a href="/article/linux4/">
-        <h2 class="post-title">
-                                 
-            linux基本命令四
-        </h2>
-        <h3 class="post-subtitle">
-            How to use Linux
-        </h3>
-        <div class="post-content-preview">
-            欢迎来到Stefanboy的博客，感谢大家对我的支持.
-该文章内容包括四部分，分别为
-1.vi命令
-2.系统信息 进程 ps -ef|grep xxx 端口号 netstat -nlp |grep xxx
-3.连接拒绝 (权限受限 ping telnet )
-4.高危命令 rm -rf /
-5.常用的命令 wget yum rpm  压缩解压
-vi命令
-
-1.1命令模式
-常见快捷键
-删除当前......
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by Stefanboy on
-            2016-11-19
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#Linux" title="Linux">Linux</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/article/linux3/">
-        <h2 class="post-title">
-                                 
-            linux基本命令三
-        </h2>
-        <h3 class="post-subtitle">
-            How to use Linux
-        </h3>
-        <div class="post-content-preview">
-            欢迎来到Stefanboy的博客，感谢大家对我的支持.
-该文章内容包括四部分，分别为
-1、用户和用户组
-2、sudo命令
-3、用户无法登录	 passwd文件
-4、权限 chmod chown
-5、其他命令 su find du 命令
-用户和用户组
-1.1查看用户命令的目录
-[root@JD ~]# ll /usr/sbin/user*
--rwxr-x--- 1 root root 1181......
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by Stefanboy on
-            2016-11-18
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#Linux" title="Linux">Linux</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
 
 
 <!-- Pager -->
@@ -623,7 +625,7 @@ vi命令
     
     
         <li class="next">
-            <a href="/page/2/">Older Posts &rarr;</a>
+            <a href="/archives/2/">Older Posts &rarr;</a>
         </li>
     
 </ul>
@@ -656,7 +658,7 @@ vi命令
     <div class="tags">
         
             
-            <a href="/tags/#Hadoop" title="Hadoop" rel="2">Hadoop</a>
+            <a href="/tags/#Hadoop" title="Hadoop" rel="3">Hadoop</a>
             
         
             
@@ -736,6 +738,10 @@ vi命令
         </li>
       
         <li>
+          <a href="/article/hadoop4/">块&amp;HDFS架构&amp;小文件&amp;配置修改存储目录</a>
+        </li>
+      
+        <li>
           <a href="/article/hadoop2/">YARN部署&amp;jps&amp;Linux的oom及过期清理</a>
         </li>
       
@@ -745,10 +751,6 @@ vi命令
       
         <li>
           <a href="/article/rundeck/">Rundeck部署使用</a>
-        </li>
-      
-        <li>
-          <a href="/article/mysquser2/">MySQL使用二</a>
         </li>
       
     </ul>
@@ -771,7 +773,7 @@ vi命令
         
     <h5>ARCHIVES</h5>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">1</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">1</span></li></ul>
     </div>
 
         <hr>

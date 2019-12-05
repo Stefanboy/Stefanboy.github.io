@@ -142,7 +142,7 @@
 
                         
                         <li>
-                            <a href="/about/">About</a>
+                            <a href="/archive/">Archives</a>
                         </li>
                         
                     
@@ -156,7 +156,7 @@
 
                         
                         <li>
-                            <a href="/archive/">Archives</a>
+                            <a href="/about/">About</a>
                         </li>
                         
                     
@@ -510,7 +510,7 @@ root       5291   3912  0 21:32 pts/1    00:00:00 grep --color=auto 31488
 <pre><code>所以，以后进程挂了，--》log位置--》error: 有error具体分析；没 想到oom机制--》查看系统日志cat /var/log/messages | grep oom
 </code></pre>
 <h2 id="linux机制-tmp默认存储周期-1个月-会自动清空不在规则以内的文件">Linux机制 /tmp默认存储周期 1个月 会自动清空不在规则以内的文件</h2>
-<p>启动hdfs或yarn，如果不在配置文件配置的话，生成的pid文件会在/tmp目录下，如果linux一个月自动清理pid文件，会造成程序有问题，所以我们需要在hdfs和yarn的配置文件中配置让，pid文件不要生成在/tmp目录下</p>
+<p>启动hdfs或yarn，如果不在配置文件配置的话，生成的pid文件会在/tmp目录下，如果linux一个月自动清理pid文件，pid文件会造成集群的启动和停止（jps文件不会影响），所以我们需要在hdfs和yarn的配置文件中配置让，pid文件不要生成在/tmp目录下</p>
 <ul>
 <li>
 <p>hdfs的配置<br>
@@ -547,7 +547,7 @@ total 20
                 <ul class="pager">
                     
                         <li class="previous">
-                            <a href="/article/hadoop3/" data-toggle="tooltip" data-placement="top" title="块&HDFS架构&小文件&配置修改存储目录">&larr; Previous Post</a>
+                            <a href="/article/hadoop4/" data-toggle="tooltip" data-placement="top" title="块&HDFS架构&小文件&配置修改存储目录">&larr; Previous Post</a>
                         </li>
                     
                     
