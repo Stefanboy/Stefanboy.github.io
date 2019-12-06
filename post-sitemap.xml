@@ -7,8 +7,16 @@
     </url>
 
     <url>
-        <loc>http://yoursite.com/article/hadoop4/</loc>
-        <lastmod>2019-12-05T14:00:36.772Z</lastmod>
+        <loc>http://yoursite.com/article/hadoop3/</loc>
+        <lastmod>2019-12-06T02:04:10.860Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://yoursite.com/article/hadoop1/</loc>
+        <lastmod>2019-12-05T15:10:34.035Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
@@ -16,15 +24,23 @@
 
     <url>
         <loc>http://yoursite.com/article/hadoop2/</loc>
-        <lastmod>2019-12-05T12:22:53.625Z</lastmod>
+        <lastmod>2019-12-05T15:09:31.581Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
     </url>
 
     <url>
-        <loc>http://yoursite.com/article/hadoop3/</loc>
-        <lastmod>2019-12-03T04:54:33.617Z</lastmod>
+        <loc>http://yoursite.com/article/DataNode%E6%8A%9B%E5%86%85%E5%AD%98%E6%BA%A2%E5%87%BAoom%E7%9A%84error/</loc>
+        <lastmod>2019-12-05T15:00:11.420Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://yoursite.com/article/hadoop4/</loc>
+        <lastmod>2019-12-05T14:14:21.616Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
@@ -65,14 +81,6 @@
     <url>
         <loc>http://yoursite.com/article/linux1/</loc>
         <lastmod>2019-12-03T03:42:05.225Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
-        <loc>http://yoursite.com/article/hadoop1/</loc>
-        <lastmod>2019-12-02T15:09:36.454Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 

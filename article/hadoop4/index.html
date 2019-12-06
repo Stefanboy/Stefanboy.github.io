@@ -142,14 +142,14 @@
 
                         
                         <li>
-                            <a href="/archive/">Archives</a>
+                            <a href="/about/">About</a>
                         </li>
                         
                     
 
                         
                         <li>
-                            <a href="/about/">About</a>
+                            <a href="/archive/">Archives</a>
                         </li>
                         
                     
@@ -342,8 +342,8 @@ FSCK started by hadoop (auth:SIMPLE) from /192.168.0.3 for path / at Thu Dec 05 
  Number of data-nodes:          1
  Number of racks:               1
 FSCK ended at Thu Dec 05 20:40:10 CST 2019 in 7 milliseconds
+The filesystem under path '/' is HEALTHY
 </code></pre>
-<p>The filesystem under path ‘/’ is HEALTHY</p>
 <h2 id="hdfs的多节点nn单节点的磁盘均衡">HDFS的多节点（nn），单节点的磁盘均衡</h2>
 <h3 id="各dn节点的数据均衡">各DN节点的数据均衡</h3>
 <p><img src="/img/hadoop4/4.png" alt=""><br>
@@ -421,7 +421,7 @@ FSCK ended at Thu Dec 05 20:40:10 CST 2019 in 7 milliseconds
 <tbody>
 <tr>
 <td>dfs.disk.balancer.enabled</td>
-<td></td>
+<td>true</td>
 </tr>
 </tbody>
 </table>
@@ -462,9 +462,13 @@ b.监控服务器的磁盘剩余空间 小于阈值 10%，发邮件预警  手�
                 <!-- Pager -->
                 <ul class="pager">
                     
+                        <li class="previous">
+                            <a href="/article/DataNode抛内存溢出oom的error/" data-toggle="tooltip" data-placement="top" title="DataNode抛内存溢出oom的error">&larr; Previous Post</a>
+                        </li>
+                    
                     
                         <li class="next">
-                            <a href="/article/hadoop3/" data-toggle="tooltip" data-placement="top" title="块&HDFS架构&小文件&配置修改存储目录">Next Post &rarr;</a>
+                            <a href="/article/hadoop3/" data-toggle="tooltip" data-placement="top" title="刀片机和机架&块副本数&HDFS架构&块损坏修复&小文件&配置修改存储目录">Next Post &rarr;</a>
                         </li>
                     
                 </ul>

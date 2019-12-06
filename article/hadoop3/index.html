@@ -14,7 +14,7 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <title>
         
-          块&amp;HDFS架构&amp;小文件&amp;配置修改存储目录 - Stefanboy | Blog
+          刀片机和机架&amp;块副本数&amp;HDFS架构&amp;块损坏修复&amp;小文件&amp;配置修改存储目录 - Stefanboy | Blog
         
     </title>
 
@@ -91,7 +91,7 @@
                               <a class="tag" href="/tags/#Hadoop" title="Hadoop">Hadoop</a>
                             
                         </div>
-                        <h1>块&amp;HDFS架构&amp;小文件&amp;配置修改存储目录</h1>
+                        <h1>刀片机和机架&amp;块副本数&amp;HDFS架构&amp;块损坏修复&amp;小文件&amp;配置修改存储目录</h1>
                         <h2 class="subheading">How to use Hadoop</h2>
                         <span class="meta">
                             Posted by Stefanboy on
@@ -142,14 +142,14 @@
 
                         
                         <li>
-                            <a href="/archive/">Archives</a>
+                            <a href="/about/">About</a>
                         </li>
                         
                     
 
                         
                         <li>
-                            <a href="/about/">About</a>
+                            <a href="/archive/">Archives</a>
                         </li>
                         
                     
@@ -339,7 +339,7 @@ a. nn每隔3s向dn发送心跳，告诉dn我还健康，是在配置文件hdfs-s
 </tr>
 </tbody>
 </table>
-<p>b. dn每隔6h扫描块，并向nn发送blockreport，生产上根据数据量大小，建议配置3小时即可,在配置文件hdfs-site.xml文件中匹配值，属性和值为</p>
+<p>b. dn每隔6h扫描块，并向nn发送blockreport，生产上根据数据量大小，建议配置3小时即可,在配置文件hdfs-site.xml文件中匹配值，其中dfs.datanode.directoryscan.interval表示扫描块的属性 21600s=6h，dfs.blockreport.intervalMsec表示blockreport的属性 21600000ms=6h属性和值为</p>
 <table>
 <thead>
 <tr>

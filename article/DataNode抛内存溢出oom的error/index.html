@@ -14,11 +14,11 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <title>
         
-          [Hexo] Theme Jepson - Stefanboy | Blog
+          DataNode抛内存溢出oom的error - Stefanboy | Blog
         
     </title>
 
-    <link rel="canonical" href="http://yoursite.com/article/hexo-theme-jepson/">
+    <link rel="canonical" href="http://yoursite.com/article/DataNode抛内存溢出oom的error/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -88,14 +88,14 @@
                     <div class="post-heading">
                         <div class="tags">
                             
-                              <a class="tag" href="/tags/#Hexo" title="Hexo">Hexo</a>
+                              <a class="tag" href="/tags/#Hadoop" title="Hadoop">Hadoop</a>
                             
                         </div>
-                        <h1>[Hexo] Theme Jepson</h1>
-                        <h2 class="subheading">This is hexo theme Demo.</h2>
+                        <h1>DataNode抛内存溢出oom的error</h1>
+                        <h2 class="subheading">How to solve DataNode OOM Error</h2>
                         <span class="meta">
                             Posted by Stefanboy on
-                            2015-07-10
+                            2017-12-25
                         </span>
                     </div>
                 
@@ -212,62 +212,24 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-                <h1 id="install-hexo">Install Hexo</h1>
-<p>Install Node.js  and Git</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#For window</span><br><span class="line">Node.js https://nodejs.org/dist/v12.13.0/node-v12.13.0-x64.msi</span><br><span class="line">Git https://github.com/git-for-windows/git/releases/download/v2.24.0.windows.2/Git-2.24.0.2-64-bit.exe</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#For Mac</span><br><span class="line">brew install node</span><br><span class="line">brew install git</span><br></pre></td></tr></table></figure>
-<p>Install hexo</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-cli -g</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span>For more:https://hexo.io/zh-cn/index.html</span><br></pre></td></tr></table></figure>
-<h1 id="theme-usage">Theme Usage</h1>
-<h2 id="init">Init</h2>
-<hr>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/hackeruncle/hackeruncle-hexo.git ./hackeruncle-hexo</span><br><span class="line"><span class="built_in">cd</span> hackeruncle-hexo</span><br><span class="line">npm install</span><br></pre></td></tr></table></figure>
-<h2 id="modify">Modify</h2>
-<hr>
-<p>Modify <code>_config.yml</code> file with your own info.<br>
-Especially the section:</p>
-<h3 id="deployment">Deployment</h3>
-<p>Replace to your own repo, the name is the same as github user name!</p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">deploy:</span></span><br><span class="line"><span class="attr">  type:</span> <span class="string">git</span></span><br><span class="line"><span class="attr">  repo:</span> <span class="string">git@github.com:&lt;git</span> <span class="string">user</span> <span class="string">name&gt;/&lt;git</span> <span class="string">user</span> <span class="string">name&gt;.github.io.git</span></span><br><span class="line"><span class="attr">  branch:</span> <span class="string">master</span></span><br></pre></td></tr></table></figure>
-<h3 id="sidebar-settings">Sidebar settings</h3>
-<p>Copy your avatar image to <code>&lt;root&gt;/img/</code> and modify the <code>_config.yml</code>:</p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">sidebar:</span> <span class="literal">true</span>    <span class="comment"># whether or not using Sidebar.</span></span><br><span class="line"><span class="attr">sidebar-about-description:</span> <span class="string">"&lt;your description&gt;"</span></span><br><span class="line"><span class="attr">sidebar-avatar:</span> <span class="string">img/&lt;your</span> <span class="string">avatar</span> <span class="string">path&gt;</span></span><br></pre></td></tr></table></figure>
-<p>and activate your personal widget you like</p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">widgets:</span>         <span class="comment"># here are widget you can use, you can comment out</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">featured-tags</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">short-about</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">recent-posts</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">friends-blog</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">archive</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">category</span></span><br></pre></td></tr></table></figure>
-<p>if you want to add sidebar widget, please add at <code>layout/_widget</code>.</p>
-<h3 id="signature-setup">Signature Setup</h3>
-<p>Copy your signature image to <code>&lt;root&gt;/img/signature</code> and modify the <code>_config.yml</code>:</p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">signature:</span> <span class="literal">true</span>   <span class="comment"># show signature</span></span><br><span class="line"><span class="attr">signature-img:</span> <span class="string">img/signature/&lt;your-signature-ID&gt;</span></span><br></pre></td></tr></table></figure>
-<h3 id="go-to-top-icon-setup">Go to top icon Setup</h3>
-<p>My icon is using iron man, you can change to your own icon at <code>css/image</code>.</p>
-<h3 id="post-tag">Post tag</h3>
-<p>You can decide to show post tags or not.</p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">home_posts_tag:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
-<h3 id="markdown-render">Markdown render</h3>
-<p>My markdown render engine plugin is <a href="https://github.com/celsomiranda/hexo-renderer-markdown-it" target="_blank" rel="noopener">hexo-renderer-markdown-it</a>.</p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Markdown-it config</span></span><br><span class="line"><span class="comment">## Docs: https://github.com/celsomiranda/hexo-renderer-markdown-it/wiki</span></span><br><span class="line"><span class="attr">markdown:</span></span><br><span class="line"><span class="attr">  render:</span></span><br><span class="line"><span class="attr">    html:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">    xhtmlOut:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">    breaks:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">    linkify:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">    typographer:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">    quotes:</span> <span class="string">'“”‘’'</span></span><br></pre></td></tr></table></figure>
-<p>and if you want to change the header anchor ‘ℬ’, you can go to <code>layout/post.ejs</code> to change it.</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span>(<span class="string">"https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js"</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        anchors.options = &#123;</span><br><span class="line">          visible: <span class="string">'hover'</span>,</span><br><span class="line">          placement: <span class="string">'left'</span>,</span><br><span class="line">          icon: ℬ <span class="comment">// this is the header anchor "unicode" icon</span></span><br><span class="line">        &#125;;</span><br></pre></td></tr></table></figure>
-<h2 id="hexo-basics">Hexo Basics</h2>
-<hr>
-<h3 id="push-hexo-file-to-github">Push hexo file to github:</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git add .</span><br><span class="line">git commit -m <span class="string">'init'</span></span><br><span class="line">git push -u origin master</span><br></pre></td></tr></table></figure>
-<h3 id="push-hexo-blog-html-to-local">Push hexo blog html to local :</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo clean &amp;&amp; hexo generate &amp;&amp; hexo server</span><br></pre></td></tr></table></figure>
-<p>open web: <a href="http://localhost:4000" target="_blank" rel="noopener">http://localhost:4000</a></p>
-<h3 id="push-hexo-blog-html-to-github">Push hexo blog html to github :</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo clean &amp;&amp; hexo deploy</span><br></pre></td></tr></table></figure>
-<p>open web: <a href="https://hackeruncle.github.io" target="_blank" rel="noopener">https://hackeruncle.github.io</a></p>
-
+                <h2 id="欢迎来到stefanboy的博客感谢大家对我的支持">欢迎来到Stefanboy的博客，感谢大家对我的支持.</h2>
+<h2 id="cdh查看datanode的内存情况">CDH查看DataNode的内存情况</h2>
+<p><img src="/img/hadoop4/6.png" alt=""></p>
+<h2 id="datanode报错信息">DataNode报错信息</h2>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">2017</span><span class="number">-12</span><span class="number">-17</span> <span class="number">23</span>:<span class="number">58</span>:<span class="number">14</span>,<span class="number">422</span> INFO org.apache.hadoop.hdfs.server.datanode.DataNode: PacketResponder: BP<span class="number">-1437036909</span>-![img](file:<span class="comment">///C:\Users\Administrator\AppData\Roaming\Tencent\QQTempSys\%W@GJ$ACOF(TYDYECOKVDYB.png)192.168.17.36-1509097205664:blk_1074725940_987917, type=HAS_DOWNSTREAM_IN_PIPELINE terminating</span></span><br><span class="line"><span class="number">2017</span><span class="number">-12</span><span class="number">-17</span> <span class="number">23</span>:<span class="number">58</span>:<span class="number">31</span>,<span class="number">425</span> ERROR org.apache.hadoop.hdfs.server.datanode.DataNode: DataNode is out <span class="keyword">of</span> memory. Will retry <span class="keyword">in</span> <span class="number">30</span> seconds.</span><br><span class="line">java.lang.OutOfMemoryError: unable to create <span class="keyword">new</span> native thread</span><br><span class="line">	at java.lang.Thread.start0(Native Method)</span><br><span class="line">	at java.lang.Thread.start(Thread.java:<span class="number">714</span>)</span><br><span class="line">	at org.apache.hadoop.hdfs.server.datanode.DataXceiverServer.run(DataXceiverServer.java:<span class="number">154</span>)</span><br><span class="line">	at java.lang.Thread.run(Thread.java:<span class="number">745</span>)</span><br><span class="line"><span class="number">2017</span><span class="number">-12</span><span class="number">-17</span> <span class="number">23</span>:<span class="number">59</span>:<span class="number">01</span>,<span class="number">426</span> ERROR org.apache.hadoop.hdfs.server.datanode.DataNode: DataNode is out <span class="keyword">of</span> memory. Will retry <span class="keyword">in</span> <span class="number">30</span> seconds.</span><br><span class="line">java.lang.OutOfMemoryError: unable to create <span class="keyword">new</span> native thread</span><br><span class="line">	at java.lang.Thread.start0(Native Method)</span><br><span class="line">	at java.lang.Thread.start(Thread.java:<span class="number">714</span>)</span><br><span class="line">	at org.apache.hadoop.hdfs.server.datanode.DataXceiverServer.run(DataXceiverServer.java:<span class="number">154</span>)</span><br><span class="line">	at java.lang.Thread.run(Thread.java:<span class="number">745</span>)</span><br><span class="line"><span class="number">2017</span><span class="number">-12</span><span class="number">-17</span> <span class="number">23</span>:<span class="number">59</span>:<span class="number">05</span>,<span class="number">520</span> ERROR org.apache.hadoop.hdfs.server.datanode.DataNode: DataNode is out <span class="keyword">of</span> memory. Will retry <span class="keyword">in</span> <span class="number">30</span> seconds.</span><br><span class="line">java.lang.OutOfMemoryError: unable to create <span class="keyword">new</span> native thread</span><br><span class="line">	at java.lang.Thread.start0(Native Method)</span><br><span class="line">	at java.lang.Thread.start(Thread.java:<span class="number">714</span>)</span><br><span class="line">	at org.apache.hadoop.hdfs.server.datanode.DataXceiverServer.run(DataXceiverServer.java:<span class="number">154</span>)</span><br><span class="line">	at java.lang.Thread.run(Thread.java:<span class="number">745</span>)</span><br><span class="line"><span class="number">2017</span><span class="number">-12</span><span class="number">-17</span> <span class="number">23</span>:<span class="number">59</span>:<span class="number">31</span>,<span class="number">429</span> INFO org.apache.hadoop.hdfs.server.datanode.DataNode: Receiving BP<span class="number">-1437036909</span>-![img]</span><br></pre></td></tr></table></figure>
+<h2 id="为什么会报错">为什么会报错</h2>
+<p>根据 CDH查看DataNode的内存情况，发现DN最大占用内存才607.1M，（<strong>生产环境DN的内存配置为2G就足够用了</strong>）为甚么还会抛出内存溢出错误呢，应该是配置信息的参数没有配正确，解决方法：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1.</span></span><br><span class="line">echo <span class="string">"kernel.threads-max=196605"</span> &gt;&gt; <span class="regexp">/etc/</span>sysctl.conf</span><br><span class="line">echo <span class="string">"kernel.pid_max=196605"</span> &gt;&gt; <span class="regexp">/etc/</span>sysctl.conf</span><br><span class="line">echo <span class="string">"vm.max_map_count=393210"</span> &gt;&gt; <span class="regexp">/etc/</span>sysctl.conf</span><br><span class="line">sysctl -p  </span><br><span class="line"></span><br><span class="line"><span class="number">2.</span></span><br><span class="line">/etc/security/limits.conf</span><br><span class="line">* soft nofile <span class="number">196605</span></span><br><span class="line">* hard nofile <span class="number">196605</span></span><br><span class="line">* soft nproc <span class="number">196605</span></span><br><span class="line">* hard nproc <span class="number">196605</span></span><br></pre></td></tr></table></figure>
                 
 
                 <hr>
                 <!-- Pager -->
                 <ul class="pager">
                     
-                        <li class="previous">
-                            <a href="/article/linux1/" data-toggle="tooltip" data-placement="top" title="linux基本命令一">&larr; Previous Post</a>
-                        </li>
                     
+                        <li class="next">
+                            <a href="/article/hadoop4/" data-toggle="tooltip" data-placement="top" title="HDFS的副本放置策略&读写流程&pid文件&多节点和单节点磁盘均衡&安全模式&常用命令和设置回收站">Next Post &rarr;</a>
+                        </li>
                     
                 </ul>
 
@@ -316,7 +278,7 @@ Especially the section:</p>
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#install-hexo"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">Install Hexo</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#theme-usage"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">Theme Usage</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#init"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text">Init</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#modify"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text">Modify</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#deployment"><span class="toc-nav-number">2.2.1.</span> <span class="toc-nav-text">Deployment</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#sidebar-settings"><span class="toc-nav-number">2.2.2.</span> <span class="toc-nav-text">Sidebar settings</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#signature-setup"><span class="toc-nav-number">2.2.3.</span> <span class="toc-nav-text">Signature Setup</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#go-to-top-icon-setup"><span class="toc-nav-number">2.2.4.</span> <span class="toc-nav-text">Go to top icon Setup</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#post-tag"><span class="toc-nav-number">2.2.5.</span> <span class="toc-nav-text">Post tag</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#markdown-render"><span class="toc-nav-number">2.2.6.</span> <span class="toc-nav-text">Markdown render</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#hexo-basics"><span class="toc-nav-number">2.3.</span> <span class="toc-nav-text">Hexo Basics</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#push-hexo-file-to-github"><span class="toc-nav-number">2.3.1.</span> <span class="toc-nav-text">Push hexo file to github:</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#push-hexo-blog-html-to-local"><span class="toc-nav-number">2.3.2.</span> <span class="toc-nav-text">Push hexo blog html to local :</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#push-hexo-blog-html-to-github"><span class="toc-nav-number">2.3.3.</span> <span class="toc-nav-text">Push hexo blog html to github :</span></a></li></ol></li></ol></li></ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#欢迎来到stefanboy的博客感谢大家对我的支持"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">&#x6B22;&#x8FCE;&#x6765;&#x5230;Stefanboy&#x7684;&#x535A;&#x5BA2;&#xFF0C;&#x611F;&#x8C22;&#x5927;&#x5BB6;&#x5BF9;&#x6211;&#x7684;&#x652F;&#x6301;.</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#cdh查看datanode的内存情况"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">CDH&#x67E5;&#x770B;DataNode&#x7684;&#x5185;&#x5B58;&#x60C5;&#x51B5;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#datanode报错信息"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">DataNode&#x62A5;&#x9519;&#x4FE1;&#x606F;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#为什么会报错"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">&#x4E3A;&#x4EC0;&#x4E48;&#x4F1A;&#x62A5;&#x9519;</span></a></li></ol>
         
         </div>
       </aside>
@@ -336,7 +298,7 @@ Especially the section:</p>
                     <h5><a href="/tags/">FEATURED TAGS</a></h5>
                     <div class="tags">
                        
-                          <a class="tag" href="/tags/#Hexo" title="Hexo">Hexo</a>
+                          <a class="tag" href="/tags/#Hadoop" title="Hadoop">Hadoop</a>
                         
                     </div>
                 </section>
