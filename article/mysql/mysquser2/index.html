@@ -14,11 +14,11 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <title>
         
-          linux基本命令二 - Stefanboy | Blog
+          MySQL使用二 - Stefanboy | Blog
         
     </title>
 
-    <link rel="canonical" href="http://yoursite.com/article/linux2/">
+    <link rel="canonical" href="http://yoursite.com/article/mysql/mysquser2/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -88,14 +88,14 @@
                     <div class="post-heading">
                         <div class="tags">
                             
-                              <a class="tag" href="/tags/#Linux" title="Linux">Linux</a>
+                              <a class="tag" href="/tags/#MySQL" title="MySQL">MySQL</a>
                             
                         </div>
-                        <h1>linux基本命令二</h1>
-                        <h2 class="subheading">How to use Linux</h2>
+                        <h1>MySQL使用二</h1>
+                        <h2 class="subheading">How to use MySQL</h2>
                         <span class="meta">
                             Posted by Stefanboy on
-                            2016-11-17
+                            2016-11-25
                         </span>
                     </div>
                 
@@ -213,143 +213,260 @@
                 post-container">
 
                 <h2 id="欢迎来到stefanboy的博客感谢大家对我的支持">欢迎来到Stefanboy的博客，感谢大家对我的支持.</h2>
-<p>该文章内容包括四部分，分别为<br>
-1、全局环境变量，个人环境变量，which理解<br>
-2、别名<br>
-3、删除<br>
-4、history</p>
-<h2 id="echo打印">echo打印</h2>
-<pre><code>[root@JD ~]# echo &quot;hello world&quot;
-hello world
-</code></pre>
-<p>查看配置好的环境变量名称</p>
-<pre><code>[root@JD ~]# echo $PATH
-/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin
-</code></pre>
-<p>查询命令所属的路径在那，去$PATH里去找，找到第一个就返回</p>
-<pre><code>[root@JD ~]# which ls
-alias ls='ls --color=auto'
-  		 /usr/bin/ls
-[root@JD ~]# which lsl
-/usr/bin/which: no lsl in (/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin)
-</code></pre>
-<p>如果将PATH置为空，当前session中的环境变量则为空，当然了，不会全局生效，只在当前session起作用</p>
-<pre><code>[root@JD ~]# PATH=&quot;&quot;
-[root@JD ~]# echo $PATH
-[root@JD ~]# which ls
-alias ls='ls --color=auto'
-[root@JD ~]# ls
--bash: ls: No such file or directory
-[root@JD ~]# 
-</code></pre>
-<h2 id="环境变量">环境变量</h2>
-<p>1、所在位置：</p>
-<pre><code>全局：/etc/profile
-个人(只对当前用户起作用)：~/.bash_profile或者 ~/.bashrc（建议个人环境变量配置这个文件中）
-</code></pre>
-<p>2、设置完环境变量后，使之起作用命令为</p>
-<pre><code>source xxx
-</code></pre>
-<p>3、创建统一放置文件目录</p>
-<pre><code>[root@JD /]# mkdir -p /usr/java
-[root@JD /]# cd /usr/java
-</code></pre>
-<p>4、安装uzip命令（解压缩）</p>
-<pre><code>[root@JD java]# yum install -y unzip
-[root@JD java]# unzip jdk1.8.0_121.zip
-[root@JD java]# ll
-total 186628
-drwxr-xr-x 8 root root      4096 Nov 17 00:24 jdk1.8.0_121
--rw-r--r-- 1 root root 191100510 Nov 14 01:25 jdk1.8.0_121.zip
-</code></pre>
-<p>5、赋用户和用户组权限</p>
-<pre><code>[root@JD java]# chown -R root:root /usr/java/*
-</code></pre>
-<p>6、配置环境变量</p>
-<pre><code>环境变量是指的什么
-K=V  前后不能有空格
-使用时 $K
-vi /etc/profile
-a. 上下键 移动光标
-b. 按 i键insert 进入 编辑模式
-c. 开始编辑
-d. 按 esc键退出 编辑模式，进入命令行模式
-e. 按 shift+: 键，进入尾行模式
-f. 输入 wq 保存退出
+<h2 id="mysql使用二">MySQL使用二</h2>
+<h3 id="单表查询">单表查询</h3>
+<p>*表结构</p>
+<p><img src="/img/mysql2/table1.png" alt="表结构"></p>
+<pre><code>求年龄大于20，各个名称的年龄和
+select name,sum(age) from testdata where age &gt; 20 group by name;
 
-[root@JD java]# vi /etc/profile
-export JAVA_HOME=/usr/java/jdk1.8.0_121/bin
-export PATH=$JAVA_HOME:$PATH
-[root@JD java]# source /etc/profile
-[root@JD java]# which java
-/usr/java/jdk1.8.0_121/bin/java
-</code></pre>
-<p>总结:<br>
-1.command not found<br>
-没有部署安装包，部署了没有配置环境变量<br>
-2.习惯<br>
-当我们以后部署一个软件，bin目录的可执行文件 比如java<br>
-习惯 当生效环境变量文件，习惯做 <strong>which java</strong>看一下是否配置成功</p>
-<h2 id="别名alias">别名（alias）</h2>
-<p>作用：简化我们自己的操作</p>
-<pre><code>[root@JD java]# vi ~/.bashrc
-# .bashrc
- User specific aliases and functions
+求各个名称的年龄和大于25岁
+select name,sum(age) from testdata group by name having sum(age) &gt; 25;
+第二种写法(将查询结果作为表，进行子查询过滤，还是尽量少用子查询，效率低)
+select * from 
+(select name,sum(age) sumage from testdata group by name) as t 
+where t.sumage &gt; 25
 
-alias rm='rm -i'
-alias cp='cp -i'
-alias mv='mv -i'
+合并两张表（不要重复的）
+select id,aname from a
+union
+select id,bname from b
+</code></pre>
+<h3 id="多表查询">多表查询</h3>
+<ul>
+<li>
+<p>多表查询<br>
+mysql执行sql的顺序从 From 开始，以下是执行的顺序流程<br>
+开始-&gt;FROM子句-&gt;WHERE子句-&gt;GROUP BY子句-&gt;HAVING子句-&gt;ORDER BY子句-&gt;SELECT子句-&gt;LIMIT子句-&gt;最终结果<br>
+多表查询的主架构<br>
+select xxx from xxx<br>
+where xxx<br>
+group by xxx having xxx<br>
+order by xxx<br>
+limit xxx;</p>
+<pre><code>左连接
+以左边的表为主表，查询的时候，左边的表会全部查询出来；右边的表是匹配的，匹配到就显示，匹配不到就null
 
- Source global definitions
-if [ -f /etc/bashrc ]; then
-    . /etc/bashrc
-fi
-**alias j='cd /usr/java'**
-~
+右连接
+以右边的表为主表，查询的时候，右边的表会全部查询出来；左边的表是匹配的，匹配到就显示，匹配不到就为null
 
-[root@JD java]# source ~/.bashrc
-[root@JD java]# cd ../
-[root@JD usr]# j
-[root@JD java]#
+内连接
+两张表都存在的显示，不存在的不显示
 </code></pre>
-<h2 id="history查看历史输入的命令">history（查看历史输入的命令）</h2>
-<p>直连<br>
-跳板机 没有关系  A–》B 没有web界面的 可视化的<br>
-堡垒机 log文件 记录 xxx  A–》B web界面的 可视化的 审计</p>
-<p>清空历史操作命令</p>
-<pre><code>[root@JD java]# history -c
-[root@JD usr]# history
-1  history
-2  cd ../
-3  echo
-4  uzip
-5  uzip --help
-6  unzip --help
-7  history
+</li>
+<li>
+<p>关联时出现笛卡尔积的一种特殊情况<br>
+比如做关联查询  a.aid = b.bid,如果aid有1w个null值，bid有10w个null值，那会产生笛卡尔积 1w * 10w个数据，那还得了，所以关联的时候一定要注意这种情况，排除null值</p>
+</li>
+<li>
+<p>sum(age)和count(*)的区别</p>
+<pre><code>sum(age)是数值求和
+count(*)是计算总共有多少条记录
 </code></pre>
-<p>执行历史指定的命令</p>
-<pre><code>[root@JD java]# !2
-cd ../
-[root@JD usr]# 
+</li>
+<li>
+<p>注意点</p>
+<pre><code>count(*)尽量少用，要用的话就用count(id)
+求和使用sum(age)
+count(distinct id):去重求和
+在进行
 </code></pre>
-<p>history 看看这个账号之前做过哪些操作吧 有可能发现password</p>
-<h2 id="删除">删除</h2>
-<p>生成新文件:</p>
-<pre><code>touch xxx.log
-cat /dev/null &gt; xxx.log 创建新文件
-cat /dev/null &gt;&gt; xxx.log 如果有该文件，会追加内容，否则创建新文件
-vi命令 也会生成新文件
+</li>
+</ul>
+<h3 id="案例">案例</h3>
+<p>在写sql时，要将需要拆分，一块一块把语句拆开编写，</p>
+<pre><code>--部门表
+dept部门表(deptno部门编号/dname部门名称/loc地点)
+create table dept (
+	deptno numeric(2),
+	dname varchar(14),
+	loc varchar(13)
+);
+
+insert into dept values (10, 'ACCOUNTING', 'NEW YORK');
+insert into dept values (20, 'RESEARCH', 'DALLAS');
+insert into dept values (30, 'SALES', 'CHICAGO');
+insert into dept values (40, 'OPERATIONS', 'BOSTON');
+
+--工资等级表
+salgrade工资等级表(grade 等级/losal此等级的最低/hisal此等级的最高)
+create table salgrade (
+	grade numeric,
+	losal numeric,
+	hisal numeric
+);
+
+insert into salgrade values (1, 700, 1200);
+insert into salgrade values (2, 1201, 1400);
+insert into salgrade values (3, 1401, 2000);
+insert into salgrade values (4, 2001, 3000);
+insert into salgrade values (5, 3001, 9999);
+
+
+--员工表
+emp员工表(empno员工号/ename员工姓名/job工作/mgr上级编号/hiredate受雇日期/sal薪金/comm佣金/deptno部门编号)
+工资 ＝ 薪金 ＋ 佣金
+
+create table emp (
+	empno numeric(4) not null,
+	ename varchar(10),
+	job varchar(9),
+	mgr numeric(4),
+	hiredate datetime,
+	sal numeric(7, 2),
+	comm numeric(7, 2),
+	deptno numeric(2)
+);
+
+
+
+insert into emp values (7369, 'SMITH', 'CLERK', 7902, '1980-12-17', 800, null, 20);
+insert into emp values (7499, 'ALLEN', 'SALESMAN', 7698, '1981-02-20', 1600, 300, 30);
+insert into emp values (7521, 'WARD', 'SALESMAN', 7698, '1981-02-22', 1250, 500, 30);
+insert into emp values (7566, 'JONES', 'MANAGER', 7839, '1981-04-02', 2975, null, 20);
+insert into emp values (7654, 'MARTIN', 'SALESMAN', 7698, '1981-09-28', 1250, 1400, 30);
+insert into emp values (7698, 'BLAKE', 'MANAGER', 7839, '1981-05-01', 2850, null, 30);
+insert into emp values (7782, 'CLARK', 'MANAGER', 7839, '1981-06-09', 2450, null, 10);
+insert into emp values (7788, 'SCOTT', 'ANALYST', 7566, '1982-12-09', 3000, null, 20);
+insert into emp values (7839, 'KING', 'PRESIDENT', null, '1981-11-17', 5000, null, 10);
+insert into emp values (7844, 'TURNER', 'SALESMAN', 7698, '1981-09-08', 1500, 0, 30);
+insert into emp values (7876, 'ADAMS', 'CLERK', 7788, '1983-01-12', 1100, null, 20);
+insert into emp values (7900, 'JAMES', 'CLERK', 7698, '1981-12-03', 950, null, 30);
+insert into emp values (7902, 'FORD', 'ANALYST', 7566, '1981-12-03', 3000, null, 20);
+insert into emp values (7934, 'MILLER', 'CLERK', 7782, '1982-01-23', 1300, null, 10);
 </code></pre>
-<p>创建文件夹: mkdir</p>
-<pre><code>rm -f rz.log11  直接删除文件
-rm -rf 1        直接删除文件夹
+<ul>
+<li>
+<p>查询出部门编号为30的所有员工的编号和姓名</p>
+<pre><code>select empno,ename from emp  where deptno = '30';
 </code></pre>
-<p>风险:<br>
-rm -rf /  跑路  高危命令<br>
-什么场景会发生 shell脚本:<br>
-K=’/home/jepson’<br>
-K=’'<br>
-这种情况如果K为空，会发生删除所有linux目录情况，需判断 $K命令是否存在，然后执行rm -rf $K/*</p>
+</li>
+<li>
+<p>找出部门编号为10中所有经理，和部门编号为20中所有销售员的详细资料。</p>
+<pre><code>select * from emp  where 
+(deptno='10' and job='MANAGER')
+or
+(deptno='20'and job='SALESMAN');
+</code></pre>
+</li>
+<li>
+<p>查询所有员工详细信息，用工资降序排序，如果工资相同使用入职日期升序排序</p>
+<pre><code>select * from emp  order by sal desc,hiredate;
+</code></pre>
+</li>
+<li>
+<p>列出薪金大于1500的各种工作及从事此工作的员工人数。</p>
+<pre><code>select job,count(job) 
+from emp
+where (sal+ifnull(comm,0))&gt;1500
+group by job;
+</code></pre>
+</li>
+<li>
+<p>列出在销售部工作的员工的姓名，假定不知道销售部的部门编号。</p>
+<pre><code>select ename 
+from emp 
+where deptno = 
+(select deptno from dept where dname='SALES')
+</code></pre>
+</li>
+<li>
+<p>查询姓名以S开头的\以S结尾\包含S字符\第二个字母为L</p>
+<pre><code>select ename from emp where ename like 'S%' OR ename like '%S%' OR ename like '_L%'
+</code></pre>
+</li>
+<li>
+<p>查询每种工作的最高工资、最低工资、人数</p>
+<pre><code>select 
+max(sal+ifnull(comm,0)) as maxsal,
+min(sal+ifnull(comm,0)) as minsal,
+count(empno) cno 
+from emp
+group by job
+</code></pre>
+</li>
+<li>
+<p>列出薪金 高于 公司平均薪金的所有员工号，员工姓名，所在部门名称，上级领导，工资，工资等级<br>
+	把需求拆分开：先查询出平均工资，然后找出select的字段，然后在根据需求字段进行关联，然后自己关联自己查询出上级领导,最后关联工资等级表</p>
+<pre><code>过程1
+select
+ename,
+deptno,
+mgr,
+sal+ifnull(comm,0) as sal
+
+from emp
+where (sal+ifnull(comm,0)) &gt; (select avg(sal+ifnull(comm,0)) from emp);
+
+
+过程2
+select
+e.ename,
+e.deptno,d.dname,
+e.mgr,
+e.sal+ifnull(e.comm,0) as sal
+
+from emp e
+left join dept d on e.deptno=d.deptno
+where (sal+ifnull(comm,0)) &gt; (select avg(sal+ifnull(comm,0)) from emp);
+
+自己 a 关联自己 b
+select
+e.ename,
+e.deptno,d.dname,
+e.mgr,m.ename,
+e.sal+ifnull(e.comm,0) as sal
+
+from emp e
+left join dept d on e.deptno=d.deptno
+left join emp m on e.mgr=m.empno
+where (e.sal+ifnull(e.comm,0)) &gt; (select avg(sal+ifnull(comm,0)) from emp);
+
+
+最终结果
+关联salgrade表
+select e.empno,e.ename,d.dname,p.ename,(e.sal+ifnull(e.comm,0)) mon,s.grade
+from emp e
+left join dept d
+on e.deptno=d.deptno
+left join emp p
+on e.mgr = p.empno
+left join salgrade s
+on e.sal+ifnull(e.comm,0) between s.losal and s.hisal
+where (e.sal+ifnull(e.comm,0)) &gt; (select avg(sal+ifnull(comm,0)) from emp);
+</code></pre>
+</li>
+<li>
+<p>列出薪金  高于  在部门30工作的  所有/任何一个员工的薪金的员工姓名和薪金、部门名称。</p>
+<pre><code>select e.sal+ifnull(e.comm,0),d.dname,e.ename
+from emp e
+left join dept d
+on e.empno = d.deptno
+where e.sal+ifnull(e.comm,0) &gt; all(select sal+ifnull(comm,0) from emp where deptno='30');
+</code></pre>
+</li>
+<li>
+<p>哪些部门的哪些职业的薪水和，最高的职业是什么<br>
+先按照部门跟职业分组查询出薪水和，然后将查询出的结果作为表，进行查询出最高的职业是什么</p>
+<pre><code>按照部门和职业分组，查询薪水和
+create view sal as select deptno,job,sum(e.sal+ifnull(e.comm,0)) mon
+from emp e
+group by deptno,job
+
+查询出最高的职业是什么
+select a.* 
+
+from sal a  
+
+where
+(
+select count(*) from sal b 
+where a.deptno = b.deptno
+and a.sal &lt; b.sal
+
+)=0</code></pre>
+</li>
+</ul>
 
                 
 
@@ -358,12 +475,12 @@ K=’'<br>
                 <ul class="pager">
                     
                         <li class="previous">
-                            <a href="/article/linux3/" data-toggle="tooltip" data-placement="top" title="linux基本命令三">&larr; Previous Post</a>
+                            <a href="/article/rundeck/" data-toggle="tooltip" data-placement="top" title="Rundeck部署使用">&larr; Previous Post</a>
                         </li>
                     
                     
                         <li class="next">
-                            <a href="/article/linux1/" data-toggle="tooltip" data-placement="top" title="linux基本命令一">Next Post &rarr;</a>
+                            <a href="/article/mysql/mysquser1/" data-toggle="tooltip" data-placement="top" title="MySQL使用一">Next Post &rarr;</a>
                         </li>
                     
                 </ul>
@@ -413,7 +530,7 @@ K=’'<br>
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#欢迎来到stefanboy的博客感谢大家对我的支持"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">&#x6B22;&#x8FCE;&#x6765;&#x5230;Stefanboy&#x7684;&#x535A;&#x5BA2;&#xFF0C;&#x611F;&#x8C22;&#x5927;&#x5BB6;&#x5BF9;&#x6211;&#x7684;&#x652F;&#x6301;.</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#echo打印"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">echo&#x6253;&#x5370;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#环境变量"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">&#x73AF;&#x5883;&#x53D8;&#x91CF;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#别名alias"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">&#x522B;&#x540D;&#xFF08;alias&#xFF09;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#history查看历史输入的命令"><span class="toc-nav-number">5.</span> <span class="toc-nav-text">history&#xFF08;&#x67E5;&#x770B;&#x5386;&#x53F2;&#x8F93;&#x5165;&#x7684;&#x547D;&#x4EE4;&#xFF09;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#删除"><span class="toc-nav-number">6.</span> <span class="toc-nav-text">&#x5220;&#x9664;</span></a></li></ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#欢迎来到stefanboy的博客感谢大家对我的支持"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">&#x6B22;&#x8FCE;&#x6765;&#x5230;Stefanboy&#x7684;&#x535A;&#x5BA2;&#xFF0C;&#x611F;&#x8C22;&#x5927;&#x5BB6;&#x5BF9;&#x6211;&#x7684;&#x652F;&#x6301;.</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#mysql使用二"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">MySQL&#x4F7F;&#x7528;&#x4E8C;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#单表查询"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text">&#x5355;&#x8868;&#x67E5;&#x8BE2;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#多表查询"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text">&#x591A;&#x8868;&#x67E5;&#x8BE2;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#案例"><span class="toc-nav-number">2.3.</span> <span class="toc-nav-text">&#x6848;&#x4F8B;</span></a></li></ol></li></ol>
         
         </div>
       </aside>
@@ -433,7 +550,7 @@ K=’'<br>
                     <h5><a href="/tags/">FEATURED TAGS</a></h5>
                     <div class="tags">
                        
-                          <a class="tag" href="/tags/#Linux" title="Linux">Linux</a>
+                          <a class="tag" href="/tags/#MySQL" title="MySQL">MySQL</a>
                         
                     </div>
                 </section>

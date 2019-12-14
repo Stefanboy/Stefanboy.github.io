@@ -14,11 +14,11 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <title>
         
-          MySQL使用二 - Stefanboy | Blog
+          linux基本命令一 - Stefanboy | Blog
         
     </title>
 
-    <link rel="canonical" href="http://yoursite.com/article/mysquser2/">
+    <link rel="canonical" href="http://yoursite.com/article/linux/linux1/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -88,14 +88,14 @@
                     <div class="post-heading">
                         <div class="tags">
                             
-                              <a class="tag" href="/tags/#MySQL" title="MySQL">MySQL</a>
+                              <a class="tag" href="/tags/#Linux" title="Linux">Linux</a>
                             
                         </div>
-                        <h1>MySQL使用二</h1>
-                        <h2 class="subheading">How to use MySQL</h2>
+                        <h1>linux基本命令一</h1>
+                        <h2 class="subheading">How to use Linux</h2>
                         <span class="meta">
                             Posted by Stefanboy on
-                            2016-11-25
+                            2016-11-11
                         </span>
                     </div>
                 
@@ -213,260 +213,144 @@
                 post-container">
 
                 <h2 id="欢迎来到stefanboy的博客感谢大家对我的支持">欢迎来到Stefanboy的博客，感谢大家对我的支持.</h2>
-<h2 id="mysql使用二">MySQL使用二</h2>
-<h3 id="单表查询">单表查询</h3>
-<p>*表结构</p>
-<p><img src="/img/mysql2/table1.png" alt="表结构"></p>
-<pre><code>求年龄大于20，各个名称的年龄和
-select name,sum(age) from testdata where age &gt; 20 group by name;
-
-求各个名称的年龄和大于25岁
-select name,sum(age) from testdata group by name having sum(age) &gt; 25;
-第二种写法(将查询结果作为表，进行子查询过滤，还是尽量少用子查询，效率低)
-select * from 
-(select name,sum(age) sumage from testdata group by name) as t 
-where t.sumage &gt; 25
-
-合并两张表（不要重复的）
-select id,aname from a
-union
-select id,bname from b
+<h1 id="linux">linux</h1>
+<h2 id="基本概念">基本概念</h2>
+<pre><code>[root@JD ~]# 
+登录的用户名  机器的名称（hostname） 家目录
+root用户 家目录 /root 
+xxx用户  家目录 /home/xxx 
 </code></pre>
-<h3 id="多表查询">多表查询</h3>
-<ul>
-<li>
-<p>多表查询<br>
-mysql执行sql的顺序从 From 开始，以下是执行的顺序流程<br>
-开始-&gt;FROM子句-&gt;WHERE子句-&gt;GROUP BY子句-&gt;HAVING子句-&gt;ORDER BY子句-&gt;SELECT子句-&gt;LIMIT子句-&gt;最终结果<br>
-多表查询的主架构<br>
-select xxx from xxx<br>
-where xxx<br>
-group by xxx having xxx<br>
-order by xxx<br>
-limit xxx;</p>
-<pre><code>左连接
-以左边的表为主表，查询的时候，左边的表会全部查询出来；右边的表是匹配的，匹配到就显示，匹配不到就null
-
-右连接
-以右边的表为主表，查询的时候，右边的表会全部查询出来；左边的表是匹配的，匹配到就显示，匹配不到就为null
-
-内连接
-两张表都存在的显示，不存在的不显示
+<h3 id="查看当前光标所在的目录">查看当前光标所在的目录</h3>
+<pre><code>[root@JD ~]# pwd
+/root
 </code></pre>
-</li>
-<li>
-<p>关联时出现笛卡尔积的一种特殊情况<br>
-比如做关联查询  a.aid = b.bid,如果aid有1w个null值，bid有10w个null值，那会产生笛卡尔积 1w * 10w个数据，那还得了，所以关联的时候一定要注意这种情况，排除null值</p>
-</li>
-<li>
-<p>sum(age)和count(*)的区别</p>
-<pre><code>sum(age)是数值求和
-count(*)是计算总共有多少条记录
+<h3 id="切换目录">切换目录</h3>
+<pre><code>[root@JD ~]# cd /home
+[root@JD home]# pwd
+/home
 </code></pre>
-</li>
-<li>
-<p>注意点</p>
-<pre><code>count(*)尽量少用，要用的话就用count(id)
-求和使用sum(age)
-count(distinct id):去重求和
-在进行
+<h3 id="回退目录的三种方式">回退目录的三种方式</h3>
+<pre><code>cd ../ 回退上一层目录
+cd ../../ 回退上2层目录
+[root@JD ~]# cd /home
+[root@JD home]# pwd
+/home
+[root@JD home]# cd /home
+[root@JD home]# pwd
+/home
+回退到上一次的目录
+[root@JD home]# cd /root
+[root@JD ~]# cd -
+/home
+[root@JD home]# cd ~
+[root@JD ~]# pwd
+/root
 </code></pre>
-</li>
-</ul>
-<h3 id="案例">案例</h3>
-<p>在写sql时，要将需要拆分，一块一块把语句拆开编写，</p>
-<pre><code>--部门表
-dept部门表(deptno部门编号/dname部门名称/loc地点)
-create table dept (
-	deptno numeric(2),
-	dname varchar(14),
-	loc varchar(13)
-);
-
-insert into dept values (10, 'ACCOUNTING', 'NEW YORK');
-insert into dept values (20, 'RESEARCH', 'DALLAS');
-insert into dept values (30, 'SALES', 'CHICAGO');
-insert into dept values (40, 'OPERATIONS', 'BOSTON');
-
---工资等级表
-salgrade工资等级表(grade 等级/losal此等级的最低/hisal此等级的最高)
-create table salgrade (
-	grade numeric,
-	losal numeric,
-	hisal numeric
-);
-
-insert into salgrade values (1, 700, 1200);
-insert into salgrade values (2, 1201, 1400);
-insert into salgrade values (3, 1401, 2000);
-insert into salgrade values (4, 2001, 3000);
-insert into salgrade values (5, 3001, 9999);
-
-
---员工表
-emp员工表(empno员工号/ename员工姓名/job工作/mgr上级编号/hiredate受雇日期/sal薪金/comm佣金/deptno部门编号)
-工资 ＝ 薪金 ＋ 佣金
-
-create table emp (
-	empno numeric(4) not null,
-	ename varchar(10),
-	job varchar(9),
-	mgr numeric(4),
-	hiredate datetime,
-	sal numeric(7, 2),
-	comm numeric(7, 2),
-	deptno numeric(2)
-);
-
-
-
-insert into emp values (7369, 'SMITH', 'CLERK', 7902, '1980-12-17', 800, null, 20);
-insert into emp values (7499, 'ALLEN', 'SALESMAN', 7698, '1981-02-20', 1600, 300, 30);
-insert into emp values (7521, 'WARD', 'SALESMAN', 7698, '1981-02-22', 1250, 500, 30);
-insert into emp values (7566, 'JONES', 'MANAGER', 7839, '1981-04-02', 2975, null, 20);
-insert into emp values (7654, 'MARTIN', 'SALESMAN', 7698, '1981-09-28', 1250, 1400, 30);
-insert into emp values (7698, 'BLAKE', 'MANAGER', 7839, '1981-05-01', 2850, null, 30);
-insert into emp values (7782, 'CLARK', 'MANAGER', 7839, '1981-06-09', 2450, null, 10);
-insert into emp values (7788, 'SCOTT', 'ANALYST', 7566, '1982-12-09', 3000, null, 20);
-insert into emp values (7839, 'KING', 'PRESIDENT', null, '1981-11-17', 5000, null, 10);
-insert into emp values (7844, 'TURNER', 'SALESMAN', 7698, '1981-09-08', 1500, 0, 30);
-insert into emp values (7876, 'ADAMS', 'CLERK', 7788, '1983-01-12', 1100, null, 20);
-insert into emp values (7900, 'JAMES', 'CLERK', 7698, '1981-12-03', 950, null, 30);
-insert into emp values (7902, 'FORD', 'ANALYST', 7566, '1981-12-03', 3000, null, 20);
-insert into emp values (7934, 'MILLER', 'CLERK', 7782, '1982-01-23', 1300, null, 10);
+<h3 id="目录-文件夹-路径">目录 文件夹  路径</h3>
+<pre><code>绝对路径： /   以根目录开始
+相对路径：不以根目录为开始，以当前光标所在的目录为开始
 </code></pre>
-<ul>
-<li>
-<p>查询出部门编号为30的所有员工的编号和姓名</p>
-<pre><code>select empno,ename from emp  where deptno = '30';
+<h3 id="清空屏幕">清空屏幕</h3>
+<pre><code>clear
 </code></pre>
-</li>
-<li>
-<p>找出部门编号为10中所有经理，和部门编号为20中所有销售员的详细资料。</p>
-<pre><code>select * from emp  where 
-(deptno='10' and job='MANAGER')
-or
-(deptno='20'and job='SALESMAN');
+<h3 id="查看当前光标所在的目录和文件有哪些">查看当前光标所在的目录和文件有哪些</h3>
+<pre><code>ls -l ==》等价于 ll
+ll -h 查看文件的大小
+ll -rt 按照时间排序
+ll -a 查看所有文件（包括隐藏文件）隐藏文件：以.开头的文件
+[root@JD local]# ll -a
+total 8
+drwxr-xr-x. 12 root root 4096 Apr 11  2018 .
+drwxr-xr-x. 13 root root 4096 Aug  8  2018 ..
+drwxr-xr-x.  2 root root    6 Apr 11  2018 bin
+drwxr-xr-x.  2 root root    6 Apr 11  2018 etc
+drwxr-xr-x.  2 root root    6 Apr 11  2018 games
+drwxr-xr-x.  2 root root    6 Apr 11  2018 include
+drwxr-xr-x.  2 root root    6 Apr 11  2018 lib
+drwxr-xr-x.  2 root root    6 Apr 11  2018 lib64
+drwxr-xr-x.  2 root root    6 Apr 11  2018 libexec
+drwxr-xr-x.  2 root root    6 Apr 11  2018 sbin
+drwxr-xr-x.  6 root root   59 Nov 28  2018 share
+drwxr-xr-x.  2 root root    6 Apr 11  2018 src
+[root@JD local]# ll -rt
+total 0
+drwxr-xr-x. 2 root root  6 Apr 11  2018 src
+drwxr-xr-x. 2 root root  6 Apr 11  2018 sbin
+drwxr-xr-x. 2 root root  6 Apr 11  2018 libexec
+drwxr-xr-x. 2 root root  6 Apr 11  2018 lib64
+drwxr-xr-x. 2 root root  6 Apr 11  2018 lib
+drwxr-xr-x. 2 root root  6 Apr 11  2018 include
+drwxr-xr-x. 2 root root  6 Apr 11  2018 games
+drwxr-xr-x. 2 root root  6 Apr 11  2018 etc
 </code></pre>
-</li>
-<li>
-<p>查询所有员工详细信息，用工资降序排序，如果工资相同使用入职日期升序排序</p>
-<pre><code>select * from emp  order by sal desc,hiredate;
+<h3 id="查看命令帮助">查看命令帮助</h3>
+<pre><code>[root@JD local]# ls --help
+Usage: ls [OPTION]... [FILE]...
+      		 ls 可选参数       文件
+List information about the FILEs (the current directory by default).
+Sort entries alphabetically if none of -cftuvSUX nor --sort is specified.
+
+Mandatory arguments to long options are mandatory for short options too.
+  -a, --all                  do not ignore entries starting with .
 </code></pre>
-</li>
-<li>
-<p>列出薪金大于1500的各种工作及从事此工作的员工人数。</p>
-<pre><code>select job,count(job) 
-from emp
-where (sal+ifnull(comm,0))&gt;1500
-group by job;
+<h3 id="mkdir-创建文件夹">mkdir 创建文件夹</h3>
+<pre><code>mkdir a：创建文件夹
+mkdir -p b/c:级联创建文件夹
+[root@JD ~]# mkdir a
+[root@JD ~]# 
+[root@JD ~]# ll
+total 0
+drwxr-xr-x 2 root root  6 Nov 10 23:34 a
+drwxr-xr-x 2 root root 43 Oct 30 22:04 shellScripts
+[root@JD ~]# mkdir -p b/c
 </code></pre>
-</li>
-<li>
-<p>列出在销售部工作的员工的姓名，假定不知道销售部的部门编号。</p>
-<pre><code>select ename 
-from emp 
-where deptno = 
-(select deptno from dept where dname='SALES')
+<h3 id="移动-拷贝文件">移动、拷贝文件</h3>
+<pre><code>mv：移动文件，始终只有一份
+cp： 拷贝文件，原文件不动，新增一份
+mv 1.txt 	1.log 移动+修改文件名 
+cp 1.txt a/1.log 复制+修改文件名
 </code></pre>
-</li>
-<li>
-<p>查询姓名以S开头的\以S结尾\包含S字符\第二个字母为L</p>
-<pre><code>select ename from emp where ename like 'S%' OR ename like '%S%' OR ename like '_L%'
+<h3 id="创建空文件或者把文件置为空">创建空文件或者把文件置为空</h3>
+<pre><code>touch rz.txt 创建一个空文件
+echo &quot;&quot; &gt; rz.log(尽量不要用该方式，因为生成的文件中有空字符串，内容并不为空)
+cat  dev/null &gt; rz.log1	把一个文件置为空
 </code></pre>
-</li>
-<li>
-<p>查询每种工作的最高工资、最低工资、人数</p>
-<pre><code>select 
-max(sal+ifnull(comm,0)) as maxsal,
-min(sal+ifnull(comm,0)) as minsal,
-count(empno) cno 
-from emp
-group by job
+<h3 id="查看文件内容">查看文件内容</h3>
+<pre><code>cat 文件内容一下子全部显示
+more 文件内容一页一页的往下翻，按空格键往下，回退不了，按q退出
+less 文件内容 往下 往上  按上下箭头的按键 按q键退出 
 </code></pre>
-</li>
-<li>
-<p>列出薪金 高于 公司平均薪金的所有员工号，员工姓名，所在部门名称，上级领导，工资，工资等级<br>
-	把需求拆分开：先查询出平均工资，然后找出select的字段，然后在根据需求字段进行关联，然后自己关联自己查询出上级领导,最后关联工资等级表</p>
-<pre><code>过程1
-select
-ename,
-deptno,
-mgr,
-sal+ifnull(comm,0) as sal
-
-from emp
-where (sal+ifnull(comm,0)) &gt; (select avg(sal+ifnull(comm,0)) from emp);
-
-
-过程2
-select
-e.ename,
-e.deptno,d.dname,
-e.mgr,
-e.sal+ifnull(e.comm,0) as sal
-
-from emp e
-left join dept d on e.deptno=d.deptno
-where (sal+ifnull(comm,0)) &gt; (select avg(sal+ifnull(comm,0)) from emp);
-
-自己 a 关联自己 b
-select
-e.ename,
-e.deptno,d.dname,
-e.mgr,m.ename,
-e.sal+ifnull(e.comm,0) as sal
-
-from emp e
-left join dept d on e.deptno=d.deptno
-left join emp m on e.mgr=m.empno
-where (e.sal+ifnull(e.comm,0)) &gt; (select avg(sal+ifnull(comm,0)) from emp);
-
-
-最终结果
-关联salgrade表
-select e.empno,e.ename,d.dname,p.ename,(e.sal+ifnull(e.comm,0)) mon,s.grade
-from emp e
-left join dept d
-on e.deptno=d.deptno
-left join emp p
-on e.mgr = p.empno
-left join salgrade s
-on e.sal+ifnull(e.comm,0) between s.losal and s.hisal
-where (e.sal+ifnull(e.comm,0)) &gt; (select avg(sal+ifnull(comm,0)) from emp);
+<h4 id="实时查看文件内容">实时查看文件内容</h4>
+<pre><code>tail -f xxx.log 跟 tail - F xxx.log的区别
+tail  -f 命令是根据文件的唯一一个incode来跟踪文件的，修改了文件名之后，它就会根据incode，追踪修改后的文件
+tail -F 命令是根据文件名来追踪的
+比如tail -f    install.log     把install.log更名为install.log.1之后，拿到的数据就是install.log.1这个文件上的数据
+比如tail -F  install.log     把install.log更名为install.log.1之后，拿到的数据还是install.log这个文件上的数据
+所以flume采集数据的时候，即flume exec source 切记使用 -F
 </code></pre>
-</li>
-<li>
-<p>列出薪金  高于  在部门30工作的  所有/任何一个员工的薪金的员工姓名和薪金、部门名称。</p>
-<pre><code>select e.sal+ifnull(e.comm,0),d.dname,e.ename
-from emp e
-left join dept d
-on e.empno = d.deptno
-where e.sal+ifnull(e.comm,0) &gt; all(select sal+ifnull(comm,0) from emp where deptno='30');
+<h4 id="error-如何定位">ERROR 如何定位</h4>
+<pre><code>文件很小：几十兆，上传给window，用editplus工具打开
+上传下载rz工具下载  yum install -y lrzsz
+上传给linux命令：[root@JD a]# rz 
+上传给window命令：[root@JD a]# sz 2.txt 
+下载后的存放位置
 </code></pre>
-</li>
-<li>
-<p>哪些部门的哪些职业的薪水和，最高的职业是什么<br>
-先按照部门跟职业分组查询出薪水和，然后将查询出的结果作为表，进行查询出最高的职业是什么</p>
-<pre><code>按照部门和职业分组，查询薪水和
-create view sal as select deptno,job,sum(e.sal+ifnull(e.comm,0)) mon
-from emp e
-group by deptno,job
-
-查询出最高的职业是什么
-select a.* 
-
-from sal a  
-
-where
-(
-select count(*) from sal b 
-where a.deptno = b.deptno
-and a.sal &lt; b.sal
-
-)=0</code></pre>
-</li>
-</ul>
+<p><img src="https://img-blog.csdnimg.cn/2019111100134684.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2NzZG5fbXljc2Ru,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<pre><code>文件很大：几百兆 2G
+cat xxx.log | grep ERROR
+命令输出结果 | 管道符 grep过滤
+cat xxx.log | grep -A 10 ERROR：输出ERROR为分界线+它的后10行
+cat xxx.log | grep -A 10 ERROR：输出ERROR为分界线+它的前10行
+cat xxx.log | grep -A 10 ERROR：输出ERROR为分界线+它的前后10行，常用语快
+速定位ERROR的上下文
+tail -300f xxx.log 实时查看xxx.log最后300行文件
+</code></pre>
+<h4 id="输出数据到文件">输出数据到文件</h4>
+<p>创建新文件 &gt;<br>
+文件存在，向文件中追加内容；文件不存在，创建文件 &gt;&gt;</p>
+<pre><code>输出内容到文件
+cat xxx.log | grep ERROR &gt; xxx.log
+cat xxx.log | grep ERROR &gt;&gt; xxx.log</code></pre>
 
                 
 
@@ -475,12 +359,12 @@ and a.sal &lt; b.sal
                 <ul class="pager">
                     
                         <li class="previous">
-                            <a href="/article/rundeck/" data-toggle="tooltip" data-placement="top" title="Rundeck部署使用">&larr; Previous Post</a>
+                            <a href="/article/linux/linux2/" data-toggle="tooltip" data-placement="top" title="linux基本命令二">&larr; Previous Post</a>
                         </li>
                     
                     
                         <li class="next">
-                            <a href="/article/mysquser1/" data-toggle="tooltip" data-placement="top" title="MySQL使用一">Next Post &rarr;</a>
+                            <a href="/article/hexo-theme-jepson/" data-toggle="tooltip" data-placement="top" title="[Hexo] Theme Jepson">Next Post &rarr;</a>
                         </li>
                     
                 </ul>
@@ -530,7 +414,7 @@ and a.sal &lt; b.sal
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#欢迎来到stefanboy的博客感谢大家对我的支持"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">&#x6B22;&#x8FCE;&#x6765;&#x5230;Stefanboy&#x7684;&#x535A;&#x5BA2;&#xFF0C;&#x611F;&#x8C22;&#x5927;&#x5BB6;&#x5BF9;&#x6211;&#x7684;&#x652F;&#x6301;.</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#mysql使用二"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">MySQL&#x4F7F;&#x7528;&#x4E8C;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#单表查询"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text">&#x5355;&#x8868;&#x67E5;&#x8BE2;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#多表查询"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text">&#x591A;&#x8868;&#x67E5;&#x8BE2;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#案例"><span class="toc-nav-number">2.3.</span> <span class="toc-nav-text">&#x6848;&#x4F8B;</span></a></li></ol></li></ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#欢迎来到stefanboy的博客感谢大家对我的支持"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">&#x6B22;&#x8FCE;&#x6765;&#x5230;Stefanboy&#x7684;&#x535A;&#x5BA2;&#xFF0C;&#x611F;&#x8C22;&#x5927;&#x5BB6;&#x5BF9;&#x6211;&#x7684;&#x652F;&#x6301;.</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#linux"><span class="toc-nav-number"></span> <span class="toc-nav-text">linux</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#基本概念"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">&#x57FA;&#x672C;&#x6982;&#x5FF5;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#查看当前光标所在的目录"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text">&#x67E5;&#x770B;&#x5F53;&#x524D;&#x5149;&#x6807;&#x6240;&#x5728;&#x7684;&#x76EE;&#x5F55;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#切换目录"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text">&#x5207;&#x6362;&#x76EE;&#x5F55;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#回退目录的三种方式"><span class="toc-nav-number">1.3.</span> <span class="toc-nav-text">&#x56DE;&#x9000;&#x76EE;&#x5F55;&#x7684;&#x4E09;&#x79CD;&#x65B9;&#x5F0F;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#目录-文件夹-路径"><span class="toc-nav-number">1.4.</span> <span class="toc-nav-text">&#x76EE;&#x5F55; &#x6587;&#x4EF6;&#x5939;  &#x8DEF;&#x5F84;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#清空屏幕"><span class="toc-nav-number">1.5.</span> <span class="toc-nav-text">&#x6E05;&#x7A7A;&#x5C4F;&#x5E55;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#查看当前光标所在的目录和文件有哪些"><span class="toc-nav-number">1.6.</span> <span class="toc-nav-text">&#x67E5;&#x770B;&#x5F53;&#x524D;&#x5149;&#x6807;&#x6240;&#x5728;&#x7684;&#x76EE;&#x5F55;&#x548C;&#x6587;&#x4EF6;&#x6709;&#x54EA;&#x4E9B;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#查看命令帮助"><span class="toc-nav-number">1.7.</span> <span class="toc-nav-text">&#x67E5;&#x770B;&#x547D;&#x4EE4;&#x5E2E;&#x52A9;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#mkdir-创建文件夹"><span class="toc-nav-number">1.8.</span> <span class="toc-nav-text">mkdir &#x521B;&#x5EFA;&#x6587;&#x4EF6;&#x5939;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#移动-拷贝文件"><span class="toc-nav-number">1.9.</span> <span class="toc-nav-text">&#x79FB;&#x52A8;&#x3001;&#x62F7;&#x8D1D;&#x6587;&#x4EF6;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#创建空文件或者把文件置为空"><span class="toc-nav-number">1.10.</span> <span class="toc-nav-text">&#x521B;&#x5EFA;&#x7A7A;&#x6587;&#x4EF6;&#x6216;&#x8005;&#x628A;&#x6587;&#x4EF6;&#x7F6E;&#x4E3A;&#x7A7A;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#查看文件内容"><span class="toc-nav-number">1.11.</span> <span class="toc-nav-text">&#x67E5;&#x770B;&#x6587;&#x4EF6;&#x5185;&#x5BB9;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#实时查看文件内容"><span class="toc-nav-number">1.11.1.</span> <span class="toc-nav-text">&#x5B9E;&#x65F6;&#x67E5;&#x770B;&#x6587;&#x4EF6;&#x5185;&#x5BB9;</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#error-如何定位"><span class="toc-nav-number">1.11.2.</span> <span class="toc-nav-text">ERROR &#x5982;&#x4F55;&#x5B9A;&#x4F4D;</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#输出数据到文件"><span class="toc-nav-number">1.11.3.</span> <span class="toc-nav-text">&#x8F93;&#x51FA;&#x6570;&#x636E;&#x5230;&#x6587;&#x4EF6;</span></a></li></ol></li></ol></li></ol>
         
         </div>
       </aside>
@@ -550,7 +434,7 @@ and a.sal &lt; b.sal
                     <h5><a href="/tags/">FEATURED TAGS</a></h5>
                     <div class="tags">
                        
-                          <a class="tag" href="/tags/#MySQL" title="MySQL">MySQL</a>
+                          <a class="tag" href="/tags/#Linux" title="Linux">Linux</a>
                         
                     </div>
                 </section>

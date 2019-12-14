@@ -14,11 +14,11 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <title>
         
-          linux基本命令五 - Stefanboy | Blog
+          linux基本命令三 - Stefanboy | Blog
         
     </title>
 
-    <link rel="canonical" href="http://yoursite.com/article/linux5/">
+    <link rel="canonical" href="http://yoursite.com/article/linux/linux3/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -91,11 +91,11 @@
                               <a class="tag" href="/tags/#Linux" title="Linux">Linux</a>
                             
                         </div>
-                        <h1>linux基本命令五</h1>
+                        <h1>linux基本命令三</h1>
                         <h2 class="subheading">How to use Linux</h2>
                         <span class="meta">
                             Posted by Stefanboy on
-                            2016-11-21
+                            2016-11-18
                         </span>
                     </div>
                 
@@ -214,101 +214,325 @@
 
                 <h2 id="欢迎来到stefanboy的博客感谢大家对我的支持">欢迎来到Stefanboy的博客，感谢大家对我的支持.</h2>
 <p>该文章内容包括四部分，分别为<br>
-1、调度工具crontab<br>
-2、后台执行nohup<br>
-3、软连接</p>
-<h2 id="调度工具">调度工具</h2>
-<pre><code>现在主要的调度工具有
-1、airflow
-2、azkaban
-3、rundeck
-4、linux自带的crontab
+1、用户和用户组<br>
+2、sudo命令<br>
+3、用户无法登录	 passwd文件<br>
+4、权限 chmod chown<br>
+5、其他命令 su find du 命令</p>
+<h2 id="用户和用户组">用户和用户组</h2>
+<p>1.1查看用户命令的目录</p>
+<pre><code>[root@JD ~]# ll /usr/sbin/user*
+-rwxr-x--- 1 root root 118192 Nov  6  2016 /usr/sbin/useradd
+-rwxr-x--- 1 root root  80360 Nov  6  2016 /usr/sbin/userdel
+-rwxr-x--- 1 root root 113840 Nov  6  2016 /usr/sbin/usermod
+-rwsr-xr-x 1 root root  11296 Apr 13  2017 /usr/sbin/usernetctl
 </code></pre>
-<p>crontab介绍<br>
-	1.1在编写脚本的时候，按照规范；执行脚本的时候，注意要有<strong>执行x权限</strong></p>
-<pre><code>	第一行写上解释器 #!/bin/bash
-	以.sh结尾
+<p>1.2查看用户组命令的目录</p>
+<pre><code>[root@JD ~]# ll /usr/sbin/group*
+-rwxr-x--- 1 root root 65480 Nov  6  2016 /usr/sbin/groupadd
+-rwxr-x--- 1 root root 57016 Nov  6  2016 /usr/sbin/groupdel
+-rwxr-x--- 1 root root 57064 Nov  6  2016 /usr/sbin/groupmems
+-rwxr-x--- 1 root root 76424 Nov  6  2016 /usr/sbin/groupmod
 </code></pre>
-<p>1.2crontab命令</p>
-<pre><code>Options:
- -u &lt;user&gt;  define user
- -e         edit user's crontab #编辑
- -l         list user's crontab  #查看
- -r         delete user's crontab
- -i         prompt before deleting
- -n &lt;host&gt;  set host in cluster to run users' crontabs
- -c         get host in cluster to run users' crontabs
- -s         selinux context
- -x &lt;mask&gt;  enable debugging
+<p>1.3添加用户</p>
+<pre><code>[root@JD ~]# useradd jack
 </code></pre>
-<p>1.3crontab调度工具支持	只能支持到分钟粒度</p>
-<pre><code>* * * * *：按顺序分别代表分 小时 日 月 周
+<p>1.4查看用户信息<br>
+		创建一个普通用户，默认创建这个用户名的用户组jack，且设置这个用户的主组为jack,同时也会在/home下创建家目录<br>
+		存储用户信息的文件/etc/passwd<br>
+		存储用户组信息的文件/etc/group<br>
+		查看一个文件大小用：ll -h<br>
+		查看文件夹大小：du -sh</p>
+<pre><code>[root@JD ~]# id jack
+uid=1001(jack) gid=1001(jack) groups=1001(jack)
+[root@JD ~]# cd /home
+[root@JD home]# ll
+total 0
+drwx------. 3 centos centos 70 Jun 28  2017 centos
+drwx------  2 jack   jack   59 Nov 18 19:43 jack
+			所属用户 所属用户组
+[root@JD etc]# cd passwd
+...........
+jack:x:1001:1001::/home/jack:/bin/bash
+[root@JD etc]# cat group
+.........
+jack:x:1001:
 </code></pre>
-<p>如果想要支持秒级别，可以在shell脚本里面for循环，建立test.sh脚本，内容如下</p>
-<pre><code>[root@JD ~]# vi test.sh
-[root@JD ~]# cat test.sh
-#!/bin/bash
+<p>1.5删除用户<br>
+	如果jack该组只有jack用户，当这个用户删除时，组会校验就他自己，会自动删除（不会删除家目录即/hom/jack目录）；如果组中还有他用户，不会自动删除</p>
+<pre><code>[root@JD /]# userdel jack
+查看用户
+[root@JD /]# id jack
+id: jack: no such user
+查看保存用户和用户组的文件
+[root@JD /]# cat /etc/passwd | grep jack
+[root@JD /]# cat /etc/group | grep jack
+查看家目录
+[root@JD /]# ll /home/
+total 0
+drwx------. 3 centos centos 70 Jun 28  2017 centos
+drwx------  2   1001   1001 59 Nov 18 19:43 jack
+重新创建jack用户
+[root@JD /]# useradd jack
+#因为家目录不会删除，所以不会重新创建家目录
+useradd: warning: the home directory already exists.
+Not copying any file from skel directory into it.
+Creating mailbox file: File exists
+查看用户
+[root@JD /]# id jack
+uid=1001(jack) gid=1001(jack) groups=1001(jack)
+</code></pre>
+<p>1.6模拟切换用户丢失样式（如果删除家目录.bash*的所有文件，会出现样式丢失情况）</p>
+<pre><code>进入家目录
+[root@JD /]# cd /home/jack
+查看隐藏文件
+[root@JD jack]# ll -a
+total 12
+drwx------  2 jack jack  59 Nov 18 19:43 .
+drwxr-xr-x. 4 root root  30 Nov 18 19:43 ..
+-rw-r--r--  1 jack jack  18 Apr 11  2018 .bash_logout
+-rw-r--r--  1 jack jack 193 Apr 11  2018 .bash_profile
+-rw-r--r--  1 jack jack 231 Apr 11  2018 .bashrc
+删除bash的隐藏文件
+[root@JD jack]# rm -rf .bash*
+[root@JD jack]# ll -a
+total 0
+drwx------  2 jack jack  6 Nov 18 20:06 .
+drwxr-xr-x. 4 root root 30 Nov 18 19:43 ..
+[root@JD jack]# 
+切换用户，会出现样式丢失
+[root@JD jack]# su - jack
+Last failed login: Tue Nov 12 10:28:24 CST 2019 from 178.62.194.63 on ssh:notty
+There were 2 failed login attempts since the last successful login.
+-bash-4.2$ ll
+total 0
+-bash-4.2$ 
+</code></pre>
+<p>1.7修正样式</p>
+<pre><code>[root@JD jack]# cp /etc/skel/.* /home/jack/
+[root@JD jack]# cp /etc/skel/.* /home/jack/
+cp: omitting directory ‘/etc/skel/.’
+cp: omitting directory ‘/etc/skel/..’
+查看家目录下的文件
+[root@JD jack]# ll -a
+total 16
+drwx------  2 jack jack  79 Nov 18 20:10 .
+drwxr-xr-x. 4 root root  30 Nov 18 19:43 ..
+-rw-------  1 jack jack   8 Nov 18 20:09 .bash_history
+-rw-r--r--  1 root root  18 Nov 18 20:13 .bash_logout
+-rw-r--r--  1 root root 193 Nov 18 20:13 .bash_profile
+-rw-r--r--  1 root root 231 Nov 18 20:13 .bashrc
+修改用户所属的用户和用户组
+[root@JD jack]# chown jack:jack .bash*
+[root@JD jack]# ll -a
+total 16
+drwx------  2 jack jack  79 Nov 18 20:10 .
+drwxr-xr-x. 4 root root  30 Nov 18 19:43 ..
+-rw-------  1 jack jack  42 Nov 18 20:18 .bash_history
+-rw-r--r--  1 jack jack  18 Nov 18 20:13 .bash_logout
+-rw-r--r--  1 jack jack 193 Nov 18 20:13 .bash_profile
+-rw-r--r--  1 jack jack 231 Nov 18 20:13 .bashrc
+[root@JD jack]# 
+切换目录
+[root@JD jack]# su - jack
+Last login: Mon Nov 18 20:08:00 CST 2019 on pts/0
+样式修正成功
+[jack@JD ~]$ 
+</code></pre>
+<p>1.8添加ruoze用户到另外一个组 bigdata</p>
+<p><strong>-a|–append  ##把用户追加到某些组中，仅与-G选项一起使用</strong><br>
+-c|–comment ##修改/etc/passwd文件第五段comment<br>
+-d|–home    ##修改用户的家目录通常和-m选项一起使用<br>
+-e|–expiredate  ##指定用户帐号禁用的日期，格式YY-MM-DD<br>
+-f|–inactive    ##用户密码过期多少天后采用就禁用该帐号，0表示密码已过期就禁用帐号，-1表示禁用此功能，默认值是-1<br>
+<strong>-g|–gid     ##修改用户的gid，该组一定存在</strong><br>
+<strong>-G|–groups  ##把用户追加到某些组中，仅与-a选项一起使用</strong><br>
+-l|–login   ##修改用户的登录名称<br>
+-L|–lock    ##锁定用户的密码<br>
+-m|–move-home   ##修改用户的家目录通常和-d选项一起使用<br>
+-s|–shell   ##修改用户的shell<br>
+-u|–uid     ##修改用户的uid，该uid必须唯一<br>
+-U|–unlock  ##解锁用户的密码</p>
+<pre><code>创建组
+[root@JD jack]# groupadd bigdata
+查看用户组文件
+[root@JD jack]# cat /etc/group | grep bigdata
+bigdata:x:1002:
+添加jack用户到bigdata组
+[root@JD jack]# usermod -a -G bigdata jack
+[root@JD jack]# id jack
+uid=1001(jack) gid=1001(jack) groups=1001(jack),1002(bigdata)
+修改bigdata为jack的主组
+	方式一：先修改jack用户组为bigdata，然后再追加jack组
+[root@JD jack]# usermod --gid bigdata jack
+[root@JD jack]# id jack
+uid=1001(jack) gid=1002(bigdata) groups=1002(bigdata)
+[root@JD jack]# usermod -a -G jack jack
+[root@JD jack]# id jack
+uid=1001(jack) gid=1002(bigdata) groups=1002(bigdata),1001(jack)
+	方式二：修改用户，指定一个主组和n个附加组（显示的指定全）
+[root@JD jack]# usermod -g jack -G bigdata,jack
+[root@JD jack]# id jack
+uid=1001(jack) gid=1002(bigdata) groups=1002(bigdata),1001(jack)
+</code></pre>
+<h2 id="设置用户密码">设置用户密码</h2>
+<pre><code>[root@JD jack]# passwd jack
+Changing password for user jack.
+New password: 
+BAD PASSWORD: The password is shorter than 8 characters
+Retype new password: 
+passwd: all authentication tokens updated successfully.
+[root@JD jack]# 
+</code></pre>
+<h2 id="切换用户">切换用户</h2>
+<p>su ruoze<br>
+su - ruoze：会切换到该用户的家目录，且执行环境变量文件<br>
+.bash_profile文件 su ruoze不会执行该文件，su - ruoze 会执行<br>
+.bashrc文件       su ruoze会执行该文件，su - ruoze 会执行</p>
+<h2 id="普通用户获取root的最大权限">普通用户获取root的最大权限</h2>
+<pre><code>[root@JD jack]# vi /etc/sudoers
+root    ALL=(ALL)       ALL
+jack    ALL=(root)      NOPASSWD:ALL
+[root@JD jack]# cd ~
+[root@JD ~]# 
+[root@JD ~]# su jack
+[jack@JD root]$ ll
+ls: cannot open directory .: Permission denied
+sudo: ll: command not found
+[jack@JD root]$ sudo ls
+1.txt  2.txt  3.txt  a  b  shellScripts
+[jack@JD root]$ 
+</code></pre>
+<h2 id="etcpasswd文件存储用户信息">/etc/passwd文件（存储用户信息）</h2>
+<p>jack: x:1001:1002::/home/jack:/bin/bash<br>
+只有可执行文件是/bin/bash才能成功切换用户<br>
+<strong>应用场景：切换不了用户，修改/etc/passwd中对应用户的尾部为/bin/bash</strong><br>
+/etc/passwd文件<br>
+CDH 很多的组件<br>
+hdfs组件 hdfs用户<br>
+su - hdfs<br>
+对应修改为 /bin/bash</p>
+<p>hbase组件 hbase用户<br>
+	su - hbase<br>
+yarn组件  yarn用户</p>
+<pre><code>[root@JD ~]# cat /etc/passwd
+。。。。。。
+jack: x:1001:1002::/home/jack:/bin/bash
+修改passwd
+[root@JD ~]# vi /etc/passwd
+。。。。。
+jack: x:1001:1002::/home/jack:/bin/false
+切换用户没切换成功
+[root@JD ~]# su jack
+[root@JD ~]# 
+修改文件
+[root@JD ~]# vi /etc/passwd
+。。。。
+jack:x:1001:1002::/home/jack:/sbin/nologin
+没切换成功
+[root@JD ~]# su jack
+This account is currently not available.
+[root@JD ~]# 
+</code></pre>
+<h2 id="权限">权限</h2>
+<p>6.1<br>
+错误: Permission denied<br>
+chomd -R 777 文件夹/文件路径<br>
+chown -R 用户:用户组 文件夹/文件路径</p>
+<p><strong>-rw-r–r-- 1 root root  0 Nov 10 23:38 1.txt<br>
+drwxr-xr-x 3 root root 14 Nov 10 23:34 b</strong><br>
+第一个字母: d文件夹 -文件 l连接<br>
+<strong>rwx r-x r-x</strong><br>
+r：read 4<br>
+w：write 2<br>
+x：执行 1<br>
+-：没有权限 0<br>
+rwx：7<br>
+wx：3<br>
+rx：5<br>
+<strong>d rwx r-x r-x 3 root root 14 Nov 10 23:34 b</strong><br>
+rwx 第一组 7 代表文件或文件夹的用户root，读写执行<br>
+r-x 第二组 5 代表文件或文件夹的用户组root，读执行<br>
+r-x 第三组 5 代表其他组的所属用户对这个文件或文件夹的权限: 读执行</p>
+<p>chmod -R 777 文件夹/文件路径<br>
+chown -R 用户:用户组 文件夹/文件路径<br>
+777 代表任意的用户用户组 都读写执行 权限</p>
+<pre><code>[root@JD ~]# ll
+total 0
+-rw-r--r-- 1 root root  0 Nov 10 23:38 1.txt
+drwxr-xr-x 3 root root 14 Nov 10 23:34 b 
+</code></pre>
+<p>6.2案例</p>
+<pre><code>创建文件xxx.log
+[root@JD tmp]# echo &quot;qqqq&quot; &gt; xxx.log
+-rw-r--r-- 1 root root 5 Nov 18 21:08 xxx.log
+切换用户为jack用户
+[root@JD tmp]# su - jack
+Last login: Mon Nov 18 20:54:38 CST 2019 on pts/0
+[jack@JD ~]$ cd /tmp
+[jack@JD tmp]$ ll
+-rw-r--r-- 1 root root  5 Nov 18 21:08 xxx.log
+切换为jack用户，编辑失败，因为jack用户只有读权限
+[jack@JD tmp]$ vi xxx.log
+5: 'readonly' option is set (add ! to override)
 
-for((i=1;i&lt;=6;i++));
-do
-
-        date
-        sleep 10s
-
-done
-
-exit
-赋执行权限
-[root@JD ~]# chmod 744 test.sh 
-[root@JD ~]# ll
--rwxr--r-- 1 root root 81 Nov 21 20:10 test.sh
+ctrl+x/z 会产生swp文件  ll -a 删除即可 .rz.log.swp
+[root@JD tmp]# ll -a 
+-rw-------   1 root root 4096 Nov 18 21:07 .xxx.log.swp
+[root@JD tmp]# rm -rf .xxx.log.swp
 </code></pre>
-<p>编辑crontab，执行该脚本，crontab内容为</p>
-<pre><code>#每10s输出时间到test.log中
-[root@JD ~]# crontab -l
-* * * * * /root/test.sh &gt;&gt; /root/test.log
-[root@JD ~]# tail -F test.log
-Thu Nov 21 20:15:01 CST 2019
-Thu Nov 21 20:15:11 CST 2019
+<p>第二次编辑 修改第三组权限为6（rw） 即其他组有读跟写权限</p>
+<pre><code>-bash: chomd: command not found
+[root@JD tmp]# chmod 646 xxx.log
+[root@JD tmp]# ll
+-rw-r--rw- 1 root root  5 Nov 18 21:08 xxx.log
+切换用户，进行编辑，成功
+[root@JD tmp]# su - jack 
+Last login: Mon Nov 18 21:11:43 CST 2019 on pts/0
+[jack@JD ~]$ pwd
+/home/jack
+[jack@JD ~]$ cd /tmp/
+编辑成功
+[jack@JD tmp]$ vi xxx.log 
 </code></pre>
-<h2 id="后台执行">后台执行</h2>
-<pre><code>有三种方式可以后台执行
-./test.sh &amp;
-nohup ./test.sh &amp;  手动启动脚本 看日志 开发维护 测试
-nohup ./test.sh &gt; /root/test.log 2&gt;&amp;1 &amp;  该种方式可以将日志文件重定向输出到test.log中，一般用该种方式
+<p>先撤回该文件的其他组的 写权限，修改第二组权限为读跟写，将jack用户添加到root组中，然后用jack用户编辑，成功</p>
+<pre><code>[jack@JD tmp]$ exit
+logout
+[root@JD tmp]# ll
+total 4
+-rw-r--rw- 1 root root  9 Nov 18 21:23 xxx.log
+[root@JD tmp]# chmod 664 xxx.log  
+[root@JD tmp]# ll
+total 4
+-rw-rw-r-- 1 root root  9 Nov 18 21:23 xxx.log
+[root@JD tmp]# usermod -a -G root jack
+[root@JD tmp]# su - jack
+Last login: Mon Nov 18 21:22:49 CST 2019 on pts/0
+[jack@JD ~]$ cd /tmp/
+[jack@JD tmp]$ vi xxx.log 	
 </code></pre>
-<h2 id="软连接">软连接</h2>
-<p>4.1软连接命令命令	，建议路径配置<strong>绝对路径</strong></p>
-<pre><code>	ln -s 原path 目标path
-</code></pre>
-<p>4.2使用场景<br>
-	4.2.1版本升级，做软连接，直接配置目标path即可	<br>
-	4.2.2CDH升级 原文件不见了  光标跳动</p>
-<pre><code>原因：原文件被删除
-解决方式
-找原文件文件夹；
-删除快捷键文件文件夹--》重新做新的软连接 高版本
-</code></pre>
-<p>4.2.3CDH会生成日志文件到系统盘，将日志文件移动到数据盘，并配置软连接</p>
-<pre><code>系统盘 / 50G
-数据盘 /data01 2T
-
-  CDH log ：#CDH默认会生成日志到系统盘，但是系统盘容量有限，需要将日志文件移动到数据盘
-  /var/log/hbase/xxx.log 1G
-   /var/log/hbase/xxx.log1 1G
-   ...
-   /var/log/hbase/xxx.log10 1G
-   ----  11G
-先将程序停止一下，暂停生成日志
-mkdir /data01/log/
-移动系统盘中的日志文件到数据盘
-mv  /var/log/hbase /data01/log/
-配置数据盘的日志文件目录到系统生成日志目录的软连接
-ln -s /data01/log/hbase /var/log/hbase
-
-切记，一定要设置权限（原文件跟软连接的文件都要设置权限）  chmod chown 
-如果忘记权限，可以查看集群中另外一台的权限
- 实在不行就设置权限（一了百了）：777</code></pre>
+<h2 id="查看文件或文件夹大小">查看文件或文件夹大小</h2>
+<p>文件:<br>
+	ll<br>
+	du -sh xxx.log<br>
+文件夹:<br>
+	du -sh yyy</p>
+<h2 id="搜索-find">搜索 find</h2>
+<p><strong>find / -name xxx</strong></p>
+<ul>
+<li>
+<p>代表模糊匹配<br>
+history 历史记录<br>
+ps -ef 查看进程<br>
+top 系统情况		<br>
+查看某一组件部署在那</p>
+<pre><code>[root@JD tmp]# find / -name '*hadoop*'
+/tmp/xxxhadoopxxx
+[root@JD tmp]# find /tmp -name '*hadoop*' 
+/tmp/xxxhadoopxxx
+[root@JD tmp]#</code></pre>
+</li>
+</ul>
 
                 
 
@@ -317,12 +541,12 @@ ln -s /data01/log/hbase /var/log/hbase
                 <ul class="pager">
                     
                         <li class="previous">
-                            <a href="/article/mysqlinstall/" data-toggle="tooltip" data-placement="top" title="MySQL安装部署">&larr; Previous Post</a>
+                            <a href="/article/linux/linux4/" data-toggle="tooltip" data-placement="top" title="linux基本命令四">&larr; Previous Post</a>
                         </li>
                     
                     
                         <li class="next">
-                            <a href="/article/linux4/" data-toggle="tooltip" data-placement="top" title="linux基本命令四">Next Post &rarr;</a>
+                            <a href="/article/linux/linux2/" data-toggle="tooltip" data-placement="top" title="linux基本命令二">Next Post &rarr;</a>
                         </li>
                     
                 </ul>
@@ -372,7 +596,7 @@ ln -s /data01/log/hbase /var/log/hbase
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#欢迎来到stefanboy的博客感谢大家对我的支持"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">&#x6B22;&#x8FCE;&#x6765;&#x5230;Stefanboy&#x7684;&#x535A;&#x5BA2;&#xFF0C;&#x611F;&#x8C22;&#x5927;&#x5BB6;&#x5BF9;&#x6211;&#x7684;&#x652F;&#x6301;.</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#调度工具"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">&#x8C03;&#x5EA6;&#x5DE5;&#x5177;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#后台执行"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">&#x540E;&#x53F0;&#x6267;&#x884C;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#软连接"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">&#x8F6F;&#x8FDE;&#x63A5;</span></a></li></ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#欢迎来到stefanboy的博客感谢大家对我的支持"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">&#x6B22;&#x8FCE;&#x6765;&#x5230;Stefanboy&#x7684;&#x535A;&#x5BA2;&#xFF0C;&#x611F;&#x8C22;&#x5927;&#x5BB6;&#x5BF9;&#x6211;&#x7684;&#x652F;&#x6301;.</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#用户和用户组"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">&#x7528;&#x6237;&#x548C;&#x7528;&#x6237;&#x7EC4;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#设置用户密码"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">&#x8BBE;&#x7F6E;&#x7528;&#x6237;&#x5BC6;&#x7801;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#切换用户"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">&#x5207;&#x6362;&#x7528;&#x6237;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#普通用户获取root的最大权限"><span class="toc-nav-number">5.</span> <span class="toc-nav-text">&#x666E;&#x901A;&#x7528;&#x6237;&#x83B7;&#x53D6;root&#x7684;&#x6700;&#x5927;&#x6743;&#x9650;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#etcpasswd文件存储用户信息"><span class="toc-nav-number">6.</span> <span class="toc-nav-text">/etc/passwd&#x6587;&#x4EF6;&#xFF08;&#x5B58;&#x50A8;&#x7528;&#x6237;&#x4FE1;&#x606F;&#xFF09;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#权限"><span class="toc-nav-number">7.</span> <span class="toc-nav-text">&#x6743;&#x9650;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#查看文件或文件夹大小"><span class="toc-nav-number">8.</span> <span class="toc-nav-text">&#x67E5;&#x770B;&#x6587;&#x4EF6;&#x6216;&#x6587;&#x4EF6;&#x5939;&#x5927;&#x5C0F;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#搜索-find"><span class="toc-nav-number">9.</span> <span class="toc-nav-text">&#x641C;&#x7D22; find</span></a></li></ol>
         
         </div>
       </aside>

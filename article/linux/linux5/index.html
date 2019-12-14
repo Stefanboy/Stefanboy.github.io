@@ -14,11 +14,11 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <title>
         
-          MySQL使用一 - Stefanboy | Blog
+          linux基本命令五 - Stefanboy | Blog
         
     </title>
 
-    <link rel="canonical" href="http://yoursite.com/article/mysquser1/">
+    <link rel="canonical" href="http://yoursite.com/article/linux/linux5/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -88,14 +88,14 @@
                     <div class="post-heading">
                         <div class="tags">
                             
-                              <a class="tag" href="/tags/#MySQL" title="MySQL">MySQL</a>
+                              <a class="tag" href="/tags/#Linux" title="Linux">Linux</a>
                             
                         </div>
-                        <h1>MySQL使用一</h1>
-                        <h2 class="subheading">How to use MySQL</h2>
+                        <h1>linux基本命令五</h1>
+                        <h2 class="subheading">How to use Linux</h2>
                         <span class="meta">
                             Posted by Stefanboy on
-                            2016-11-24
+                            2016-11-21
                         </span>
                     </div>
                 
@@ -213,221 +213,102 @@
                 post-container">
 
                 <h2 id="欢迎来到stefanboy的博客感谢大家对我的支持">欢迎来到Stefanboy的博客，感谢大家对我的支持.</h2>
-<h2 id="mysql使用">MySQL使用</h2>
-<h3 id="允许外面机器各种客户端连接mysql">允许外面机器（各种客户端）连接mysql</h3>
-<pre><code>允许用户root从任意ip的主机连接到mysql服务器，并使用mysqladmin作为密码
-mysql&gt; grant all privileges on *.* to root@'%' identified by 'mysqladmin';
-Query OK, 0 rows affected (0.00 sec)
-刷新权限
-mysql&gt; flush privileges;
-Query OK, 0 rows affected (0.00 sec)
+<p>该文章内容包括四部分，分别为<br>
+1、调度工具crontab<br>
+2、后台执行nohup<br>
+3、软连接</p>
+<h2 id="调度工具">调度工具</h2>
+<pre><code>现在主要的调度工具有
+1、airflow
+2、azkaban
+3、rundeck
+4、linux自带的crontab
 </code></pre>
-<h3 id="命令行登录mysql">命令行登录mysql</h3>
-<p>命令行有两种方式登录mysql：mysql -uroot -p和mysql -u root -p<br>
-切记在命令行输入命令时不要，不要带密码登录，否则使用history -c 命令时会看到密码，带来风险</p>
-<pre><code>JD:mysqladmin:/usr/local/mysql:&gt;mysql -uroot -p
-JD:mysqladmin:/usr/local/mysql:&gt;mysql -u root -p
-
-创建数据库bigdata
-mysql&gt; create database bigdata;
-
-Query OK, 1 row affected (0.00 sec)
-
-mysql&gt; show database;
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'database' at line 1
-
-查看数据库
-mysql&gt; show databases;
-+--------------------+
-| Database           |
-+--------------------+
-| information_schema |
-| bigdata            |
-| mysql              |
-| performance_schema |
-| test               |
-+--------------------+
-5 rows in set (0.00 sec)
-查看
-mysql&gt; show processlist;
-+-----+------+----------------------+---------+---------+------+-------+------------------+
-| Id  | User | Host                 | db      | Command | Time | State | Info             |
-+-----+------+----------------------+---------+---------+------+-------+------------------+
-| 129 | root | 36.102.228.101:13117 | bigdata | Sleep   |   21 |       | NULL             |
-| 130 | root | 36.102.228.101:2783  | NULL    | Sleep   | 1343 |       | NULL             |
-| 132 | root | localhost            | NULL    | Query   |    0 | init  | show processlist |
-+-----+------+----------------------+---------+---------+------+-------+------------------+
-3 rows in set (0.00 sec)
-
-看时间，找到哪个消耗时间长的，有可能导致mysql服务夯住 锁死-	-》这个执行的sql确认清楚，到底能不能kill
-mysql&gt; kill 
+<p>crontab介绍<br>
+	1.1在编写脚本的时候，按照规范；执行脚本的时候，注意要有<strong>执行x权限</strong></p>
+<pre><code>	第一行写上解释器 #!/bin/bash
+	以.sh结尾
 </code></pre>
-<h3 id="mysql的字段类型">mysql的字段类型</h3>
-<ul>
-<li>
-<p>数值类型</p>
-<pre><code>int 整数型
-long 长整形
-float 单精度
-double 双精度
-decimal 小数型 金额
+<p>1.2crontab命令</p>
+<pre><code>Options:
+ -u &lt;user&gt;  define user
+ -e         edit user's crontab #编辑
+ -l         list user's crontab  #查看
+ -r         delete user's crontab
+ -i         prompt before deleting
+ -n &lt;host&gt;  set host in cluster to run users' crontabs
+ -c         get host in cluster to run users' crontabs
+ -s         selinux context
+ -x &lt;mask&gt;  enable debugging
 </code></pre>
-</li>
-<li>
-<p>字符串类型</p>
-<pre><code>char 字节 定长 范围0-255字节 如果长度不够会自动补全
-varhar 字符串 变长 范围0-65535字节
+<p>1.3crontab调度工具支持	只能支持到分钟粒度</p>
+<pre><code>* * * * *：按顺序分别代表分 小时 日 月 周
 </code></pre>
-</li>
-</ul>
-<p>日期类型</p>
-<pre><code>	date 日期 YYYY-MM-DD
-	time HH:MM:SS
-	datetime 年月日时分秒 YYYY-MM-DD HH:MM:SS
-	timestamp 年月日时分秒 YYYY-MM-DD HH:MM:SS
-</code></pre>
-<h3 id="sql类型">sql类型</h3>
-<pre><code>DDL 数据定义语言: create drop 
-DML 数据操作语言: insert update delete select 增删改查
-DCL 数据控制语言: grant
-</code></pre>
-<h3 id="建表规划">建表规划</h3>
-<pre><code>create table rzdata(
-id int(11) not null auto_increment,
+<p>如果想要支持秒级别，可以在shell脚本里面for循环，建立test.sh脚本，内容如下</p>
+<pre><code>[root@JD ~]# vi test.sh
+[root@JD ~]# cat test.sh
+#!/bin/bash
 
-name varchar(200),
-age  int(3),
+for((i=1;i&lt;=6;i++));
+do
 
+        date
+        sleep 10s
 
+done
 
-createuser varchar(200) ,
-createtime timestamp not null default current_timestamp,
+exit
+赋执行权限
+[root@JD ~]# chmod 744 test.sh 
+[root@JD ~]# ll
+-rwxr--r-- 1 root root 81 Nov 21 20:10 test.sh
+</code></pre>
+<p>编辑crontab，执行该脚本，crontab内容为</p>
+<pre><code>#每10s输出时间到test.log中
+[root@JD ~]# crontab -l
+* * * * * /root/test.sh &gt;&gt; /root/test.log
+[root@JD ~]# tail -F test.log
+Thu Nov 21 20:15:01 CST 2019
+Thu Nov 21 20:15:11 CST 2019
+</code></pre>
+<h2 id="后台执行">后台执行</h2>
+<pre><code>有三种方式可以后台执行
+./test.sh &amp;
+nohup ./test.sh &amp;  手动启动脚本 看日志 开发维护 测试
+nohup ./test.sh &gt; /root/test.log 2&gt;&amp;1 &amp;  该种方式可以将日志文件重定向输出到test.log中，一般用该种方式
+</code></pre>
+<h2 id="软连接">软连接</h2>
+<p>4.1软连接命令命令	，建议路径配置<strong>绝对路径</strong></p>
+<pre><code>	ln -s 原path 目标path
+</code></pre>
+<p>4.2使用场景<br>
+	4.2.1版本升级，做软连接，直接配置目标path即可	<br>
+	4.2.2CDH升级 原文件不见了  光标跳动</p>
+<pre><code>原因：原文件被删除
+解决方式
+找原文件文件夹；
+删除快捷键文件文件夹--》重新做新的软连接 高版本
+</code></pre>
+<p>4.2.3CDH会生成日志文件到系统盘，将日志文件移动到数据盘，并配置软连接</p>
+<pre><code>系统盘 / 50G
+数据盘 /data01 2T
 
-updateuser varchar(200) ,
-updatetime timestamp not null default current_timestamp on update current_timestamp,
+  CDH log ：#CDH默认会生成日志到系统盘，但是系统盘容量有限，需要将日志文件移动到数据盘
+  /var/log/hbase/xxx.log 1G
+   /var/log/hbase/xxx.log1 1G
+   ...
+   /var/log/hbase/xxx.log10 1G
+   ----  11G
+先将程序停止一下，暂停生成日志
+mkdir /data01/log/
+移动系统盘中的日志文件到数据盘
+mv  /var/log/hbase /data01/log/
+配置数据盘的日志文件目录到系统生成日志目录的软连接
+ln -s /data01/log/hbase /var/log/hbase
 
-primary key (id)
-);
-</code></pre>
-<ul>
-<li>
-<p>表名称 字段名统一不能是中文，也不能是汉语拼音</p>
-</li>
-<li>
-<p>统一风格，已存在的表是什么风格，就要遵循；如果是新建的表，风格定义要统一标准</p>
-</li>
-<li>
-<p>第一个字段必须id 是自增长，是主键且无意义</p>
-</li>
-<li>
-<p>一张表只有一个主键 primary key==》id 非空 unique+not null，业务字段如果是非空，需要unique约束</p>
-<pre><code> ALTER TABLE bigdata.testdata ADD CONSTRAINT testdata_un UNIQUE KEY (name) ;
-</code></pre>
-</li>
-<li>
-<p>后四个字段必须要加上</p>
-<pre><code>用户 创建时间 修改用户 修改时间
-</code></pre>
-</li>
-<li>
-<p>业务字段上加上注释</p>
-<pre><code>COMMENT '用户名称'
-COMMENT '用户年龄'
-</code></pre>
-</li>
-<li>
-<p>ENGINE=InnoDB  CHARSET<br>
-DEFAULT CHARSET=latin1 表示字符集</p>
-<pre><code>CREATE TABLE `testdata` (
-`id` int(11) NOT NULL AUTO_INCREMENT,
-`name` varchar(200) DEFAULT NULL COMMENT '用户名称',
-`age` int(3) DEFAULT NULL COMMENT '用户年龄',
-`createuser` varchar(200) DEFAULT NULL,
-`createtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-`updateuser` varchar(200) DEFAULT NULL,
-`updatetime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-PRIMARY KEY (`id`),
-UNIQUE KEY `rzdata_un` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-</code></pre>
-</li>
-<li>
-<p>字符集<br>
-字符集包括多种</p>
-<pre><code>database 字符集
-table字符集 
-column 字符集
-服务端 字符集
-客户端字符集
-
-查看创建表的字符集
-mysql&gt; show create database bigdata
-	-&gt; ;
-+----------+--------------------------------------------------------------------+
-| Database | Create Database                                                    |
-+----------+--------------------------------------------------------------------+
-| bigdata  | CREATE DATABASE `bigdata` /*!40100 DEFAULT CHARACTER SET latin1 */ |
-+----------+--------------------------------------------------------------------+
-1 row in set (0.00 sec)
-
-查看字符集（下面的字符集是生成的配置）
-mysql&gt; show variables like '%char%'
--&gt; ;
-+--------------------------+---------------------------------------------------------------+
-| Variable_name            | Value                                                         |
-+--------------------------+---------------------------------------------------------------+
-| character_set_client     | utf8   #客户端字符集                                                       |
-| character_set_connection | utf8                                                          |
-| character_set_database   | latin1  #database 字符集                                                    |
-| character_set_filesystem | binary                                                        |
-| character_set_results    | utf8                                                          |
-| character_set_server     | latin1  #服务端字符集                                                     |
-| character_set_system     | utf8                                                          |
-| character_sets_dir       | /usr/local/mysql-5.6.23-linux-glibc2.5-x86_64/share/charsets/ |
-+--------------------------+---------------------------------------------------------------+
-8 rows in set (0.00 sec)
-</code></pre>
-</li>
-</ul>
-<h3 id="简单的增删改查">简单的增删改查</h3>
-<p>update 和 delete语句执行时，一定要加上条件（切记）<br>
-select查询时不要写 * ，应该直接加具体字段<br>
-生产数据过过查询时，记得加上limit关键字，限制条数<br>
-如果误删，可以从binlog文件恢复 arch/mysql-bin.000001<br>
-生产上一般是读写分离</p>
-<pre><code>添加到主库，查询在从库中查
-</code></pre>
-<h3 id="datetime-timestamp区别">datetime timestamp区别</h3>
-<ul>
-<li>
-<p>两者的存储方式不一样</p>
-<pre><code>`对于TIMESTAMP：
-它把客户端插入的时间从 当前时区 转化为UTC（世界标准时间）进行存储。
-查询时，将其又转化为客户端当前时区进行返回。
-
-`对于DATETIME：
-不做任何改变，基本上是原样输入和输出。
-</code></pre>
-</li>
-<li>
-<p>两者所能存储的时间范围不一样</p>
-<pre><code>timestamp所能存储的时间范围为：'1970-01-01 00:00:01.000000' 到 '2038-01-19 03:14:07.999999'。
-
-datetime所能存储的时间范围为：'1000-01-01 00:00:00.000000' 到 '9999-12-31 23:59:59.999999'。
-</code></pre>
-</li>
-<li>
-<p>总结：TIMESTAMP和DATETIME除了存储范围和存储方式不一样，没有太大区别。当然，对于跨时区的业务，TIMESTAMP更为合适。</p>
-</li>
-</ul>
-<h3 id="engineinnodb-是什么myisam区别是什么">ENGINE=InnoDB 是什么？MyISAM区别是什么</h3>
-<ul>
-<li>InnoDB<br>
-它提供了事务控制能力功能，它确保一组命令全部执行成功，或者当任何一个命令出现错误时所有命令的结果都被回退，可以想像在电子银行中事务控制能力是非常重要的。支持COMMIT、ROLLBACK和其他事务特性。最新版本的Mysql已经计划移除对BDB的支持，转而全力发展InnoDB。</li>
-<li>区别<br>
-MyISAM类型不支持事务处理等高级处理，而InnoDB类型支持。<br>
-MyISAM类型的表强调的是性能，其执行数度比InnoDB类型更快，但是不提供事务支持，而InnoDB提供事务支持，外键等高级数据库功能。</li>
-</ul>
+切记，一定要设置权限（原文件跟软连接的文件都要设置权限）  chmod chown 
+如果忘记权限，可以查看集群中另外一台的权限
+ 实在不行就设置权限（一了百了）：777</code></pre>
 
                 
 
@@ -436,12 +317,12 @@ MyISAM类型的表强调的是性能，其执行数度比InnoDB类型更快，�
                 <ul class="pager">
                     
                         <li class="previous">
-                            <a href="/article/mysquser2/" data-toggle="tooltip" data-placement="top" title="MySQL使用二">&larr; Previous Post</a>
+                            <a href="/article/mysql/mysqlinstall/" data-toggle="tooltip" data-placement="top" title="MySQL安装部署">&larr; Previous Post</a>
                         </li>
                     
                     
                         <li class="next">
-                            <a href="/article/hexoinstall/" data-toggle="tooltip" data-placement="top" title="Hexo安装部署和使用">Next Post &rarr;</a>
+                            <a href="/article/linux/linux4/" data-toggle="tooltip" data-placement="top" title="linux基本命令四">Next Post &rarr;</a>
                         </li>
                     
                 </ul>
@@ -491,7 +372,7 @@ MyISAM类型的表强调的是性能，其执行数度比InnoDB类型更快，�
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#欢迎来到stefanboy的博客感谢大家对我的支持"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">&#x6B22;&#x8FCE;&#x6765;&#x5230;Stefanboy&#x7684;&#x535A;&#x5BA2;&#xFF0C;&#x611F;&#x8C22;&#x5927;&#x5BB6;&#x5BF9;&#x6211;&#x7684;&#x652F;&#x6301;.</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#mysql使用"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">MySQL&#x4F7F;&#x7528;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#允许外面机器各种客户端连接mysql"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text">&#x5141;&#x8BB8;&#x5916;&#x9762;&#x673A;&#x5668;&#xFF08;&#x5404;&#x79CD;&#x5BA2;&#x6237;&#x7AEF;&#xFF09;&#x8FDE;&#x63A5;mysql</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#命令行登录mysql"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text">&#x547D;&#x4EE4;&#x884C;&#x767B;&#x5F55;mysql</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#mysql的字段类型"><span class="toc-nav-number">2.3.</span> <span class="toc-nav-text">mysql&#x7684;&#x5B57;&#x6BB5;&#x7C7B;&#x578B;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#sql类型"><span class="toc-nav-number">2.4.</span> <span class="toc-nav-text">sql&#x7C7B;&#x578B;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#建表规划"><span class="toc-nav-number">2.5.</span> <span class="toc-nav-text">&#x5EFA;&#x8868;&#x89C4;&#x5212;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#简单的增删改查"><span class="toc-nav-number">2.6.</span> <span class="toc-nav-text">&#x7B80;&#x5355;&#x7684;&#x589E;&#x5220;&#x6539;&#x67E5;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#datetime-timestamp区别"><span class="toc-nav-number">2.7.</span> <span class="toc-nav-text">datetime timestamp&#x533A;&#x522B;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#engineinnodb-是什么myisam区别是什么"><span class="toc-nav-number">2.8.</span> <span class="toc-nav-text">ENGINE=InnoDB &#x662F;&#x4EC0;&#x4E48;&#xFF1F;MyISAM&#x533A;&#x522B;&#x662F;&#x4EC0;&#x4E48;</span></a></li></ol></li></ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#欢迎来到stefanboy的博客感谢大家对我的支持"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">&#x6B22;&#x8FCE;&#x6765;&#x5230;Stefanboy&#x7684;&#x535A;&#x5BA2;&#xFF0C;&#x611F;&#x8C22;&#x5927;&#x5BB6;&#x5BF9;&#x6211;&#x7684;&#x652F;&#x6301;.</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#调度工具"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">&#x8C03;&#x5EA6;&#x5DE5;&#x5177;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#后台执行"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">&#x540E;&#x53F0;&#x6267;&#x884C;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#软连接"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">&#x8F6F;&#x8FDE;&#x63A5;</span></a></li></ol>
         
         </div>
       </aside>
@@ -511,7 +392,7 @@ MyISAM类型的表强调的是性能，其执行数度比InnoDB类型更快，�
                     <h5><a href="/tags/">FEATURED TAGS</a></h5>
                     <div class="tags">
                        
-                          <a class="tag" href="/tags/#MySQL" title="MySQL">MySQL</a>
+                          <a class="tag" href="/tags/#Linux" title="Linux">Linux</a>
                         
                     </div>
                 </section>
