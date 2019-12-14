@@ -134,13 +134,6 @@
 
                         
                         <li>
-                            <a href="/tags/">Tags</a>
-                        </li>
-                        
-                    
-
-                        
-                        <li>
                             <a href="/about/">About</a>
                         </li>
                         
@@ -149,6 +142,13 @@
                         
                         <li>
                             <a href="/archive/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
                         </li>
                         
                     
@@ -231,6 +231,44 @@ DataNode报错信息
         <p class="post-meta" style="margin: 10px 0;">
             Posted by Stefanboy on
             2017-12-25
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#Hadoop" title="Hadoop">Hadoop</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/article/hadoop/hadoop6/">
+        <h2 class="post-title">
+                                 
+            yarn资源调优参数&yarn的调度器&yarn的常用命令
+        </h2>
+        <h3 class="post-subtitle">
+            How to use Hadoop
+        </h3>
+        <div class="post-content-preview">
+            欢迎来到Stefanboy的博客，感谢大家对我的支持.
+yarn资源调优参数
+概念介绍
+
+container
+是一个虚拟化的容器，包括memory和vcore两个维度，作用是运行appmaster和task任务
+物理核pcore
+服务器上实际的物理CPU的核数
+虚拟核vcore
+yarn引入的一个概念，设计的初衷是考虑到每台服务器的性能不一样，比如某一个物理CPU是另一个物理CPU的两倍，通......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by Stefanboy on
+            2016-12-14
         </p>
         <div class="tags">
             
@@ -573,41 +611,6 @@ Query OK, 0 rows......
 </div>
 <hr>
 
-<div class="post-preview">
-
-    <a href="/article/mysqlinstall/">
-        <h2 class="post-title">
-                                 
-            MySQL安装部署
-        </h2>
-        <h3 class="post-subtitle">
-            How to install MySQL
-        </h3>
-        <div class="post-content-preview">
-            欢迎来到Stefanboy的博客，感谢大家对我的支持.
-MySQL安装配置
-上传tar包到/uar/local目录下
-[root@JD ~]# cd /usr/local
-[root@JD local]# ll
-total 43856
--rw-r--r--  1 root root 44908544 Nov 22 23:56 mysql-5.6.23-linux-glibc2.5-x86_6......
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by Stefanboy on
-            2016-11-23
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#MySQL" title="MySQL">MySQL</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
 
 
 <!-- Pager -->
@@ -649,7 +652,7 @@ total 43856
     <div class="tags">
         
             
-            <a href="/tags/#Hadoop" title="Hadoop" rel="5">Hadoop</a>
+            <a href="/tags/#Hadoop" title="Hadoop" rel="6">Hadoop</a>
             
         
             
@@ -729,6 +732,10 @@ total 43856
         </li>
       
         <li>
+          <a href="/article/hadoop/hadoop6/">yarn资源调优参数&amp;yarn的调度器&amp;yarn的常用命令</a>
+        </li>
+      
+        <li>
           <a href="/article/hadoop5/">MR架构&amp;文件格式优缺点&amp;压缩格式优缺点&amp;spilt -&gt; map task关系&amp;wordcount&amp;shuffle的理解</a>
         </li>
       
@@ -738,10 +745,6 @@ total 43856
       
         <li>
           <a href="/article/hadoop3/">刀片机和机架&amp;块副本数&amp;HDFS架构&amp;块损坏修复&amp;小文件&amp;配置修改存储目录</a>
-        </li>
-      
-        <li>
-          <a href="/article/hadoop2/">YARN部署&amp;jps&amp;Linux的oom及过期清理</a>
         </li>
       
     </ul>
@@ -764,7 +767,7 @@ total 43856
         
     <h5>ARCHIVES</h5>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">1</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">1</span></li></ul>
     </div>
 
         <hr>

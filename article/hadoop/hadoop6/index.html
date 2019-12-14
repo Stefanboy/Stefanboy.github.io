@@ -14,11 +14,11 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <title>
         
-          HDFS的副本放置策略&amp;读写流程&amp;pid文件&amp;多节点和单节点磁盘均衡&amp;安全模式&amp;常用命令和设置回收站 - Stefanboy | Blog
+          yarn资源调优参数&amp;yarn的调度器&amp;yarn的常用命令 - Stefanboy | Blog
         
     </title>
 
-    <link rel="canonical" href="http://yoursite.com/article/hadoop4/">
+    <link rel="canonical" href="http://yoursite.com/article/hadoop/hadoop6/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -91,11 +91,11 @@
                               <a class="tag" href="/tags/#Hadoop" title="Hadoop">Hadoop</a>
                             
                         </div>
-                        <h1>HDFS的副本放置策略&amp;读写流程&amp;pid文件&amp;多节点和单节点磁盘均衡&amp;安全模式&amp;常用命令和设置回收站</h1>
+                        <h1>yarn资源调优参数&amp;yarn的调度器&amp;yarn的常用命令</h1>
                         <h2 class="subheading">How to use Hadoop</h2>
                         <span class="meta">
                             Posted by Stefanboy on
-                            2016-12-05
+                            2016-12-14
                         </span>
                     </div>
                 
@@ -213,248 +213,220 @@
                 post-container">
 
                 <h2 id="欢迎来到stefanboy的博客感谢大家对我的支持">欢迎来到Stefanboy的博客，感谢大家对我的支持.</h2>
-<h2 id="hdfs副本放置策略">HDFS副本放置策略</h2>
-<p>客户端：执行put命令所在的机器称为客户端<br>
-<img src="/img/hadoop4/1.png" alt=""></p>
+<h1 id="yarn资源调优参数">yarn资源调优参数</h1>
+<h2 id="概念介绍">概念介绍</h2>
 <ul>
-<li>第一副本<br>
-假如上传节点为dn节点，优先放置在本节点；否则会随机找一个磁盘不太慢、CPU不太繁忙的节点</li>
-<li>第二副本<br>
-放置于第一副本不同的机架上</li>
-<li>第三副本<br>
-放置于第二副本的相同机架的不同节点上</li>
+<li>container<br>
+是一个虚拟化的容器，包括memory和vcore两个维度，作用是运行appmaster和task任务</li>
+<li>物理核pcore<br>
+服务器上实际的物理CPU的核数</li>
+<li>虚拟核vcore<br>
+yarn引入的一个概念，设计的初衷是考虑到每台服务器的性能不一样，比如某一个物理CPU是另一个物理CPU的两倍，通过设置pcore和vcore来弥补这种差距<br>
+比如第一台机器CPU性能强悍，设置pcore：vcore=1:2<br>
+第二台机器CPU性能比较差，设置pcore：vcore=1:1</li>
 </ul>
-<p>CDH机架有一个默认的机架，虚拟的概念，CDH一般不调整这种默认机架</p>
-<h2 id="hdfs的读写流程">HDFS的读写流程</h2>
-<h3 id="写流程">写流程</h3>
-<p><img src="/img/hadoop4/2.png" alt=""></p>
-<ul>
-<li>1、client调用FileSystem.create(filePath)方法<br>
-client调用FileSystem.create(filePath)方法跟NN进行<strong>rpc</strong>通信，nn会检查文件是否存在以及是否有权限进行创建，如果检查失败，返回错误信息，如果检查通过，就创建一个新文件，不会关联任何block块，然后返回一个FSDataOutputStream对象</li>
-<li>2、client端调用FSDataOutputStream对象的write()方法<br>
-将第一块的第一个副本写到第一个DN；第一个写完，<br>
-就传输第二个副本到第二个DN上；第二个写完，<br>
-就传输第三个副本到DN上；第三个副本写完，<br>
-就返回一个ack packet确认包给第二个DN；<br>
-第二个DN接收到第三个的ack packet加上自身的ok后，就返回一个ack packet确认包给第一个DN，<br>
-第一个DN接收到第二个DN的ack packet 并加上自身的ok，就返回ack paket确认包给FSDataOutputStream对象，<br>
-标志着第一块 3副本已经写入完毕，然后余下的block依次这样写</li>
-<li>3、当向文件写入完数据后<br>
-client调用FSDataOutputStream对象的close()方法，关闭输出流</li>
-<li>4、最后调用FileSystem.complete()方法告诉NN数据写入成功</li>
-</ul>
-<h3 id="读流程">读流程</h3>
-<p><img src="/img/hadoop4/3.png" alt=""></p>
-<ul>
-<li>1、client调用FileSystem.open(filePath)方法，<br>
-与NN进行<strong>rpc</strong>通信，返回该文件的部分或者全部block列表，也就是FSDataInputStream对象</li>
-<li>2、client调用FSDataInputStream.open()方法，<br>
-与第一块最近的NN进行read，读取完成后，会check，假如ok，就关闭与DN的通信；假如失败，会记录失败块+DN信息，下次将不会访问该block块，然后会去该块的第二个NN地址进行读取；<br>
-然后会去第二块的最近的DN上通信读取，check完成后，关闭通信；<br>
-假如block块列表读取完成后，文件还未结束，就再次调用FileSystem从NN获取该文件的下一批次的block块列表，然后继续跟NN进行read</li>
-<li>3、client调用FSDataInputStream的close()方法，关闭输入流</li>
-</ul>
-<h2 id="配置pid文件的生成路径">配置pid文件的生成路径</h2>
-<p>启动hdfs或yarn，如果不在配置文件配置的话，生成的pid文件会在/tmp目录下，如果linux一个月自动清理pid文件，<strong>pid文件会造成集群的启动和停止（jps文件不会影响集群）</strong>，所以我们需要在hdfs和yarn的配置文件中配置让，pid文件不要生成在/tmp目录下</p>
-<h3 id="hdfs的配置">hdfs的配置</h3>
-<p><a href="http://xn--hadoop-env-o150at28m.sh" target="_blank" rel="noopener">配置hadoop-env.sh</a></p>
-<pre><code>	export HADOOP_PID_DIR=/home/hadoop/tmp
-</code></pre>
-<h3 id="yarn配置">yarn配置</h3>
-<p><a href="http://xn--yarn-env-vz2ve12k.sh" target="_blank" rel="noopener">配置yarn-env.sh</a></p>
-<pre><code>	export YARN_PID_DIR=/home/hadoop/tmp
-</code></pre>
-<h3 id="重新启动查看pid文件路径">重新启动，查看pid文件路径</h3>
-<pre><code>	[hadoop@JD tmp]$ pwd
-	/home/hadoop/tmp
-	
-	生成在配置的路径下
-	[hadoop@JD tmp]$ ll
-	total 20
-	-rw-rw-r-- 1 hadoop hadoop 5 Dec  1 18:28 hadoop-hadoop-datanode.pid
-	-rw-rw-r-- 1 hadoop hadoop 5 Dec  1 18:28 hadoop-hadoop-namenode.pid
-	-rw-rw-r-- 1 hadoop hadoop 5 Dec  1 18:29 hadoop-hadoop-secondarynamenode.pid
-	-rw-rw-r-- 1 hadoop hadoop 5 Dec  1 18:29 yarn-hadoop-nodemanager.pid
-	-rw-rw-r-- 1 hadoop hadoop 5 Dec  1 18:29 yarn-hadoop-resourcemanager.pid
-</code></pre>
-<h2 id="hdfs-dfs常用命令">HDFS DFS常用命令</h2>
-<h3 id="hadoop-fs-跟-hdfs-dfs命令的区别">hadoop fs 跟 hdfs dfs命令的区别</h3>
-<p>在linux输入hdfs dfs命令还是会调用hadoop fs命令</p>
-<pre><code>[hadoop@JD ~]$ hdfs dfs
-Usage: hadoop fs [generic options]
-[-cat [-ignoreCrc] &lt;src&gt; ...]
-[-chmod [-R] &lt;MODE[,MODE]... | OCTALMODE&gt; PATH...]
-[-chown [-R] [OWNER][:[GROUP]] PATH...]
-
-[-ls [-C] [-d] [-h] [-q] [-R] [-t] [-S] [-r] [-u] [&lt;path&gt; ...]]
-
-[-put [-f] [-p] [-l] &lt;localsrc&gt; ... &lt;dst&gt;]
-[-get [-p] [-ignoreCrc] [-crc] &lt;src&gt; ... &lt;localdst&gt;]
-[-copyFromLocal [-f] [-p] [-l] &lt;localsrc&gt; ... &lt;dst&gt;]
-[-copyToLocal [-p] [-ignoreCrc] [-crc] &lt;src&gt; ... &lt;localdst&gt;]
-
-[-rm [-f] [-r|-R] [-skipTrash] &lt;src&gt; ...]
-</code></pre>
-<h3 id="hdfs的回收站">hdfs的回收站</h3>
-<p>切记检查生产上是否开启了回收站，CDH默认是开启的，哪怕开了回收站后，删除文件的时候也要慎用-skipTrash（直接删除）命令</p>
-<ul>
-<li>配置开启回收站(10080代表保留7天)，在core-site.xml进行配置</li>
-</ul>
+<h2 id="生产上如何调优">生产上如何调优</h2>
+<h3 id="内存参数">内存参数</h3>
+<p>在yarn-site.xml中进行配置</p>
 <table>
 <thead>
 <tr>
 <th>key</th>
 <th>value</th>
+<th>desc</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>fs.trash.interval</td>
-<td>10080</td>
+<td>yarn.nodemanager.resource.memory-mb</td>
+<td>-1</td>
+<td>可以分配给容器的物理内存总量(以MB为单位)</td>
+</tr>
+<tr>
+<td>yarn.scheduler.minimum-allocation-mb</td>
+<td>1024</td>
+<td>单个container向RM能申请到的最小内存</td>
+</tr>
+<tr>
+<td>yarn.scheduler.maximum-allocation-mb</td>
+<td>8192</td>
+<td>单个container向RM能申请到的最大内存</td>
 </tr>
 </tbody>
 </table>
-<p>配置开启回收站后，删除文件，会将文件删除到回收站中，七天过后会自动删除；但是如果使用hdfs dfs -put -skipTrash /xxx命令，哪怕配置了回收站，也会直接把文件删除</p>
-<h3 id="查看hdfs上的数据健康情况">查看hdfs上的数据健康情况</h3>
-<pre><code>[hadoop@JD ~]$ hdfs fsck /
-19/12/05 20:40:09 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
-Connecting to namenode via http://JD:50070/fsck?ugi=hadoop&amp;path=%2F
-FSCK started by hadoop (auth:SIMPLE) from /192.168.0.3 for path / at Thu Dec 05 20:40:10 CST 2019
-........Status: HEALTHY
- Total size:    174944 B
- Total dirs:    13
- Total files:   8
- Total symlinks:                0
- Total blocks (validated):      7 (avg. block size 24992 B)
- Minimally replicated blocks:   7 (100.0 %)
- Over-replicated blocks:        0 (0.0 %)
- Under-replicated blocks:       0 (0.0 %)
- Mis-replicated blocks:         0 (0.0 %)
- Default replication factor:    1
- Average block replication:     1.0
- 
- 
- 这两个指标最重要，正常情况下这俩都是0
- Corrupt blocks:                0 #损坏的块
- Missing replicas:              0 (0.0 %)#丢失的副本
- 
- 
- Number of data-nodes:          1
- Number of racks:               1
-FSCK ended at Thu Dec 05 20:40:10 CST 2019 in 7 milliseconds
-The filesystem under path '/' is HEALTHY
-</code></pre>
-<h2 id="hdfs的多节点nn单节点的磁盘均衡">HDFS的多节点（nn），单节点的磁盘均衡</h2>
-<h3 id="各dn节点的数据均衡">各DN节点的数据均衡</h3>
-<p><img src="/img/hadoop4/4.png" alt=""><br>
-为了防止各个节点的磁盘使用率差距过大，我们可以执行start-balancer.sh脚本设置阈值，参数为threshold = xxx,<strong>生产上一般设置阈值为10</strong>即可。</p>
-<ul>
-<li>
-<p>设置阈值的目的是</p>
-<p>90+60+80=230/3=76%<br>
-所有节点的磁盘used与集群的平均used之差要小于这个阈值</p>
-</li>
-<li>
-<p>同时也要设置执行平衡脚本时得带宽,<strong>生产上设置30m</strong>即可，不能让带宽占得太大，影响正常的写入流程，在hdfs-site.xml设置</p>
-</li>
-</ul>
+<h3 id="cpu参数">cpu参数</h3>
+<p>在yarn-site.xml中进行配置</p>
 <table>
 <thead>
 <tr>
 <th>key</th>
 <th>value</th>
+<th>desc</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>dfs.datanode.balance.bandwidthPerSec</td>
-<td>30m</td>
+<td>yarn.nodemanager.resource.pcores-vcores-multiplier</td>
+<td>1</td>
+<td>将pcore转化为vcore的乘数，若为2，表示pcore*2=vcore。推荐pcore:vcore=1:2</td>
+</tr>
+<tr>
+<td>yarn.nodemanager.resource.cpu-vcores</td>
+<td>-1</td>
+<td>所有conatiner能使用的物理内存总和</td>
+</tr>
+<tr>
+<td>yarn.scheduler.minimum-allocation-vcores</td>
+<td>1</td>
+<td>单个container向RM能申请到的最小vcore数量</td>
+</tr>
+<tr>
+<td>yarn.scheduler.maximum-allocation-vcores</td>
+<td>4</td>
+<td>单个container向RM能申请到的最大vcore数量。cloudera公司推荐一个container的vcores最好不要超过5，一般我们设置为4</td>
 </tr>
 </tbody>
 </table>
-<ul>
-<li>
-<p>执行</p>
-<pre><code>[hadoop@JD sbin]$ pwd
-/home/hadoop/app/hadoop/sbin
-[hadoop@JD sbin]$ ./start-balancer.sh
-
-设置阈值执行
-[hadoop@JD sbin]$ ./start-balancer.sh -threshold 5
+<h3 id="设置dn和nm的内存数">设置DN和NM的内存数</h3>
+<p>DN和NM在生产上的参数设置为2G和4G即可</p>
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>文件</th>
+<th>参数</th>
+<th>大小</th>
+<th>desc</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DataNode</td>
+<td><a href="http://hadoop-env.sh" target="_blank" rel="noopener">hadoop-env.sh</a></td>
+<td>HADOOP_HEAPSIZE=</td>
+<td>1000</td>
+<td>单位M，生产上一般分配2048即可</td>
+</tr>
+<tr>
+<td>NodeManager</td>
+<td><a href="http://yarn-env.sh" target="_blank" rel="noopener">yarn-env.sh</a></td>
+<td>YARN_HEAPSIZE=</td>
+<td>1000</td>
+<td>单位M，生产上一般分配4096即可</td>
+</tr>
+</tbody>
+</table>
+<h3 id="样例">样例</h3>
+<h4 id="假如服务器有128g内存16物理cpu需要装dn和nm具体如何设置参数">假如服务器有128G内存，16物理cpu，需要装DN和NM，具体如何设置参数</h4>
+<p>1、装centos需要消耗1G内存<br>
+2、系统预留15%-20%，包括装centos的空间，预留的原因是防止全部被使用以及oom事件或者给未来装其他组件预留空间</p>
+<pre><code>128*20=25.6G==26G
 </code></pre>
-</li>
-</ul>
-<p>其实可以自己写一个定时脚本，例如crontab，在每天晚上零点20的时候执行，从而达到每天调度，数据平衡，毛刺修正</p>
-<h3 id="一个dn节点的多个磁盘的数据均衡">一个DN节点的多个磁盘的数据均衡</h3>
-<p><a href="https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/HDFSDiskbalancer.html" target="_blank" rel="noopener">https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/HDFSDiskbalancer.html</a><br>
-<img src="/img/hadoop4/5.png" alt=""></p>
-<ul>
-<li>
-<p>为什么要放置多个物理的磁盘目录</p>
-<pre><code>/data01 disk1
-/data02 disk2
-/data03 disk3
-为了高效率写  高效率读
-提前规划好2-3年存储量 ，避免后期加磁盘维护的工作量
+<p>还剩下 128-26=102G内存<br>
+3、假设只有dn和nm组件，装dn和nm分别需要2G和4G内存<br>
+还剩下102-2-4=96G内存<br>
+container内存的分配</p>
+<pre><code>yarn.nodemanager.resource.memory-mb     96G
+yarn.scheduler.minimum-allocation-mb	1G   极限情况下，只有96个container 内存1G	
+yarn.scheduler.maximum-allocation-mb	96G  极限情况下，只有1个container 内存96G
+container的内存会自动增加，默认1g递增
+container:1-96个
 </code></pre>
-</li>
-<li>
-<p>查看磁盘所占空间大小</p>
-<pre><code>[hadoop@JD sbin]$ df -h
-/data01   90%
-/data02   60%
-/data03   80%
-/data04   0%
+<p>4、container物理核分配 (物理核:虚拟核 =1:2 ==&gt;16:32)</p>
+<pre><code>yarn.nodemanager.resource.pcores-vcores-multiplier 2
+yarn.nodemanager.resource.cpu-vcores            32
+yarn.scheduler.minimum-allocation-vcores	1  极限情况下，只有32个container	
+yarn.scheduler.maximum-allocation-vcores	32 极限情况下，只有1个container
+container:1-32个
 </code></pre>
-</li>
-<li>
-<p>在hdfs-site.xml中开启磁盘数据平衡（注意apache的某些低版本的hdfs没有该配置项，cdh的版本都有）</p>
-</li>
-</ul>
+<p>4、需要注意的是pcore:vcore=1:2 所以vcore=16*2=32核；<strong>cloudera公司推荐，一个container的vcore最好不要超过5，那么我们设置4</strong></p>
+<pre><code>yarn.scheduler.maximum-allocation-vcores 4   极限情况下，只有8个container
+</code></pre>
+<p>5、综合memory+vcore，确定 vcore=4 container 8个<br>
+内存的设置为</p>
+<pre><code>yarn.scheduler.maximum-allocation-mb	12G 极限container 8个
+</code></pre>
+<p>6、最终的设置为</p>
+<pre><code>yarn.nodemanager.resource.cpu-vcores     --&gt;  32  # 16*2=32
+yarn.scheduler.minimum-allocation-vcores --&gt;  1   # 最多有32个container
+yarn.scheduler.maximum-allocation-vcores --&gt;  4   # 最少有8个container 
+yarn.nodemanager.resource.memory-mb      --&gt;  96G # container能使用的最大内存
+yarn.scheduler.minimum-allocation-mb     --&gt;  1G  # 
+yarn.scheduler.maximum-allocation-mb     --&gt;  12G # 极限8个(96/8)
+</code></pre>
+<p>当然当spark计算时内存不够大，这个参数肯定要调大，<br>
+那么这种理想化的设置个数必然要打破，<strong>以memory为主</strong></p>
+<h4 id="假如服务器有256g内存56物理cpu需要装dn-nm和hbase-regionserver具体如何设置参数">假如服务器有256G内存，56物理cpu，需要装DN、NM和hbase regionserver，具体如何设置参数</h4>
+<p>1、需要减去内存开销和其他组件的开销</p>
+<pre><code>预留 15%-20%（包括装centos消耗的内存）
+dn 2G
+nm 4G
+hbase regionserver 30G
+</code></pre>
+<p>还剩余256-256<em>0.2-2-4-30 = 168G<br>
+2、pcore:vcore=1:2 ，故vcore数量为56</em>2=112；单个container占用4个vcore，确定 memory和vcore，所以最终为</p>
+<pre><code>yarn.nodemanager.resource.cpu-vcores     --&gt;  112  # 56*2=112
+yarn.scheduler.minimum-allocation-vcores --&gt;  1    # 最多有112个container
+yarn.scheduler.maximum-allocation-vcores --&gt;  4    # 最少有28个container 
+yarn.nodemanager.resource.memory-mb      --&gt;  168G # RM能使用的最大内存
+yarn.scheduler.minimum-allocation-mb     --&gt;  1G   # 
+yarn.scheduler.maximum-allocation-mb     --&gt;  6G   # 极限28个(168/28)
+</code></pre>
+<h1 id="yarn的调度器整理三种">yarn的调度器整理三种</h1>
+<p>在Yarn中有三种调度器可以选择：FIFO Scheduler ，Capacity Scheduler，FairScheduler。</p>
+<h2 id="fifo-先进先出调度器">FIFO 先进先出调度器</h2>
+<p>先进先出（First In First Out）调度器。FIFO 调度器是 Hadoop 使用最早的一种调度策略，可以简单的将其理解为一个队列，这意味着在集群中同时只能有一个作业运行。所有的应用程序按照提交顺序来执行，在上一个 Job 执行完成之后，下一个 Job 按照队列中的顺序执行。FIFO调度器以独占集群全部资源的方式来运行作业，这样的好处是 Job 可以充分利用集群的全部资源，但是对于运行时间短，优先级高或者交互式查询类的MR Job 需要等待它之前的 Job 完成才能被执行，这也就导致了如果前面有一个比较大的 Job 在运行，那么后面的 Job 将会被阻塞。因此，虽然 FIFO 调度器实现简单，但是并不能满足很多实际场景的要求。这也就促使 Capacity 调度器和 Fair 调度器的诞生。<br>
+<img src="/img/hadoop6/1.png" alt=""></p>
+<h2 id="capacity-计算调度器">Capacity 计算调度器</h2>
+<p>而对于Capacity调度器，有一个专门的队列用来运行小任务，但是为小任务专门设置一个队列会预先占用一定的集群资源，这就导致大任务的执行时间会落后于使用FIFO调度器时的时间。<br>
+<img src="/img/hadoop6/2.png" alt=""></p>
+<h2 id="fair-公平调度器">Fair 公平调度器</h2>
+<p>在Fair调度器中，我们不需要预先占用一定的系统资源，Fair调度器会为所有运行的job动态的调整系统资源。如上图所示，当第一个大job提交时，只有这一个job在运行，此时它获得了所有集群资源；当第二个小任务提交后，Fair调度器会分配一半资源给这个小任务，让这两个任务公平的共享集群资源。</p>
+<p>需要注意的是，在上图Fair调度器中，从第二个任务提交到获得资源会有一定的延迟，因为它需要等待第一个任务释放占用的Container。小任务执行完成之后也会释放自己占用的资源，大任务又获得了全部的系统资源。最终的效果就是Fair调度器即得到了高的资源利用率又能保证小任务及时完成。<br>
+<img src="/img/hadoop6/3.png" alt=""></p>
+<h2 id="apache和cdh的默认调度器">apache和cdh的默认调度器</h2>
+<h3 id="apache-hadoop的默认调度器是什么">Apache Hadoop的默认调度器是什么</h3>
+<p>yarn-site.xml进行设置</p>
 <table>
 <thead>
 <tr>
 <th>key</th>
 <th>value</th>
+<th>desc</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>dfs.disk.balancer.enabled</td>
-<td>true</td>
+<td>yarn.resourcemanager.scheduler.class</td>
+<td>org.apache.hadoop.yarn.server.resourcemanager.scheduler.capacity.CapacityScheduler</td>
+<td>默认是计算调度器</td>
 </tr>
 </tbody>
 </table>
-<ul>
-<li>
-<p>在JD这台机器上生成执行计划，会生成JD.plan.json<br>
-hdfs diskbalancer -plan JD</p>
-</li>
-<li>
-<p>根据执行计划去执行<br>
-hdfs diskbalancer -execute JD.plan.json</p>
-</li>
-<li>
-<p>查看状态<br>
-hdfs diskbalancer -query JD</p>
-</li>
-<li>
-<p>什么时候手动或调度执行？</p>
-<pre><code>a.新盘加入
-b.监控服务器的磁盘剩余空间 小于阈值 10%，发邮件预警  手动执行
-</code></pre>
-</li>
-</ul>
-<h2 id="hdfs的安全模式">HDFS的安全模式</h2>
-<h3 id="进入安全模式">进入安全模式</h3>
-<pre><code>[hadoop@JD ~]$ hdfs dfsadmin -safemode enter
-</code></pre>
-<h3 id="离开安全模式">离开安全模式</h3>
-<pre><code>[hadoop@JD ~]$ hdfs dfsadmin -safemode leave
-</code></pre>
-<h3 id="安全模式影响">安全模式影响</h3>
-<p>安全模式会影响写数据，对读数据没有影响；如果NN的log显示进入safe mode时，正常手动让其离开安全模式	<br>
-如果hdfs突然进入安全模式，从flume或者kafka读数据到hdfs会抛大量的错，这时候我们最好可以在数据上游设置一个开关，不让数据到下游来</p>
+<h3 id="cdh的默认调度器是什么">cdh的默认调度器是什么</h3>
+<p>默认调度器是：公平调度器<br>
+可以登录yarn的页面查看<br>
+<img src="/img/hadoop6/4.png" alt=""></p>
+<h1 id="yarn的常用命令">yarn的常用命令</h1>
+<h2 id="运行jar包">运行jar包</h2>
+<p>yarn jar<br>
+hadoop jar</p>
+<h2 id="杀死yarn的进程">杀死yarn的进程</h2>
+<p>使用场景，进程夯住了或者提交错任务了<br>
+yarn application -kill <application id=""><br>
+<img src="/img/hadoop6/5.png" alt=""></application></p>
+<h2 id="下载log日志">下载log日志</h2>
+<p>[hadoop@JD ~]$ yarn logs<br>
+Retrieve logs for completed YARN applications.<br>
+<strong>usage: yarn logs -applicationId <application id=""> [OPTIONS]</application></strong></p>
+<p>general options are:<br>
+-appOwner <application owner="">   AppOwner (assumed to be current user if<br>
+not specified)<br>
+-containerId <container id="">     ContainerId (must be specified if node<br>
+address is specified)<br>
+-nodeAddress <node address="">     NodeAddress in the format nodename:port<br>
+(must be specified if container id is<br>
+specified)</node></container></application></p>
 
                 
 
@@ -463,12 +435,12 @@ b.监控服务器的磁盘剩余空间 小于阈值 10%，发邮件预警  手�
                 <ul class="pager">
                     
                         <li class="previous">
-                            <a href="/article/hadoop5/" data-toggle="tooltip" data-placement="top" title="MR架构&文件格式优缺点&压缩格式优缺点&spilt -> map task关系&wordcount&shuffle的理解">&larr; Previous Post</a>
+                            <a href="/article/DataNode抛内存溢出oom的error/" data-toggle="tooltip" data-placement="top" title="DataNode抛内存溢出oom的error">&larr; Previous Post</a>
                         </li>
                     
                     
                         <li class="next">
-                            <a href="/article/hadoop3/" data-toggle="tooltip" data-placement="top" title="刀片机和机架&块副本数&HDFS架构&块损坏修复&小文件&配置修改存储目录">Next Post &rarr;</a>
+                            <a href="/article/hadoop5/" data-toggle="tooltip" data-placement="top" title="MR架构&文件格式优缺点&压缩格式优缺点&spilt -> map task关系&wordcount&shuffle的理解">Next Post &rarr;</a>
                         </li>
                     
                 </ul>
@@ -518,7 +490,7 @@ b.监控服务器的磁盘剩余空间 小于阈值 10%，发邮件预警  手�
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#欢迎来到stefanboy的博客感谢大家对我的支持"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">&#x6B22;&#x8FCE;&#x6765;&#x5230;Stefanboy&#x7684;&#x535A;&#x5BA2;&#xFF0C;&#x611F;&#x8C22;&#x5927;&#x5BB6;&#x5BF9;&#x6211;&#x7684;&#x652F;&#x6301;.</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#hdfs副本放置策略"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">HDFS&#x526F;&#x672C;&#x653E;&#x7F6E;&#x7B56;&#x7565;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#hdfs的读写流程"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">HDFS&#x7684;&#x8BFB;&#x5199;&#x6D41;&#x7A0B;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#写流程"><span class="toc-nav-number">3.1.</span> <span class="toc-nav-text">&#x5199;&#x6D41;&#x7A0B;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#读流程"><span class="toc-nav-number">3.2.</span> <span class="toc-nav-text">&#x8BFB;&#x6D41;&#x7A0B;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#配置pid文件的生成路径"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">&#x914D;&#x7F6E;pid&#x6587;&#x4EF6;&#x7684;&#x751F;&#x6210;&#x8DEF;&#x5F84;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#hdfs的配置"><span class="toc-nav-number">4.1.</span> <span class="toc-nav-text">hdfs&#x7684;&#x914D;&#x7F6E;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#yarn配置"><span class="toc-nav-number">4.2.</span> <span class="toc-nav-text">yarn&#x914D;&#x7F6E;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#重新启动查看pid文件路径"><span class="toc-nav-number">4.3.</span> <span class="toc-nav-text">&#x91CD;&#x65B0;&#x542F;&#x52A8;&#xFF0C;&#x67E5;&#x770B;pid&#x6587;&#x4EF6;&#x8DEF;&#x5F84;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#hdfs-dfs常用命令"><span class="toc-nav-number">5.</span> <span class="toc-nav-text">HDFS DFS&#x5E38;&#x7528;&#x547D;&#x4EE4;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#hadoop-fs-跟-hdfs-dfs命令的区别"><span class="toc-nav-number">5.1.</span> <span class="toc-nav-text">hadoop fs &#x8DDF; hdfs dfs&#x547D;&#x4EE4;&#x7684;&#x533A;&#x522B;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#hdfs的回收站"><span class="toc-nav-number">5.2.</span> <span class="toc-nav-text">hdfs&#x7684;&#x56DE;&#x6536;&#x7AD9;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#查看hdfs上的数据健康情况"><span class="toc-nav-number">5.3.</span> <span class="toc-nav-text">&#x67E5;&#x770B;hdfs&#x4E0A;&#x7684;&#x6570;&#x636E;&#x5065;&#x5EB7;&#x60C5;&#x51B5;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#hdfs的多节点nn单节点的磁盘均衡"><span class="toc-nav-number">6.</span> <span class="toc-nav-text">HDFS&#x7684;&#x591A;&#x8282;&#x70B9;&#xFF08;nn&#xFF09;&#xFF0C;&#x5355;&#x8282;&#x70B9;&#x7684;&#x78C1;&#x76D8;&#x5747;&#x8861;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#各dn节点的数据均衡"><span class="toc-nav-number">6.1.</span> <span class="toc-nav-text">&#x5404;DN&#x8282;&#x70B9;&#x7684;&#x6570;&#x636E;&#x5747;&#x8861;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#一个dn节点的多个磁盘的数据均衡"><span class="toc-nav-number">6.2.</span> <span class="toc-nav-text">&#x4E00;&#x4E2A;DN&#x8282;&#x70B9;&#x7684;&#x591A;&#x4E2A;&#x78C1;&#x76D8;&#x7684;&#x6570;&#x636E;&#x5747;&#x8861;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#hdfs的安全模式"><span class="toc-nav-number">7.</span> <span class="toc-nav-text">HDFS&#x7684;&#x5B89;&#x5168;&#x6A21;&#x5F0F;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#进入安全模式"><span class="toc-nav-number">7.1.</span> <span class="toc-nav-text">&#x8FDB;&#x5165;&#x5B89;&#x5168;&#x6A21;&#x5F0F;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#离开安全模式"><span class="toc-nav-number">7.2.</span> <span class="toc-nav-text">&#x79BB;&#x5F00;&#x5B89;&#x5168;&#x6A21;&#x5F0F;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#安全模式影响"><span class="toc-nav-number">7.3.</span> <span class="toc-nav-text">&#x5B89;&#x5168;&#x6A21;&#x5F0F;&#x5F71;&#x54CD;</span></a></li></ol></li></ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#欢迎来到stefanboy的博客感谢大家对我的支持"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">&#x6B22;&#x8FCE;&#x6765;&#x5230;Stefanboy&#x7684;&#x535A;&#x5BA2;&#xFF0C;&#x611F;&#x8C22;&#x5927;&#x5BB6;&#x5BF9;&#x6211;&#x7684;&#x652F;&#x6301;.</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#yarn资源调优参数"><span class="toc-nav-number"></span> <span class="toc-nav-text">yarn&#x8D44;&#x6E90;&#x8C03;&#x4F18;&#x53C2;&#x6570;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#概念介绍"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">&#x6982;&#x5FF5;&#x4ECB;&#x7ECD;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#生产上如何调优"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">&#x751F;&#x4EA7;&#x4E0A;&#x5982;&#x4F55;&#x8C03;&#x4F18;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#内存参数"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text">&#x5185;&#x5B58;&#x53C2;&#x6570;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#cpu参数"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text">cpu&#x53C2;&#x6570;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#设置dn和nm的内存数"><span class="toc-nav-number">2.3.</span> <span class="toc-nav-text">&#x8BBE;&#x7F6E;DN&#x548C;NM&#x7684;&#x5185;&#x5B58;&#x6570;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#样例"><span class="toc-nav-number">2.4.</span> <span class="toc-nav-text">&#x6837;&#x4F8B;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#假如服务器有128g内存16物理cpu需要装dn和nm具体如何设置参数"><span class="toc-nav-number">2.4.1.</span> <span class="toc-nav-text">&#x5047;&#x5982;&#x670D;&#x52A1;&#x5668;&#x6709;128G&#x5185;&#x5B58;&#xFF0C;16&#x7269;&#x7406;cpu&#xFF0C;&#x9700;&#x8981;&#x88C5;DN&#x548C;NM&#xFF0C;&#x5177;&#x4F53;&#x5982;&#x4F55;&#x8BBE;&#x7F6E;&#x53C2;&#x6570;</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#假如服务器有256g内存56物理cpu需要装dn-nm和hbase-regionserver具体如何设置参数"><span class="toc-nav-number">2.4.2.</span> <span class="toc-nav-text">&#x5047;&#x5982;&#x670D;&#x52A1;&#x5668;&#x6709;256G&#x5185;&#x5B58;&#xFF0C;56&#x7269;&#x7406;cpu&#xFF0C;&#x9700;&#x8981;&#x88C5;DN&#x3001;NM&#x548C;hbase regionserver&#xFF0C;&#x5177;&#x4F53;&#x5982;&#x4F55;&#x8BBE;&#x7F6E;&#x53C2;&#x6570;</span></a></li></ol></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#yarn的调度器整理三种"><span class="toc-nav-number"></span> <span class="toc-nav-text">yarn&#x7684;&#x8C03;&#x5EA6;&#x5668;&#x6574;&#x7406;&#x4E09;&#x79CD;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#fifo-先进先出调度器"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">FIFO &#x5148;&#x8FDB;&#x5148;&#x51FA;&#x8C03;&#x5EA6;&#x5668;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#capacity-计算调度器"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">Capacity &#x8BA1;&#x7B97;&#x8C03;&#x5EA6;&#x5668;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#fair-公平调度器"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">Fair &#x516C;&#x5E73;&#x8C03;&#x5EA6;&#x5668;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#apache和cdh的默认调度器"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">apache&#x548C;cdh&#x7684;&#x9ED8;&#x8BA4;&#x8C03;&#x5EA6;&#x5668;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#apache-hadoop的默认调度器是什么"><span class="toc-nav-number">4.1.</span> <span class="toc-nav-text">Apache Hadoop&#x7684;&#x9ED8;&#x8BA4;&#x8C03;&#x5EA6;&#x5668;&#x662F;&#x4EC0;&#x4E48;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#cdh的默认调度器是什么"><span class="toc-nav-number">4.2.</span> <span class="toc-nav-text">cdh&#x7684;&#x9ED8;&#x8BA4;&#x8C03;&#x5EA6;&#x5668;&#x662F;&#x4EC0;&#x4E48;</span></a></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#yarn的常用命令"><span class="toc-nav-number"></span> <span class="toc-nav-text">yarn&#x7684;&#x5E38;&#x7528;&#x547D;&#x4EE4;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#运行jar包"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">&#x8FD0;&#x884C;jar&#x5305;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#杀死yarn的进程"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">&#x6740;&#x6B7B;yarn&#x7684;&#x8FDB;&#x7A0B;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#下载log日志"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">&#x4E0B;&#x8F7D;log&#x65E5;&#x5FD7;</span></a></li></ol>
         
         </div>
       </aside>
