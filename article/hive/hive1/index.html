@@ -14,11 +14,11 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <title>
         
-          MySQL使用一 - Stefanboy | Blog
+          Hive介绍&amp;部署&amp;配置&amp;简单使用 - Stefanboy | Blog
         
     </title>
 
-    <link rel="canonical" href="http://yoursite.com/article/mysql/mysquser1/">
+    <link rel="canonical" href="http://yoursite.com/article/hive/hive1/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -88,14 +88,14 @@
                     <div class="post-heading">
                         <div class="tags">
                             
-                              <a class="tag" href="/tags/#MySQL" title="MySQL">MySQL</a>
+                              <a class="tag" href="/tags/#Hive" title="Hive">Hive</a>
                             
                         </div>
-                        <h1>MySQL使用一</h1>
-                        <h2 class="subheading">How to use MySQL</h2>
+                        <h1>Hive介绍&amp;部署&amp;配置&amp;简单使用</h1>
+                        <h2 class="subheading">How to use Hive</h2>
                         <span class="meta">
                             Posted by Stefanboy on
-                            2016-11-24
+                            2016-12-15
                         </span>
                     </div>
                 
@@ -213,221 +213,304 @@
                 post-container">
 
                 <h2 id="欢迎来到stefanboy的博客感谢大家对我的支持">欢迎来到Stefanboy的博客，感谢大家对我的支持.</h2>
-<h2 id="mysql使用">MySQL使用</h2>
-<h3 id="允许外面机器各种客户端连接mysql">允许外面机器（各种客户端）连接mysql</h3>
-<pre><code>允许用户root从任意ip的主机连接到mysql服务器，并使用mysqladmin作为密码
-mysql&gt; grant all privileges on *.* to root@'%' identified by 'mysqladmin';
-Query OK, 0 rows affected (0.00 sec)
-刷新权限
-mysql&gt; flush privileges;
-Query OK, 0 rows affected (0.00 sec)
+<h2 id="hadoop">Hadoop</h2>
+<ul>
+<li>狭义<br>
+Hadoop是最重要最基础的一个部分</li>
+<li>广义<br>
+Hadoop生态圈，包括Hadoop、Hive、Sqoop、HBase…</li>
+</ul>
+<h2 id="hive概述">Hive概述</h2>
+<p>构建在Hadoop（HDFS/MapReduce/YARN）之上的数据仓库<br>
+	Hive的数据是存放在HDFS之上<br>
+	Hive底层执行引擎：MapReduce/Tez/Spark，只需要通过一个参数就能够切换底层的执行引擎，Hive作业提交到YARN上运行<br>
+提供了HQL查询语言</p>
+<pre><code>	和SQL类似，但不完全相同
+	所谓的大数据“云化”：是一个很大项目
 </code></pre>
-<h3 id="命令行登录mysql">命令行登录mysql</h3>
-<p>命令行有两种方式登录mysql：mysql -uroot -p和mysql -u root -p<br>
-切记在命令行输入命令时不要，不要带密码登录，否则使用history -c 命令时会看到密码，带来风险</p>
-<pre><code>JD:mysqladmin:/usr/local/mysql:&gt;mysql -uroot -p
-JD:mysqladmin:/usr/local/mysql:&gt;mysql -u root -p
-
-创建数据库bigdata
-mysql&gt; create database bigdata;
-
-Query OK, 1 row affected (0.00 sec)
-
-mysql&gt; show database;
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'database' at line 1
-
-查看数据库
-mysql&gt; show databases;
-+--------------------+
-| Database           |
-+--------------------+
-| information_schema |
-| bigdata            |
-| mysql              |
-| performance_schema |
-| test               |
-+--------------------+
-5 rows in set (0.00 sec)
-查看
-mysql&gt; show processlist;
-+-----+------+----------------------+---------+---------+------+-------+------------------+
-| Id  | User | Host                 | db      | Command | Time | State | Info             |
-+-----+------+----------------------+---------+---------+------+-------+------------------+
-| 129 | root | 36.102.228.101:13117 | bigdata | Sleep   |   21 |       | NULL             |
-| 130 | root | 36.102.228.101:2783  | NULL    | Sleep   | 1343 |       | NULL             |
-| 132 | root | localhost            | NULL    | Query   |    0 | init  | show processlist |
-+-----+------+----------------------+---------+---------+------+-------+------------------+
-3 rows in set (0.00 sec)
-
-看时间，找到哪个消耗时间长的，有可能导致mysql服务夯住 锁死-	-》这个执行的sql确认清楚，到底能不能kill
-mysql&gt; kill 
+<p>适用于离线处理/批处理<br>
+HDFS上的数据：文本   压缩、列式存储<br>
+	SQL on Hadoop：Hive/Presto/Impala/Spark SQL…<br>
+元数据  vs  源数据</p>
+<pre><code>	源数据：HDFS上的文件
+	元数据：是描述数据的数据
 </code></pre>
-<h3 id="mysql的字段类型">mysql的字段类型</h3>
+<h3 id="hive架构">Hive架构</h3>
+<p><img src="/img/hive1/1.png" alt=""><br>
+	用户接口层：黑窗口(cli)、JDBC<br>
+	Driver/驱动器<br>
+		SQL解析：SQL ==&gt; AST(antlr)<br>
+		查询优化：逻辑/物理执行计划<br>
+		UDF/SerDes：<br>
+		Execution：执行<br>
+	元数据：表名、所属数据库、列（名/类型/index）、表类型、表数据所在目录</p>
+<pre><code>	id,username,password,age	
+</code></pre>
+<p>Hive的数据是存放在HDFS之上<br>
+Hive的数据分为两部分：数据 + 元数据</p>
+<h3 id="hive和rdbms的对比">Hive和RDBMS的对比</h3>
+<p>Hive和RDBMS的对比<br>
+相同点</p>
+<pre><code>	SQL
+	事务
+	insert/update/delete   Hive-0.14才支持
+		针对Hive数据仓库，写比较少的，批次加载数据到Hive然后进行统计分析
+</code></pre>
+<p>不同点</p>
+<pre><code>	体量/集群规模
+	延迟/时性
+</code></pre>
+<h2 id="hive部署">Hive部署</h2>
+<h3 id="前置">前置</h3>
+<p>要求 linux，jdk8以上，hadoop2.x以及mysql数据库</p>
+<h3 id="安装">安装</h3>
+<pre><code>移动tar包到指定目录下
+[root@JD ~]# mv hive-1.1.0-cdh5.16.2.tar.gz 		     /home/hadoop/software
+
+切换hadoop用户
+[root@JD ~]# su - hadoop
+
+解压到app目录下
+[hadoop@JD software]$ tar -zxvf hive-1.1.0-cdh5.16.2.tar.gz -C ~/app/
+
+在配置环境变量
+[hadoop@JD hive-1.1.0-cdh5.16.2]$ vi ~/.bashrc 
+export HIVE_HOME=/home/hadoop/app/hive-1.1.0-cdh5.16.2
+export PATH=$HIVE_HOME/bin:$PATH
+
+重新加载环境变量
+[hadoop@JD hive-1.1.0-cdh5.16.2]$ source ~/.bashrc
+</code></pre>
+<h3 id="配置">配置</h3>
+<h4 id="hive_home下目录说明">$HIVE_HOME下目录说明</h4>
+<pre><code>bin：脚本
+lib：依赖包
+conf：配置文件
+</code></pre>
+<h4 id="修改配置文件">修改配置文件</h4>
 <ul>
 <li>
-<p>数值类型</p>
-<pre><code>int 整数型
-long 长整形
-float 单精度
-double 双精度
-decimal 小数型 金额
+<p>创建hive-site.xml并增加配置,包括配置mysql数据配</p>
+<pre><code>[hadoop@JD conf]$ vi hive-site.xml
+</code></pre>
+<configuration>
+		<property>
+		  <name>javax.jdo.option.ConnectionURL</name>
+		<value>jdbc:mysql://JD:3306/ruozedata_hive?createDatabaseIfNotExist=true</value>
+      </property>
+<pre><code>  &lt;property&gt;
+    &lt;name&gt;javax.jdo.option.ConnectionDriverName&lt;/name&gt;
+    &lt;value&gt;com.mysql.jdbc.Driver&lt;/value&gt;
+  &lt;/property&gt;
+
+  &lt;property&gt;
+    &lt;name&gt;javax.jdo.option.ConnectionUserName&lt;/name&gt;
+    &lt;value&gt;root&lt;/value&gt;
+  &lt;/property&gt;
+
+  &lt;property&gt;
+    &lt;name&gt;javax.jdo.option.ConnectionPassword&lt;/name&gt;
+    &lt;value&gt;xxx&lt;/value&gt;
+  &lt;/property&gt;
+
+  &lt;property&gt;
+          &lt;name&gt;hive.cli.print.current.db&lt;/name&gt;
+          &lt;value&gt;true&lt;/value&gt;
+  &lt;/property&gt;
+
+  &lt;property&gt;
+          &lt;name&gt;hive.cli.print.header&lt;/name&gt;
+          &lt;value&gt;true&lt;/value&gt;
+  &lt;/property&gt;
+</code></pre>
+</configuration></li>
+</ul>
+
+<ul>
+<li>
+<p>将mysql驱动放到lib目录下</p>
+<pre><code>使用root用户将驱动放到lib目录下
+[root@JD ~]# mv mysql-connector-java-5.1.27-bin.jar /home/hadoop/app/hive-1.1.0-cdh5.16.2/lib
+
+修改该文件的用户和用户组
+[root@JD lib]# cd /home/hadoop/app/hive-1.1.0-cdh5.16.2/lib
+[root@JD lib]# chown hadoop:hadoop mysql-connector-java-5.1.27-bin.jar
 </code></pre>
 </li>
 <li>
-<p>字符串类型</p>
-<pre><code>char 字节 定长 范围0-255字节 如果长度不够会自动补全
-varhar 字符串 变长 范围0-65535字节
+<p>配置hive日志</p>
+<pre><code>[hadoop@JD conf]$ cp  hive-log4j.properties.template hive-log4j.properties
+</code></pre>
+</li>
+<li>
+<p>解析hive日志路径</p>
+<pre><code> 在hive-log4j.properties中查看到日志的生成路径
+ hive.log.dir=${java.io.tmpdir}/${user.name}
+hive.log.file=hive.log
+解析结果
+${java.io.tmpdir}/${user.name}/${hive.log.file}
+/tmp/hadoop/hive.log
+</code></pre>
+</li>
+<li>
+<p>Hive配置属性</p>
+<pre><code>全局配置在hive-site.xml中进行配置
+
+当前session配置
+查看当前的属性：set key;
+修改当前的属性：set key=value;
+hive -hiveconf hive.cli.print.current.db=true
+</code></pre>
+</li>
+<li>
+<p>Hive中交互式命令</p>
+<pre><code>-e：不需要进入hive命令后，就可以跟上sql语句查询
+	-f：执行指定文件（内容是SQL语句）
+</code></pre>
+</li>
+<li>
+<p>拓展：基于Hive的离线统计/数据仓库</p>
+<pre><code>把SQL封装到shell脚本中去，使用hive -e &quot;query sql...&quot;
+定时调度：crontab 
 </code></pre>
 </li>
 </ul>
-<p>日期类型</p>
-<pre><code>	date 日期 YYYY-MM-DD
-	time HH:MM:SS
-	datetime 年月日时分秒 YYYY-MM-DD HH:MM:SS
-	timestamp 年月日时分秒 YYYY-MM-DD HH:MM:SS
+<h2 id="hive使用">Hive使用</h2>
+<h3 id="启动hive">启动hive</h3>
+<pre><code>[hadoop@JD hive-1.1.0-cdh5.16.2]$ hive
 </code></pre>
-<h3 id="sql类型">sql类型</h3>
-<pre><code>DDL 数据定义语言: create drop 
-DML 数据操作语言: insert update delete select 增删改查
-DCL 数据控制语言: grant
-</code></pre>
-<h3 id="建表规划">建表规划</h3>
-<pre><code>create table rzdata(
-id int(11) not null auto_increment,
+<h3 id="基本命令">基本命令</h3>
+<pre><code>查看库
+hive (default)&gt; show databases;
+OK
+database_name
+default
+Time taken: 3.231 seconds, Fetched: 1 row(s)
 
-name varchar(200),
-age  int(3),
+创建表
+hive (default)&gt; create table stu(id int,name string,age int);
+OK
+Time taken: 2.546 seconds
 
+向表中插入数据
+hive (default)&gt; insert into stu values(1,'stefanboy',18);
+Time taken: 16.617 seconds
 
+查询数据
+hive (default)&gt; select * from stu;
+OK
+stu.id  stu.name        stu.age
+1       stefanboy       18
+Time taken: 0.059 seconds, Fetched: 1 row(s)
 
-createuser varchar(200) ,
-createtime timestamp not null default current_timestamp,
+清屏
+hive (default)&gt; !clear;
+退出
+hive (default)&gt; !exit;
+切换数据库
+hive (default)&gt; use dbname;
 
-updateuser varchar(200) ,
-updatetime timestamp not null default current_timestamp on update current_timestamp,
+查看表结构
+hive (default)&gt; desc stu;
+OK
+col_name        data_type       comment
+id                      int                                         
+name                    string                                      
+age                     int                                         
+Time taken: 0.063 seconds, Fetched: 3 row(s)
 
-primary key (id)
-);
-</code></pre>
-<ul>
-<li>
-<p>表名称 字段名统一不能是中文，也不能是汉语拼音</p>
-</li>
-<li>
-<p>统一风格，已存在的表是什么风格，就要遵循；如果是新建的表，风格定义要统一标准</p>
-</li>
-<li>
-<p>第一个字段必须id 是自增长，是主键且无意义</p>
-</li>
-<li>
-<p>一张表只有一个主键 primary key==》id 非空 unique+not null，业务字段如果是非空，需要unique约束</p>
-<pre><code> ALTER TABLE bigdata.testdata ADD CONSTRAINT testdata_un UNIQUE KEY (name) ;
-</code></pre>
-</li>
-<li>
-<p>后四个字段必须要加上</p>
-<pre><code>用户 创建时间 修改用户 修改时间
-</code></pre>
-</li>
-<li>
-<p>业务字段上加上注释</p>
-<pre><code>COMMENT '用户名称'
-COMMENT '用户年龄'
-</code></pre>
-</li>
-<li>
-<p>ENGINE=InnoDB  CHARSET<br>
-DEFAULT CHARSET=latin1 表示字符集</p>
-<pre><code>CREATE TABLE `testdata` (
-`id` int(11) NOT NULL AUTO_INCREMENT,
-`name` varchar(200) DEFAULT NULL COMMENT '用户名称',
-`age` int(3) DEFAULT NULL COMMENT '用户年龄',
-`createuser` varchar(200) DEFAULT NULL,
-`createtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-`updateuser` varchar(200) DEFAULT NULL,
-`updatetime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-PRIMARY KEY (`id`),
-UNIQUE KEY `rzdata_un` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-</code></pre>
-</li>
-<li>
-<p>字符集<br>
-字符集包括多种</p>
-<pre><code>database 字符集
-table字符集 
-column 字符集
-服务端 字符集
-客户端字符集
+查看表的详细信息
+hive (default)&gt; desc formatted stu;
+OK
+col_name        data_type       comment
+# col_name              data_type               comment             
 
-查看创建表的字符集
-mysql&gt; show create database bigdata
-	-&gt; ;
-+----------+--------------------------------------------------------------------+
-| Database | Create Database                                                    |
-+----------+--------------------------------------------------------------------+
-| bigdata  | CREATE DATABASE `bigdata` /*!40100 DEFAULT CHARACTER SET latin1 */ |
-+----------+--------------------------------------------------------------------+
-1 row in set (0.00 sec)
+id                      int                                         
+name                    string                                      
+age                     int                                         
 
-查看字符集（下面的字符集是生成的配置）
-mysql&gt; show variables like '%char%'
--&gt; ;
-+--------------------------+---------------------------------------------------------------+
-| Variable_name            | Value                                                         |
-+--------------------------+---------------------------------------------------------------+
-| character_set_client     | utf8   #客户端字符集                                                       |
-| character_set_connection | utf8                                                          |
-| character_set_database   | latin1  #database 字符集                                                    |
-| character_set_filesystem | binary                                                        |
-| character_set_results    | utf8                                                          |
-| character_set_server     | latin1  #服务端字符集                                                     |
-| character_set_system     | utf8                                                          |
-| character_sets_dir       | /usr/local/mysql-5.6.23-linux-glibc2.5-x86_64/share/charsets/ |
-+--------------------------+---------------------------------------------------------------+
-8 rows in set (0.00 sec)
-</code></pre>
-</li>
-</ul>
-<h3 id="简单的增删改查">简单的增删改查</h3>
-<p>update 和 delete语句执行时，一定要加上条件（切记）<br>
-select查询时不要写 * ，应该直接加具体字段<br>
-生产数据过过查询时，记得加上limit关键字，限制条数<br>
-如果误删，可以从binlog文件恢复 arch/mysql-bin.000001<br>
-生产上一般是读写分离</p>
-<pre><code>添加到主库，查询在从库中查
-</code></pre>
-<h3 id="datetime-timestamp区别">datetime timestamp区别</h3>
-<ul>
-<li>
-<p>两者的存储方式不一样</p>
-<pre><code>`对于TIMESTAMP：
-它把客户端插入的时间从 当前时区 转化为UTC（世界标准时间）进行存储。
-查询时，将其又转化为客户端当前时区进行返回。
+# Detailed Table Information             
+Database:               default                  
+OwnerType:              USER                     
+Owner:                  hadoop                   
+CreateTime:             Sun Dec 15 17:35:59 CST 2019     
+LastAccessTime:         UNKNOWN                  
+Protect Mode:           None                     
+Retention:              0                        
+Location:               hdfs://JD:9000/user/hive/warehouse/stu   
+Table Type:             MANAGED_TABLE            
+Table Parameters:                
+		COLUMN_STATS_ACCURATE   true                
+		numFiles                1                   
+		numRows                 1                   
+		rawDataSize             14                  
+		totalSize               15                  
+		transient_lastDdlTime   1576402663          
 
-`对于DATETIME：
-不做任何改变，基本上是原样输入和输出。
+# Storage Information            
+SerDe Library:          org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe       
+InputFormat:            org.apache.hadoop.mapred.TextInputFormat         
+OutputFormat:           org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat       
+Compressed:             No                       
+Num Buckets:            -1                       
+Bucket Columns:         []                       
+Sort Columns:           []                       
+Storage Desc Params:             
+		serialization.format    1                   
+Time taken: 0.098 seconds, Fetched: 34 row(s)
 </code></pre>
-</li>
-<li>
-<p>两者所能存储的时间范围不一样</p>
-<pre><code>timestamp所能存储的时间范围为：'1970-01-01 00:00:01.000000' 到 '2038-01-19 03:14:07.999999'。
+<h3 id="默认存放路径和执行日志">默认存放路径和执行日志</h3>
+<p>创建stu表，默认存储在HDFS的目录是（可通过desc formatted stu命令进行查看）</p>
+<pre><code>hdfs://JD:9000/user/hive/warehouse/stu  
+其中hive默认的存放路径（hive.metastore.warehouse.dir）为：/user/hive/warehouse
+表名：stu
+表的完整路径是: ${hive.metastore.warehouse.dir}/tablename
+</code></pre>
+<h3 id="创建删除库">创建删除库</h3>
+<p>Hive中的数据抽象<br>
+<img src="/img/hive1/2.png" alt="">	<br>
+	Hive中的表(stu)必须要归属于某个数据库(default)<br>
+Database</p>
+<pre><code>包含了0到N张表，每个db对应HDFS上的一个文件夹
+default==&gt;/user/hive/warehouse
+</code></pre>
+<p>创建数据库(可以指定存储路径)</p>
+<pre><code>  其中!是表示选择一个 []表示可选
+  CREATE (DATABASE|SCHEMA) [IF NOT EXISTS] database_name
+  [COMMENT database_comment]#备注
+  [LOCATION hdfs_path]#指定存储路径
+  [WITH DBPROPERTIES (property_name=property_value, ...)];#数据库的信息
 
-datetime所能存储的时间范围为：'1000-01-01 00:00:00.000000' 到 '9999-12-31 23:59:59.999999'。
+  例如
+  CREATE DATABASE IF NOT EXISTS bigdata_hive;
+  CREATE DATABASE IF NOT EXISTS bigdata_hive3 COMMENT 'this is bigdata database' WITH DBPROPERTIES('creator'='stefanoy', 'date'='2016-12-15');
 </code></pre>
-</li>
-<li>
-<p>总结：TIMESTAMP和DATETIME除了存储范围和存储方式不一样，没有太大区别。当然，对于跨时区的业务，TIMESTAMP更为合适。</p>
-</li>
-</ul>
-<h3 id="engineinnodb-是什么myisam区别是什么">ENGINE=InnoDB 是什么？MyISAM区别是什么</h3>
-<ul>
-<li>InnoDB<br>
-它提供了事务控制能力功能，它确保一组命令全部执行成功，或者当任何一个命令出现错误时所有命令的结果都被回退，可以想像在电子银行中事务控制能力是非常重要的。支持COMMIT、ROLLBACK和其他事务特性。最新版本的Mysql已经计划移除对BDB的支持，转而全力发展InnoDB。</li>
-<li>区别<br>
-MyISAM类型不支持事务处理等高级处理，而InnoDB类型支持。<br>
-MyISAM类型的表强调的是性能，其执行数度比InnoDB类型更快，但是不提供事务支持，而InnoDB提供事务支持，外键等高级数据库功能。</li>
-</ul>
+<p>删除数据库(如果数据库下面有表则删除不成功；强制删除命令CASCADE，哪怕下面有表也会删除，慎用)</p>
+<pre><code>	DROP (DATABASE|SCHEMA) [IF EXISTS] database_name [RESTRICT|CASCADE];
+	
+	命令样例
+	DROP DATABASE IF EXISTS bigdata_hive2;
+	CASCADE(了解即可，慎用)： one2many ==  1 db 对 多 table 
+</code></pre>
+<h3 id="数据类型">数据类型</h3>
+<pre><code>数值类型：int bigint float double  decimal
+字符串类型：string  90% #用的最广
+布尔类型：boolean： true/false
+日期类型：date  timestamp ...
+</code></pre>
+<h3 id="分隔符">分隔符</h3>
+<p>各种分隔符介绍</p>
+<pre><code> delimiter   code
+^A          \001  字段之间的分隔符
+\n          \n    记录分隔符
+^B          \002  ARRAY/STRUCT (Hive中的复杂数据类型)
+^C          \003  key/value of MAP (Hive中的复杂数据类型)
+</code></pre>
+<p>创建表的时候可以指定分隔符</p>
+<pre><code>指定','为分隔符
+create table stu2(id int, name string, age int) row format delimited fields terminated by ',';
+insert into stu2 values(1,'stefanboy',18);
+把/user/hive/warehouse/stu/000000_0下载到本地，查看数据的内容。</code></pre>
 
                 
 
@@ -436,12 +519,12 @@ MyISAM类型的表强调的是性能，其执行数度比InnoDB类型更快，�
                 <ul class="pager">
                     
                         <li class="previous">
-                            <a href="/article/mysql/mysquser2/" data-toggle="tooltip" data-placement="top" title="MySQL使用二">&larr; Previous Post</a>
+                            <a href="/article/DataNode抛内存溢出oom的error/" data-toggle="tooltip" data-placement="top" title="DataNode抛内存溢出oom的error">&larr; Previous Post</a>
                         </li>
                     
                     
                         <li class="next">
-                            <a href="/article/hexoinstall/" data-toggle="tooltip" data-placement="top" title="Hexo安装部署和使用">Next Post &rarr;</a>
+                            <a href="/article/hadoop/hadoop6/" data-toggle="tooltip" data-placement="top" title="yarn资源调优参数&yarn的调度器&yarn的常用命令">Next Post &rarr;</a>
                         </li>
                     
                 </ul>
@@ -491,7 +574,7 @@ MyISAM类型的表强调的是性能，其执行数度比InnoDB类型更快，�
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#欢迎来到stefanboy的博客感谢大家对我的支持"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">&#x6B22;&#x8FCE;&#x6765;&#x5230;Stefanboy&#x7684;&#x535A;&#x5BA2;&#xFF0C;&#x611F;&#x8C22;&#x5927;&#x5BB6;&#x5BF9;&#x6211;&#x7684;&#x652F;&#x6301;.</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#mysql使用"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">MySQL&#x4F7F;&#x7528;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#允许外面机器各种客户端连接mysql"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text">&#x5141;&#x8BB8;&#x5916;&#x9762;&#x673A;&#x5668;&#xFF08;&#x5404;&#x79CD;&#x5BA2;&#x6237;&#x7AEF;&#xFF09;&#x8FDE;&#x63A5;mysql</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#命令行登录mysql"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text">&#x547D;&#x4EE4;&#x884C;&#x767B;&#x5F55;mysql</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#mysql的字段类型"><span class="toc-nav-number">2.3.</span> <span class="toc-nav-text">mysql&#x7684;&#x5B57;&#x6BB5;&#x7C7B;&#x578B;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#sql类型"><span class="toc-nav-number">2.4.</span> <span class="toc-nav-text">sql&#x7C7B;&#x578B;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#建表规划"><span class="toc-nav-number">2.5.</span> <span class="toc-nav-text">&#x5EFA;&#x8868;&#x89C4;&#x5212;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#简单的增删改查"><span class="toc-nav-number">2.6.</span> <span class="toc-nav-text">&#x7B80;&#x5355;&#x7684;&#x589E;&#x5220;&#x6539;&#x67E5;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#datetime-timestamp区别"><span class="toc-nav-number">2.7.</span> <span class="toc-nav-text">datetime timestamp&#x533A;&#x522B;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#engineinnodb-是什么myisam区别是什么"><span class="toc-nav-number">2.8.</span> <span class="toc-nav-text">ENGINE=InnoDB &#x662F;&#x4EC0;&#x4E48;&#xFF1F;MyISAM&#x533A;&#x522B;&#x662F;&#x4EC0;&#x4E48;</span></a></li></ol></li></ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#欢迎来到stefanboy的博客感谢大家对我的支持"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">&#x6B22;&#x8FCE;&#x6765;&#x5230;Stefanboy&#x7684;&#x535A;&#x5BA2;&#xFF0C;&#x611F;&#x8C22;&#x5927;&#x5BB6;&#x5BF9;&#x6211;&#x7684;&#x652F;&#x6301;.</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#hadoop"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">Hadoop</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#hive概述"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">Hive&#x6982;&#x8FF0;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#hive架构"><span class="toc-nav-number">3.1.</span> <span class="toc-nav-text">Hive&#x67B6;&#x6784;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#hive和rdbms的对比"><span class="toc-nav-number">3.2.</span> <span class="toc-nav-text">Hive&#x548C;RDBMS&#x7684;&#x5BF9;&#x6BD4;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#hive部署"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">Hive&#x90E8;&#x7F72;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#前置"><span class="toc-nav-number">4.1.</span> <span class="toc-nav-text">&#x524D;&#x7F6E;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#安装"><span class="toc-nav-number">4.2.</span> <span class="toc-nav-text">&#x5B89;&#x88C5;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#配置"><span class="toc-nav-number">4.3.</span> <span class="toc-nav-text">&#x914D;&#x7F6E;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#hive_home下目录说明"><span class="toc-nav-number">4.3.1.</span> <span class="toc-nav-text">$HIVE_HOME&#x4E0B;&#x76EE;&#x5F55;&#x8BF4;&#x660E;</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#修改配置文件"><span class="toc-nav-number">4.3.2.</span> <span class="toc-nav-text">&#x4FEE;&#x6539;&#x914D;&#x7F6E;&#x6587;&#x4EF6;</span></a></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#hive使用"><span class="toc-nav-number">5.</span> <span class="toc-nav-text">Hive&#x4F7F;&#x7528;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#启动hive"><span class="toc-nav-number">5.1.</span> <span class="toc-nav-text">&#x542F;&#x52A8;hive</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#基本命令"><span class="toc-nav-number">5.2.</span> <span class="toc-nav-text">&#x57FA;&#x672C;&#x547D;&#x4EE4;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#默认存放路径和执行日志"><span class="toc-nav-number">5.3.</span> <span class="toc-nav-text">&#x9ED8;&#x8BA4;&#x5B58;&#x653E;&#x8DEF;&#x5F84;&#x548C;&#x6267;&#x884C;&#x65E5;&#x5FD7;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#创建删除库"><span class="toc-nav-number">5.4.</span> <span class="toc-nav-text">&#x521B;&#x5EFA;&#x5220;&#x9664;&#x5E93;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#数据类型"><span class="toc-nav-number">5.5.</span> <span class="toc-nav-text">&#x6570;&#x636E;&#x7C7B;&#x578B;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#分隔符"><span class="toc-nav-number">5.6.</span> <span class="toc-nav-text">&#x5206;&#x9694;&#x7B26;</span></a></li></ol></li></ol>
         
         </div>
       </aside>
@@ -511,7 +594,7 @@ MyISAM类型的表强调的是性能，其执行数度比InnoDB类型更快，�
                     <h5><a href="/tags/">FEATURED TAGS</a></h5>
                     <div class="tags">
                        
-                          <a class="tag" href="/tags/#MySQL" title="MySQL">MySQL</a>
+                          <a class="tag" href="/tags/#Hive" title="Hive">Hive</a>
                         
                     </div>
                 </section>
