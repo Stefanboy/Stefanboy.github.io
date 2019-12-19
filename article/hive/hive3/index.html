@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/ironman-draw.png">
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <title>
+        
+          Hive DDL&amp;DML&amp;DQL - Stefanboy | Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://yoursite.com/article/hive/hive3/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS --> 
+    <link rel="stylesheet" href="/css/beantech.min.css">
+
+    <link rel="stylesheet" href="/css/donate.css">
+    
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <link rel="stylesheet" href="/css/widget.css">
+
+    <link rel="stylesheet" href="/css/rocket.css">
+
+    <link rel="stylesheet" href="/css/signature.css">
+
+    <link rel="stylesheet" href="/css/toc.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+	<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        
+            background-image: url('/img/article_header/article_header.png')
+            /*post*/
+        
+    }
+    
+</style>
+
+<header class="intro-header" >
+    <!-- Signature -->
+    <div id="signature">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                
+                    <div class="post-heading">
+                        <div class="tags">
+                            
+                              <a class="tag" href="/tags/#Hive" title="Hive">Hive</a>
+                            
+                        </div>
+                        <h1>Hive DDL&amp;DML&amp;DQL</h1>
+                        <h2 class="subheading">How to use Hive</h2>
+                        <span class="meta">
+                            Posted by Stefanboy on
+                            2016-12-19
+                        </span>
+                    </div>
+                
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+	
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">StefanboyBlog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archive/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Modify by Yu-Hsuan Yen -->
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h2 id="欢迎来到stefanboy的博客感谢大家对我的支持">欢迎来到Stefanboy的博客，感谢大家对我的支持.</h2>
+<h2 id="join操作">join操作</h2>
+<p><img src="/img/hive2/1.png" alt=""><br>
+<img src="/img/hive1/2.png" alt=""><br>
+hive中有两张表，分别为emp和dept表<br>
+hive支持innert join，left join, rigth join,full join；<br>
+hive的join操作的on条件仅支持等值连接，即e.deptno <strong>=</strong> d.deptno，不支持&lt;或者&gt;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">inner join：只返回连接条件匹配上的数据</span><br><span class="line">outer join</span><br><span class="line">	left：左表为基准</span><br><span class="line">	right：右表为基准</span><br><span class="line">	full：左右两表数据都会查询出</span><br><span class="line"></span><br><span class="line">select  </span><br><span class="line">e.empno, e.ename, e.deptno, d.dname</span><br><span class="line">from emp e join dept d</span><br><span class="line">on e.deptno = d.deptno;</span><br></pre></td></tr></table></figure>
+<h2 id="hiveserver2-hs2">HiveServer2 = HS2</h2>
+<h3 id="hiveserver2是一个server">HiveServer2：是一个server</h3>
+<p>默认端口号是10000，也可以修改端口为其他端口，如10086<br>
+启动hive的server<br>
+设置端口参数的地址<a href="https://cwiki.apache.org/confluence/display/Hive/Configuration+Properties" target="_blank" rel="noopener">https://cwiki.apache.org/confluence/display/Hive/Configuration+Properties</a></p>
+<table>
+<thead>
+<tr>
+<th>key</th>
+<th>value</th>
+<th>desc</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>hive.server2.thrift.port</td>
+<td>指定的端口</td>
+<td>用户可以指定端口启动</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">进入bin目录</span><br><span class="line">[hadoop@JD bin]$ pwd</span><br><span class="line">/home/hadoop/app/hive-1.1.0-cdh5.16.2/bin</span><br><span class="line"></span><br><span class="line">执行启动命令</span><br><span class="line">[hadoop@JD bin]$ hiveserver2 </span><br><span class="line"></span><br><span class="line">指定端口启动（先kill掉原来的进程再启动）</span><br><span class="line">[hadoop@JD bin]$ ./hiveserver2 --hiveconf hive.server2.thrift.port=10086;</span><br></pre></td></tr></table></figure>
+<h3 id="beeline是一个客户端">beeline：是一个客户端</h3>
+<p>连接server</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">启动beeline时，建议先cd $HIVE_HOME/bin中去，因为hive中有beeline，spark中也有beeline，只有进入到组件的bin目录下，才能确定启动的是该组件的客户端</span><br><span class="line"></span><br><span class="line">连接server（JD：指的是server所在主机名 10000：server默认端口 db_hive1:数据库名 -n:指定用户启动）</span><br><span class="line">[hadoop@JD bin]$ ./beeline -u jdbc:hive2://JD:10000/db_hive1 -n hadoop </span><br><span class="line"></span><br><span class="line">scan complete in 1ms</span><br><span class="line">Connecting to jdbc:hive2://JD:10000/db_hive1 #连接到server地址</span><br><span class="line">Connected to: Apache Hive (version 1.1.0-cdh5.16.2) #连接到hive</span><br><span class="line">Driver: Hive JDBC (version 1.1.0-cdh5.16.2)</span><br><span class="line">Transaction isolation: TRANSACTION_REPEATABLE_READ</span><br><span class="line">Beeline version 1.1.0-cdh5.16.2 by Apache Hive</span><br></pre></td></tr></table></figure>
+<h2 id="hive复杂数据类型">Hive复杂数据类型</h2>
+<p>对于复杂数据类型，掌握存和取即可<br>
+建表语句的row_format参数<br>
+地址：<a href="https://cwiki.apache.org/confluence/display/Hive/LanguageManual+DDL" target="_blank" rel="noopener">https://cwiki.apache.org/confluence/display/Hive/LanguageManual+DDL</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">row_format</span><br><span class="line">  : DELIMITED [FIELDS TERMINATED BY char [ESCAPED BY char]] [COLLECTION ITEMS TERMINATED BY char]</span><br><span class="line">        [MAP KEYS TERMINATED BY char] [LINES TERMINATED BY char]</span><br><span class="line">        [NULL DEFINED AS char]   -- (Note: Available in Hive 0.13 and later)</span><br><span class="line">  | SERDE serde_name [WITH SERDEPROPERTIES (property_name=property_value, property_name=property_value, ...)]</span><br></pre></td></tr></table></figure>
+<p>复杂类型地址<a href="https://cwiki.apache.org/confluence/display/Hive/LanguageManual+Types" target="_blank" rel="noopener">https://cwiki.apache.org/confluence/display/Hive/LanguageManual+Types</a></p>
+<h3 id="array">array</h3>
+<p>array<t>   T泛型，array里的数据类型要一样<br>
+数据内容如下</t></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@JD data]# cat hive_array.txt</span><br><span class="line">pk      beijing,shanghai,tianjin,hangzhou</span><br><span class="line">jepson  changchu,chengdu,wuhan,beijing</span><br></pre></td></tr></table></figure>
+<p>建表 导入数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line">数据按照\t分割，数组间按照,分割</span><br><span class="line">create table hive_array(name string, work_locations array&lt;string&gt;)</span><br><span class="line">row format delimited</span><br><span class="line">fields terminated by &apos;\t&apos;</span><br><span class="line">COLLECTION ITEMS TERMINATED BY &apos;,&apos;;</span><br><span class="line"></span><br><span class="line">导入数据</span><br><span class="line">0: jdbc:hive2://JD:10086/db_hive1&gt; load data local inpath &apos;/home/hadoop/data/hive_array.txt&apos; into table hive_array;</span><br><span class="line"></span><br><span class="line">查询</span><br><span class="line">0: jdbc:hive2://JD:10086/db_hive1&gt; select * from  hive_array;</span><br><span class="line"></span><br><span class="line">+------------------+----------------------------------------------+--+</span><br><span class="line">| hive_array.name  |          hive_array.work_locations           |</span><br><span class="line">+------------------+----------------------------------------------+--+</span><br><span class="line">| pk               | [&quot;beijing&quot;,&quot;shanghai&quot;,&quot;tianjin&quot;,&quot;hangzhou&quot;]  |</span><br><span class="line">| jepson           | [&quot;changchu&quot;,&quot;chengdu&quot;,&quot;wuhan&quot;,&quot;beijing&quot;]     |</span><br><span class="line">+------------------+----------------------------------------------+--+</span><br><span class="line">2 rows selected (0.216 seconds)</span><br><span class="line"></span><br><span class="line">查询表信息</span><br><span class="line">0: jdbc:hive2://JD:10086/db_hive1&gt; desc hive_array;</span><br><span class="line"></span><br><span class="line">+-----------------+----------------+----------+--+</span><br><span class="line">|    col_name     |   data_type    | comment  |</span><br><span class="line">+-----------------+----------------+----------+--+</span><br><span class="line">| name            | string         |          |</span><br><span class="line">| work_locations  | array&lt;string&gt;  |          |</span><br><span class="line">+-----------------+----------------+----------+--+</span><br><span class="line">2 rows selected (0.116 seconds)</span><br><span class="line"></span><br><span class="line">取数组的第一个数据</span><br><span class="line">0: jdbc:hive2://JD:10086/db_hive1&gt; select name,work_locations[0] from hive_array;</span><br><span class="line">+---------+-----------+--+</span><br><span class="line">|  name   |    _c1    |</span><br><span class="line">+---------+-----------+--+</span><br><span class="line">| pk      | beijing   |</span><br><span class="line">| jepson  | changchu  |</span><br><span class="line">+---------+-----------+--+</span><br><span class="line"></span><br><span class="line">查询数组的长度</span><br><span class="line">0: jdbc:hive2://JD:10086/db_hive1&gt; select name,size(work_locations) from hive_array;</span><br><span class="line">+---------+------+--+</span><br><span class="line">|  name   | _c1  |</span><br><span class="line">+---------+------+--+</span><br><span class="line">| pk      | 4    |</span><br><span class="line">| jepson  | 4    |</span><br><span class="line">+---------+------+--+</span><br><span class="line"></span><br><span class="line">查询数组包含tianjin的数据</span><br><span class="line">0: jdbc:hive2://JD:10086/db_hive1&gt; select name,work_locations  from hive_array where array_contains(work_locations,&apos;tianjin&apos;);</span><br><span class="line">+-------+----------------------------------------------+--+</span><br><span class="line">| name  |                work_locations                |</span><br><span class="line">+-------+----------------------------------------------+--+</span><br><span class="line">| pk    | [&quot;beijing&quot;,&quot;shanghai&quot;,&quot;tianjin&quot;,&quot;hangzhou&quot;]  |</span><br><span class="line">+-------+----------------------------------------------+--+</span><br><span class="line">1 row selected (0.098 seconds)</span><br></pre></td></tr></table></figure>
+<h3 id="map类型">map类型</h3>
+<p>MAP&lt;primitive_type, data_type&gt;  k-v类型</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br></pre></td><td class="code"><pre><span class="line">数据内容</span><br><span class="line">[root@JD data]# cat hive_map.txt</span><br><span class="line">1,zhangsan,father:xiaoming#mother:xiaohuang#brother:xiaoxu,28</span><br><span class="line">2,lisi,father:mayun#mother:huangyi#brother:guanyu,22</span><br><span class="line">3,wangwu,father:wangjianlin#mother:ruhua#sister:jingtian,29</span><br><span class="line">4,mayun,father:mayongzhen#mother:angelababy,26</span><br><span class="line"></span><br><span class="line">建表语句</span><br><span class="line">create table hive_map(</span><br><span class="line">id int, name string, members map&lt;string,string&gt;, age int</span><br><span class="line">)</span><br><span class="line">row format delimited</span><br><span class="line">fields terminated by &apos;,&apos;</span><br><span class="line">COLLECTION ITEMS TERMINATED BY &apos;#&apos;</span><br><span class="line">MAP KEYS TERMINATED BY &apos;:&apos;</span><br><span class="line">;</span><br><span class="line"></span><br><span class="line">导入数据</span><br><span class="line">load data local inpath &apos;/home/hadoop/data/hive_map.txt&apos; into table hive_map;</span><br><span class="line"></span><br><span class="line">查询数据</span><br><span class="line">0: jdbc:hive2://JD:10086/db_hive1&gt; select * from hive_map;</span><br><span class="line">+--------------+----------------+----------------------------------------------------+---------------+--+</span><br><span class="line">| hive_map.id  | hive_map.name  |                  hive_map.members                  | hive_map.age  |</span><br><span class="line">+--------------+----------------+----------------------------------------------------+---------------+--+</span><br><span class="line">| 1            | zhangsan       | &#123;&quot;father&quot;:&quot;xiaoming&quot;,&quot;mother&quot;:&quot;xiaohuang&quot;,&quot;brother&quot;:&quot;xiaoxu&quot;&#125; | 28            |</span><br><span class="line">| 2            | lisi           | &#123;&quot;father&quot;:&quot;mayun&quot;,&quot;mother&quot;:&quot;huangyi&quot;,&quot;brother&quot;:&quot;guanyu&quot;&#125; | 22            |</span><br><span class="line">| 3            | wangwu         | &#123;&quot;father&quot;:&quot;wangjianlin&quot;,&quot;mother&quot;:&quot;ruhua&quot;,&quot;sister&quot;:&quot;jingtian&quot;&#125; | 29            |</span><br><span class="line">| 4            | mayun          | &#123;&quot;father&quot;:&quot;mayongzhen&quot;,&quot;mother&quot;:&quot;angelababy&quot;&#125;      | 26            |</span><br><span class="line">+--------------+----------------+----------------------------------------------------+---------------+--+</span><br><span class="line"></span><br><span class="line">查询map中的值</span><br><span class="line">0: jdbc:hive2://JD:10086/db_hive1&gt; select id,name,members[&apos;father&apos;] as father,members[&apos;mother&apos;] as mother,age from  hive_map;</span><br><span class="line">+-----+-----------+--------------+-------------+------+--+</span><br><span class="line">| id  |   name    |    father    |   mother    | age  |</span><br><span class="line">+-----+-----------+--------------+-------------+------+--+</span><br><span class="line">| 1   | zhangsan  | xiaoming     | xiaohuang   | 28   |</span><br><span class="line">| 2   | lisi      | mayun        | huangyi     | 22   |</span><br><span class="line">| 3   | wangwu    | wangjianlin  | ruhua       | 29   |</span><br><span class="line">| 4   | mayun     | mayongzhen   | angelababy  | 26   |</span><br><span class="line">+-----+-----------+--------------+-------------+------+--+</span><br><span class="line"></span><br><span class="line">查询map中的所有key</span><br><span class="line">0: jdbc:hive2://JD:10086/db_hive1&gt; select id,name,map_keys(members) as cation from hive_map;</span><br><span class="line">+-----+-----------+--------------------------------+--+</span><br><span class="line">| id  |   name    |             cation             |</span><br><span class="line">+-----+-----------+--------------------------------+--+</span><br><span class="line">| 1   | zhangsan  | [&quot;father&quot;,&quot;mother&quot;,&quot;brother&quot;]  |</span><br><span class="line">| 2   | lisi      | [&quot;father&quot;,&quot;mother&quot;,&quot;brother&quot;]  |</span><br><span class="line">| 3   | wangwu    | [&quot;father&quot;,&quot;mother&quot;,&quot;sister&quot;]   |</span><br><span class="line">| 4   | mayun     | [&quot;father&quot;,&quot;mother&quot;]            |</span><br><span class="line">+-----+-----------+--------------------------------+--+</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">查询map中的所有值</span><br><span class="line">0: jdbc:hive2://JD:10086/db_hive1&gt; select id,name,map_values(members) as cation from hive_map;</span><br><span class="line">+-----+-----------+-------------------------------------+--+</span><br><span class="line">| id  |   name    |               cation                |</span><br><span class="line">+-----+-----------+-------------------------------------+--+</span><br><span class="line">| 1   | zhangsan  | [&quot;xiaoming&quot;,&quot;xiaohuang&quot;,&quot;xiaoxu&quot;]   |</span><br><span class="line">| 2   | lisi      | [&quot;mayun&quot;,&quot;huangyi&quot;,&quot;guanyu&quot;]        |</span><br><span class="line">| 3   | wangwu    | [&quot;wangjianlin&quot;,&quot;ruhua&quot;,&quot;jingtian&quot;]  |</span><br><span class="line">| 4   | mayun     | [&quot;mayongzhen&quot;,&quot;angelababy&quot;]         |</span><br><span class="line">+-----+-----------+-------------------------------------+--+</span><br><span class="line"></span><br><span class="line">查询出有兄弟的人以及他的兄弟是谁</span><br><span class="line">分析：使用array_contains(map_keys(members),&apos;value&apos;)查询出有兄弟的人，然后再使用map[&apos;key&apos;]查询出兄弟的姓名</span><br><span class="line"></span><br><span class="line">常规写法</span><br><span class="line">0: jdbc:hive2://JD:10086/db_hive1&gt; select id,name,members[&apos;brother&apos;] from hive_map where array_contains(map_keys(members),&apos;brother&apos;);</span><br><span class="line">+-----+-----------+---------+--+</span><br><span class="line">| id  |   name    |   _c2   |</span><br><span class="line">+-----+-----------+---------+--+</span><br><span class="line">| 1   | zhangsan  | xiaoxu  |</span><br><span class="line">| 2   | lisi      | guanyu  |</span><br><span class="line">+-----+-----------+---------+--+</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">子查询写法</span><br><span class="line">0: jdbc:hive2://JD:10086/db_hive1&gt; select a.id,a.name,a.members[&apos;brother&apos;] as brother from (select * from hive_map where array_contains(map_keys(members),&apos;brother&apos;)) as a;</span><br><span class="line">+-------+-----------+----------+--+</span><br><span class="line">| a.id  |  a.name   | brother  |</span><br><span class="line">+-------+-----------+----------+--+</span><br><span class="line">| 1     | zhangsan  | xiaoxu   |</span><br><span class="line">| 2     | lisi      | guanyu   |</span><br><span class="line">+-------+-----------+----------+--+</span><br></pre></td></tr></table></figure>
+<h3 id="structs类型">structs类型</h3>
+<p>structs: STRUCT&lt;col_name : data_type [COMMENT col_comment], …&gt; 内部的数据类型可以不同</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">数据内容</span><br><span class="line">[root@JD data]# cat  hive_struct.txt</span><br><span class="line">192.168.1.1#zhangsan:40</span><br><span class="line">192.168.1.2#lisi:50</span><br><span class="line">192.168.1.3#wangwu:60</span><br><span class="line"></span><br><span class="line">建表语句</span><br><span class="line">create table hive_struct(</span><br><span class="line">ip string, info struct&lt;name:string,age:int&gt;</span><br><span class="line">)</span><br><span class="line">row format delimited</span><br><span class="line">fields terminated by &apos;#&apos;</span><br><span class="line">COLLECTION ITEMS TERMINATED BY &apos;:&apos;</span><br><span class="line">;</span><br><span class="line"></span><br><span class="line">导入数据</span><br><span class="line">0: jdbc:hive2://JD:10086/db_hive1&gt; load data local inpath &apos;/home/hadoop/data/hive_struct.txt&apos; into table hive_struct;</span><br><span class="line"></span><br><span class="line">查询</span><br><span class="line">0: jdbc:hive2://JD:10086/db_hive1&gt; select * from hive_struct;</span><br><span class="line">+-----------------+-------------------------------+--+</span><br><span class="line">| hive_struct.ip  |       hive_struct.info        |</span><br><span class="line">+-----------------+-------------------------------+--+</span><br><span class="line">| 192.168.1.1     | &#123;&quot;name&quot;:&quot;zhangsan&quot;,&quot;age&quot;:40&#125;  |</span><br><span class="line">| 192.168.1.2     | &#123;&quot;name&quot;:&quot;lisi&quot;,&quot;age&quot;:50&#125;      |</span><br><span class="line">| 192.168.1.3     | &#123;&quot;name&quot;:&quot;wangwu&quot;,&quot;age&quot;:60&#125;    |</span><br><span class="line">| 192.168.1.4     | &#123;&quot;name&quot;:&quot;zhaoliu&quot;,&quot;age&quot;:70&#125;   |</span><br><span class="line">+-----------------+-------------------------------+--+</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">查询struct的值</span><br><span class="line">0: jdbc:hive2://JD:10086/db_hive1&gt; select ip,info.name,info.age from hive_struct;</span><br><span class="line">+--------------+-----------+------+--+</span><br><span class="line">|      ip      |   name    | age  |</span><br><span class="line">+--------------+-----------+------+--+</span><br><span class="line">| 192.168.1.1  | zhangsan  | 40   |</span><br><span class="line">| 192.168.1.2  | lisi      | 50   |</span><br><span class="line">| 192.168.1.3  | wangwu    | 60   |</span><br><span class="line">| 192.168.1.4  | zhaoliu   | 70   |</span><br><span class="line">+--------------+-----------+------+--+</span><br><span class="line">4 rows selected (0.076 seconds)</span><br></pre></td></tr></table></figure>
+                
+
+                <hr>
+                <!-- Pager -->
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/article/DataNode抛内存溢出oom的error/" data-toggle="tooltip" data-placement="top" title="DataNode抛内存溢出oom的error">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/article/hive/hive2/" data-toggle="tooltip" data-placement="top" title="Hive DDL&DML&DQL">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                <br>
+
+                <!--打赏-->
+                
+                <!--打赏-->
+
+                <br>
+                <!--分享-->
+                
+                    <div class="social-share"  data-wechat-qrcode-helper="" align="center"></div>
+                    <!--  css & js -->
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+                
+                <!--分享-->
+                <br>                       
+                
+                <!-- require APlayer -->
+                
+
+                <!-- duoshuo Share start -->
+                
+                <!-- 多说 Share end-->
+
+                <!-- 多说评论框 start -->
+                
+                <!-- 多说评论框 end -->
+
+                <!-- disqus comment start -->
+                
+                <!-- disqus comment end -->
+
+                
+
+            </div>
+            
+            <!-- Tabe of Content -->
+            <!-- Table of Contents -->
+
+  
+    
+      <aside id="sidebar">
+        <div id="toc" class="toc-article">
+        <strong class="toc-title">Contents</strong>
+        
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#欢迎来到stefanboy的博客感谢大家对我的支持"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">&#x6B22;&#x8FCE;&#x6765;&#x5230;Stefanboy&#x7684;&#x535A;&#x5BA2;&#xFF0C;&#x611F;&#x8C22;&#x5927;&#x5BB6;&#x5BF9;&#x6211;&#x7684;&#x652F;&#x6301;.</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#join操作"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">join&#x64CD;&#x4F5C;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#hiveserver2-hs2"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">HiveServer2 = HS2</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#hiveserver2是一个server"><span class="toc-nav-number">3.1.</span> <span class="toc-nav-text">HiveServer2&#xFF1A;&#x662F;&#x4E00;&#x4E2A;server</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#beeline是一个客户端"><span class="toc-nav-number">3.2.</span> <span class="toc-nav-text">beeline&#xFF1A;&#x662F;&#x4E00;&#x4E2A;&#x5BA2;&#x6237;&#x7AEF;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#hive复杂数据类型"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">Hive&#x590D;&#x6742;&#x6570;&#x636E;&#x7C7B;&#x578B;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#array"><span class="toc-nav-number">4.1.</span> <span class="toc-nav-text">array</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#map类型"><span class="toc-nav-number">4.2.</span> <span class="toc-nav-text">map&#x7C7B;&#x578B;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#structs类型"><span class="toc-nav-number">4.3.</span> <span class="toc-nav-text">structs&#x7C7B;&#x578B;</span></a></li></ol></li></ol>
+        
+        </div>
+      </aside>
+    
+
+                
+            <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#Hive" title="Hive">Hive</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                        <li><a href="" target="_blank"></a></li>
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'hover',
+          placement: 'left',
+          icon: 'rz'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+<!-- chrome Firefox 中文锚点定位失效-->
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+<!-- smooth scroll behavior polyfill  -->
+<script type="text/javascript" src="/js/smoothscroll.js"></script>
+<script>
+        $('#toc').on('click','a',function(a){
+            // var isChrome = window.navigator.userAgent.indexOf("Chrome") !== -1;
+            // console.log(window.navigator.userAgent,isChrome)
+                // if(isChrome) {
+                    // console.log(a.currentTarget.outerHTML);
+                    // console.log($(a.currentTarget).attr("href"));
+                    //跳转到指定锚点
+                    // document.getElementById(a.target.innerText.toLowerCase()).scrollIntoView(true);
+                    document.getElementById($(a.currentTarget).attr("href").replace("#","")).scrollIntoView({behavior: 'smooth' });
+                // }
+        })  
+</script>
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/Stefanboy">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Stefanboy 2019 
+                    By <a href="#">Stefanboy</a> | BigData
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=ruozedata&repo=Bigdata&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://yoursite.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-XXXXXXXX-X';
+    var _gaDomain = 'yoursite';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    var _baId = 'xxx';
+
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+
+
+
+
+	<a id="rocket" href="#top" class=""></a>
+	<script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+    <script type="text/javascript" src="/js/toc.js?v=1.0.0" async=""></script>
+<!-- Image to hack wechat -->
+<img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

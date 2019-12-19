@@ -14,11 +14,11 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <title>
         
-          linux基本命令五 - Stefanboy | Blog
+          Stefanboy | Blog
         
     </title>
 
-    <link rel="canonical" href="http://yoursite.com/article/linux/linux5/">
+    <link rel="canonical" href="http://yoursite.com/page/3/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -71,8 +71,8 @@
 <style type="text/css">
     header.intro-header{
         
-            background-image: url('/img/article_header/article_header.png')
-            /*post*/
+            background-image: url('/img/header_img/ruozedatahead.png') 
+            /*config*/
         
     }
     
@@ -85,18 +85,10 @@
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                 
-                    <div class="post-heading">
-                        <div class="tags">
-                            
-                              <a class="tag" href="/tags/#Linux" title="Linux">Linux</a>
-                            
-                        </div>
-                        <h1>linux基本命令五</h1>
-                        <h2 class="subheading">How to use Linux</h2>
-                        <span class="meta">
-                            Posted by Stefanboy on
-                            2016-11-21
-                        </span>
+                    <div class="site-heading">
+                        <h1>StefanboyBlog</h1>
+                        <!--<hr class="small">-->
+                        <span class="subheading"></span>
                     </div>
                 
 
@@ -199,280 +191,225 @@
 
 
     <!-- Main Content -->
-    <!-- Modify by Yu-Hsuan Yen -->
+    <!-- Main Content -->
+<div class="container">
+    <div class="row">
+        
 
-<!-- Post Content -->
-<article>
-    <div class="container">
-        <div class="row">
-
-            <!-- Post Container -->
+<!-- USE SIDEBAR -->
+    <!-- Post Container -->
             <div class="
-                col-lg-8 col-lg-offset-2
-                col-md-10 col-md-offset-1
-                post-container">
+                col-lg-8 col-lg-offset-1
+                col-md-8 col-md-offset-1
+                col-sm-12
+                col-xs-12
+                post-container
+            ">
+            
+                <!-- Main Content -->
 
-                <h2 id="欢迎来到stefanboy的博客感谢大家对我的支持">欢迎来到Stefanboy的博客，感谢大家对我的支持.</h2>
-<p>该文章内容包括四部分，分别为<br>
-1、调度工具crontab<br>
-2、后台执行nohup<br>
-3、软连接</p>
-<h2 id="调度工具">调度工具</h2>
-<pre><code>现在主要的调度工具有
-1、airflow
-2、azkaban
-3、rundeck
-4、linux自带的crontab
-</code></pre>
-<p>crontab介绍<br>
-	1.1在编写脚本的时候，按照规范；执行脚本的时候，注意要有<strong>执行x权限</strong></p>
-<pre><code>	第一行写上解释器 #!/bin/bash
-	以.sh结尾
-</code></pre>
-<p>1.2crontab命令</p>
-<pre><code>Options:
- -u &lt;user&gt;  define user
- -e         edit user's crontab #编辑
- -l         list user's crontab  #查看
- -r         delete user's crontab
- -i         prompt before deleting
- -n &lt;host&gt;  set host in cluster to run users' crontabs
- -c         get host in cluster to run users' crontabs
- -s         selinux context
- -x &lt;mask&gt;  enable debugging
-</code></pre>
-<p>1.3crontab调度工具支持	只能支持到分钟粒度</p>
-<pre><code>* * * * *：按顺序分别代表分 小时 日 月 周
-</code></pre>
-<p>如果想要支持秒级别，可以在shell脚本里面for循环，建立test.sh脚本，内容如下</p>
-<pre><code>[root@JD ~]# vi test.sh
-[root@JD ~]# cat test.sh
-#!/bin/bash
 
-for((i=1;i&lt;=6;i++));
-do
+<div class="post-preview">
 
-        date
-        sleep 10s
+    <a href="/article/hexo-theme-jepson/">
+        <h2 class="post-title">
+                                 
+            [Hexo] Theme Jepson
+        </h2>
+        <h3 class="post-subtitle">
+            This is hexo theme Demo.
+        </h3>
+        <div class="post-content-preview">
+            Install Hexo
+Install Node.js  and Git
+12345678#For windowNode.js https://nodejs.org/dist/v12.13.0/node-v12.13.0-x64.msiGit https://github.com/git-for-windows/git/releases/download/v2.24.0.windows.2......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by Stefanboy on
+            2015-07-10
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#Hexo" title="Hexo">Hexo</a>
+            
+        </div>
+    
 
-done
+</div>
+<hr>
 
-exit
-赋执行权限
-[root@JD ~]# chmod 744 test.sh 
-[root@JD ~]# ll
--rwxr--r-- 1 root root 81 Nov 21 20:10 test.sh
-</code></pre>
-<p>编辑crontab，执行该脚本，crontab内容为</p>
-<pre><code>#每10s输出时间到test.log中
-[root@JD ~]# crontab -l
-* * * * * /root/test.sh &gt;&gt; /root/test.log
-[root@JD ~]# tail -F test.log
-Thu Nov 21 20:15:01 CST 2019
-Thu Nov 21 20:15:11 CST 2019
-</code></pre>
-<h2 id="后台执行">后台执行</h2>
-<pre><code>有三种方式可以后台执行
-./test.sh &amp;
-nohup ./test.sh &amp;  手动启动脚本 看日志 开发维护 测试
-nohup ./test.sh &gt; /root/test.log 2&gt;&amp;1 &amp;  该种方式可以将日志文件重定向输出到test.log中，一般用该种方式
-</code></pre>
-<h2 id="软连接">软连接</h2>
-<p>4.1软连接命令命令	，建议路径配置<strong>绝对路径</strong></p>
-<pre><code>	ln -s 原path 目标path
-</code></pre>
-<p>4.2使用场景<br>
-	4.2.1版本升级，做软连接，直接配置目标path即可	<br>
-	4.2.2CDH升级 原文件不见了  光标跳动</p>
-<pre><code>原因：原文件被删除
-解决方式
-找原文件文件夹；
-删除快捷键文件文件夹--》重新做新的软连接 高版本
-</code></pre>
-<p>4.2.3CDH会生成日志文件到系统盘，将日志文件移动到数据盘，并配置软连接</p>
-<pre><code>系统盘 / 50G
-数据盘 /data01 2T
 
-  CDH log ：#CDH默认会生成日志到系统盘，但是系统盘容量有限，需要将日志文件移动到数据盘
-  /var/log/hbase/xxx.log 1G
-   /var/log/hbase/xxx.log1 1G
-   ...
-   /var/log/hbase/xxx.log10 1G
-   ----  11G
-先将程序停止一下，暂停生成日志
-mkdir /data01/log/
-移动系统盘中的日志文件到数据盘
-mv  /var/log/hbase /data01/log/
-配置数据盘的日志文件目录到系统生成日志目录的软连接
-ln -s /data01/log/hbase /var/log/hbase
 
-切记，一定要设置权限（原文件跟软连接的文件都要设置权限）  chmod chown 
-如果忘记权限，可以查看集群中另外一台的权限
- 实在不行就设置权限（一了百了）：777</code></pre>
+<!-- Pager -->
 
-                
+<ul class="pager">
+    
+        <li class="previous">
+            <a href="/page/2/">&larr; Newer Posts</a>
+        </li>
+    
+    
+</ul>
 
-                <hr>
-                <!-- Pager -->
-                <ul class="pager">
-                    
-                        <li class="previous">
-                            <a href="/article/mysql/mysqlinstall/" data-toggle="tooltip" data-placement="top" title="MySQL安装部署">&larr; Previous Post</a>
-                        </li>
-                    
-                    
-                        <li class="next">
-                            <a href="/article/linux/linux4/" data-toggle="tooltip" data-placement="top" title="linux基本命令四">Next Post &rarr;</a>
-                        </li>
-                    
-                </ul>
+
 
                 <br>
 
-                <!--打赏-->
-                
-                <!--打赏-->
-
-                <br>
-                <!--分享-->
-                
-                    <div class="social-share"  data-wechat-qrcode-helper="" align="center"></div>
-                    <!--  css & js -->
-                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
-                    <script src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
-                
-                <!--分享-->
-                <br>                       
-                
                 <!-- require APlayer -->
                 
 
-                <!-- duoshuo Share start -->
+                <!-- 如果开启评论功能 -->
                 
-                <!-- 多说 Share end-->
-
-                <!-- 多说评论框 start -->
-                
-                <!-- 多说评论框 end -->
-
-                <!-- disqus comment start -->
-                
-                <!-- disqus comment end -->
-
-                
-
             </div>
+
+          <!-- Sidebar Container -->
+<div class="
+    col-lg-3 col-lg-offset-0
+    col-md-3 col-md-offset-0
+    col-sm-12
+    col-xs-12
+    sidebar-container
+">
+    
+        <!-- Featured Tags -->
+
+<section>
+    <!-- no hr -->
+    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+    <div class="tags">
+        
             
-            <!-- Tabe of Content -->
-            <!-- Table of Contents -->
-
-  
-    
-      <aside id="sidebar">
-        <div id="toc" class="toc-article">
-        <strong class="toc-title">Contents</strong>
+            <a href="/tags/#Hexo" title="Hexo" rel="2">Hexo</a>
+            
         
-          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#欢迎来到stefanboy的博客感谢大家对我的支持"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">&#x6B22;&#x8FCE;&#x6765;&#x5230;Stefanboy&#x7684;&#x535A;&#x5BA2;&#xFF0C;&#x611F;&#x8C22;&#x5927;&#x5BB6;&#x5BF9;&#x6211;&#x7684;&#x652F;&#x6301;.</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#调度工具"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">&#x8C03;&#x5EA6;&#x5DE5;&#x5177;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#后台执行"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">&#x540E;&#x53F0;&#x6267;&#x884C;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#软连接"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">&#x8F6F;&#x8FDE;&#x63A5;</span></a></li></ol>
+            
+            <a href="/tags/#Hadoop" title="Hadoop" rel="6">Hadoop</a>
+            
         
-        </div>
-      </aside>
-    
-
-                
-            <!-- Sidebar Container -->
-            <div class="
-                col-lg-8 col-lg-offset-2
-                col-md-10 col-md-offset-1
-                sidebar-container">
-
-                <!-- Featured Tags -->
-                
-                <section>
-                    <!-- no hr -->
-                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
-                    <div class="tags">
-                       
-                          <a class="tag" href="/tags/#Linux" title="Linux">Linux</a>
-                        
-                    </div>
-                </section>
-                
-
-                <!-- Friends Blog -->
-                
-                <hr>
-                <h5>FRIENDS</h5>
-                <ul class="list-inline">
-
-                    
-                        <li><a href="" target="_blank"></a></li>
-                    
-                </ul>
-                
-            </div>
-        </div>
+            
+            <a href="/tags/#Rundeck" title="Rundeck" rel="1">Rundeck</a>
+            
+        
+            
+            <a href="/tags/#Hadoop Linux" title="Hadoop Linux" rel="1">Hadoop Linux</a>
+            
+        
+            
+            <a href="/tags/#Hive" title="Hive" rel="3">Hive</a>
+            
+        
+            
+            <a href="/tags/#Linux" title="Linux" rel="5">Linux</a>
+            
+        
+            
+            <a href="/tags/#MySQL" title="MySQL" rel="3">MySQL</a>
+            
+        
     </div>
-</article>
+</section>
 
+        <hr>
+    
+        <!-- Short About -->
+<section class="visible-md visible-lg">
+    <h5><a href="/about/">ABOUT ME</a></h5>
+    <div class="short-about">
 
+        
+            <img id = "avatar_pic" src="/img/avatar/Stefanboy.jpg" />
+        
 
+        
+            <p>StefanboyBlog</p>
+        
 
+        <!-- SNS Link -->
+        <ul class="list-inline">
+            
+            
+            
 
+            
 
+            
 
+            
+                <li>
+                    <a target="_blank"  href="https://github.com/Stefanboy">
+                        <span class="fa-stack fa-lg">
+                            <i class="fa fa-circle fa-stack-2x"></i>
+                            <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                        </span>
+                    </a>
+                </li>
+            
+            
+            
+            
+        </ul>
+    </div>
+</section>
 
-<!-- async load function -->
-<script>
-    function async(u, c) {
-      var d = document, t = 'script',
-          o = d.createElement(t),
-          s = d.getElementsByTagName(t)[0];
-      o.src = u;
-      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
-      s.parentNode.insertBefore(o, s);
-    }
-</script>
-<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
-<script>
-    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
-        anchors.options = {
-          visible: 'hover',
-          placement: 'left',
-          icon: 'rz'
-        };
-        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
-    })
-</script>
-<style>
-    /* place left on bigger screen */
-    @media all and (min-width: 800px) {
-        .anchorjs-link{
-            position: absolute;
-            left: -0.75em;
-            font-size: 1.1em;
-            margin-top : -0.1em;
-        }
-    }
-</style>
+        <hr>
+    
+        
+  <h5>RECENT POSTS</h3>
+  <div class="widget">
+    <ul>
+      
+        <li>
+          <a href="/article/DataNode抛内存溢出oom的error/">DataNode抛内存溢出oom的error</a>
+        </li>
+      
+        <li>
+          <a href="/article/hive/hive2/">Hive DDL&amp;DML&amp;DQL</a>
+        </li>
+      
+        <li>
+          <a href="/article/hive/hive3/">Hive DDL&amp;DML&amp;DQL</a>
+        </li>
+      
+        <li>
+          <a href="/article/hive/hive1/">Hive介绍&amp;部署&amp;配置&amp;简单使用</a>
+        </li>
+      
+        <li>
+          <a href="/article/hadoop/hadoop6/">yarn资源调优参数&amp;yarn的调度器&amp;yarn的常用命令</a>
+        </li>
+      
+    </ul>
+  </div>
 
+        <hr>
+    
+        <!-- Friends Blog -->
 
-<!-- chrome Firefox 中文锚点定位失效-->
-<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
-<!-- smooth scroll behavior polyfill  -->
-<script type="text/javascript" src="/js/smoothscroll.js"></script>
-<script>
-        $('#toc').on('click','a',function(a){
-            // var isChrome = window.navigator.userAgent.indexOf("Chrome") !== -1;
-            // console.log(window.navigator.userAgent,isChrome)
-                // if(isChrome) {
-                    // console.log(a.currentTarget.outerHTML);
-                    // console.log($(a.currentTarget).attr("href"));
-                    //跳转到指定锚点
-                    // document.getElementById(a.target.innerText.toLowerCase()).scrollIntoView(true);
-                    document.getElementById($(a.currentTarget).attr("href").replace("#","")).scrollIntoView({behavior: 'smooth' });
-                // }
-        })  
-</script>
+<h5>FRIENDS</h5>
+<ul class="list-inline">
+
+    
+        <li><a href="" target="_blank"></a></li>
+    
+</ul>
+
+        <hr>
+    
+        
+    <h5>ARCHIVES</h5>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+
+        <hr>
+    
+</div>
+
+        
+    </div>
+</div>
 
 
     <!-- Footer -->
