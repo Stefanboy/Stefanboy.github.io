@@ -142,14 +142,14 @@
 
                         
                         <li>
-                            <a href="/about/">About</a>
+                            <a href="/archive/">Archives</a>
                         </li>
                         
                     
 
                         
                         <li>
-                            <a href="/archive/">Archives</a>
+                            <a href="/about/">About</a>
                         </li>
                         
                     
@@ -271,8 +271,9 @@ Time taken: 0.2 seconds
 OK
 Time taken: 0.2 seconds
 </code></pre>
-<h3 id="创建表">创建表</h3>
-<p>语法</p>
+<h2 id="表操作">表操作</h2>
+<p>创建表	<br>
+语法</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">CREATE [EXTERNAL] TABLE [IF NOT EXISTS] table_name </span><br><span class="line">[(col_name data_type [COMMENT col_comment], ...)] </span><br><span class="line">[COMMENT table_comment] </span><br><span class="line">[PARTITIONED BY (col_name data_type [COMMENT col_comment], ...)] </span><br><span class="line">[CLUSTERED BY (col_name, col_name, ...) </span><br><span class="line">[SORTED BY (col_name [ASC|DESC], ...)] INTO num_buckets BUCKETS] </span><br><span class="line">[ROW FORMAT row_format] </span><br><span class="line">[STORED AS file_format] </span><br><span class="line">[LOCATION hdfs_path]</span><br><span class="line">[TBLPROPERTIES (property_name=property_value, ...)]</span><br><span class="line">[AS select_statement]</span><br></pre></td></tr></table></figure>
 <p>参数解析</p>
 <ul>
@@ -303,7 +304,7 @@ Time taken: 0.2 seconds
 <li>AS：后跟查询语句，根据查询结果创建表</li>
 <li>LIKE：根据一个已存在的表创建另一个表，但是不复制数据</li>
 </ul>
-<h4 id="创建普通表指定列分隔符为t并指定存储路径">创建普通表指定列分隔符为‘\t’,并指定存储路径</h4>
+<h3 id="创建普通表指定列分隔符为t并指定存储路径">创建普通表指定列分隔符为‘\t’,并指定存储路径</h3>
 <pre><code>CREATE TABLE emp_test1(
 empno int,
 ename string,
@@ -315,12 +316,19 @@ comm double,
 deptno int
 ) ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t' LOCATION '/bigdata/';
 </code></pre>
+<h3 id="查看表">查看表</h3>
 <p>查看表</p>
 <pre><code>hive (db_hive1)&gt; show tables;
 OK
 tab_name
 emp_test1
 Time taken: 0.082 seconds, Fetched: 1 row(s)
+</code></pre>
+<p>查看指定数据库中的表</p>
+<pre><code>hive (default)&gt; show tables in db_hive1;
+</code></pre>
+<p>模糊查询查看表</p>
+<pre><code>hive (db_hive1)&gt; show tables like 'emp*'
 </code></pre>
 <p>查看表字段信息</p>
 <pre><code>hive (db_hive1)&gt; desc emp_test1;
@@ -346,15 +354,21 @@ Table db_hive1.emp_test1 stats: [numFiles=0, numRows=0, totalSize=0, rawDataSize
 OK
 Time taken: 0.427 seconds
 </code></pre>
-<h4 id="根据查询结果创建表">根据查询结果创建表</h4>
+<h4 id="根据查询结果创建表创建的表和数据都有">根据查询结果创建表(创建的表和数据都有)</h4>
 <pre><code>hive (db_hive1)&gt; create table emp_test2 as select * from emp_test1;
 。。。#跑mr程序
 </code></pre>
-<h4 id="使用like创建表">使用like创建表</h4>
+<h4 id="使用like创建表只复制表结构">使用like创建表（只复制表结构）</h4>
 <pre><code>hive (db_hive1)&gt; create table emp_test3 like emp_test1;
 OK
 Time taken: 0.082 seconds
 </code></pre>
+<h3 id="修改表">修改表</h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">修改表的名称</span><br><span class="line">hive (db_hive1)&gt; alter table </span><br><span class="line">               &gt; emp_test2 rename to emp_test3;</span><br></pre></td></tr></table></figure>
+<h3 id="删除表">删除表</h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">删除表</span><br><span class="line">hive (db_hive1)&gt; drop table emp_test;</span><br></pre></td></tr></table></figure>
+<h3 id="清除表">清除表</h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">清除表</span><br><span class="line">hive (db_hive1)&gt; truncate table emp_test1;</span><br></pre></td></tr></table></figure>
 <h3 id="外部表和内部表">外部表和内部表</h3>
 <ul>
 <li>
@@ -363,10 +377,11 @@ Time taken: 0.082 seconds
 </li>
 <li>
 <p>外部表使用场景	<br>
-每天收集到的网站数据,需要做大量的统计数据分析,所以在数据源（即原始数据）上可以使用外部表进行存储，方便数据的共享，在做统计分析时候用到的中间表，结果表可以使用内部表，因为这些数据不需要共享，使用内部表更为合适。</p>
+每天收集到的网站数据,需要做大量的统计数据分析,所以在数据源（<strong>即原始数据</strong>）上使用外部表进行存储，方便数据的共享，在做统计分析时候用到的中间表，结果表使用内部表，因为这些数据不需要共享，使用内部表更为合适。</p>
 </li>
 <li>
-<p>建表语句</p>
+<p>建表语句<br>
+创建外部表</p>
 <pre><code>CREATE EXTERNAL TABLE emp_test4(
 empno int,
 ename string,
@@ -483,11 +498,11 @@ row format delimited fields terminated by ‘\t’;</p>
 <p>4、再次查询</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">hive (db_hive1)&gt; select * from order_mulit_partition where event_month=&apos;2014-06&apos; and step=&apos;2&apos;;</span><br><span class="line"></span><br><span class="line">OK</span><br><span class="line">order_mulit_partition.order_no  order_mulit_partition.event_time        order_mulit_partition.event_month       order_mulit_partition.step</span><br><span class="line">10703007267488  2014-05-01 06:01:12.334+01      2014-06 2</span><br><span class="line">10101043505096  2014-05-01 07:28:12.342+01      2014-06 2</span><br><span class="line">10103043509747  2014-05-01 07:50:12.33+01       2014-06 2</span><br><span class="line">10103043501575  2014-05-01 09:27:12.33+01       2014-06 2</span><br><span class="line">10104043514061  2014-05-01 09:03:12.324+01      2014-06 2</span><br><span class="line">Time taken: 0.056 seconds, Fetched: 5 row(s)</span><br></pre></td></tr></table></figure>
 <ul>
-<li>上传数据后添加分区<br>
+<li>上传数据后添加分区（推荐方式）<br>
 1、上传数据</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@JD ~]$ hadoop fs -mkdir -p /user/hive/warehouse/db_hive1.db/order_mulit_partition/event_month=2014-07/step=3</span><br><span class="line"></span><br><span class="line">19/12/19 15:23:43 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable</span><br><span class="line">[hadoop@JD ~]$ </span><br><span class="line">[hadoop@JD ~]$ hadoop fs -put &apos;/home/hadoop/data/order_created.txt&apos; &apos;/user/hive/warehouse/db_hive1.db/order_mulit_partition/event_month=2014-07/step=3&apos;</span><br><span class="line"></span><br><span class="line">19/12/19 15:23:52 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable</span><br></pre></td></tr></table></figure>
-<p>2、添加分区</p>
+<p>2、添加分区（添加分区信息到元数据中）</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hive (db_hive1)&gt; alter table order_mulit_partition  add partition(event_month=&apos;2014-07&apos;,step=&apos;3&apos;);</span><br><span class="line">OK</span><br><span class="line">Time taken: 0.083 seconds</span><br></pre></td></tr></table></figure>
 <p>3、查询</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">hive (db_hive1)&gt; select * from order_mulit_partition where event_month=&apos;2014-07&apos; and step=&apos;3&apos;;</span><br><span class="line"></span><br><span class="line">OK</span><br><span class="line">order_mulit_partition.order_no  order_mulit_partition.event_time        order_mulit_partition.event_month       order_mulit_partition.step</span><br><span class="line">10703007267488  2014-05-01 06:01:12.334+01      2014-07 3</span><br><span class="line">10101043505096  2014-05-01 07:28:12.342+01      2014-07 3</span><br><span class="line">10103043509747  2014-05-01 07:50:12.33+01       2014-07 3</span><br><span class="line">10103043501575  2014-05-01 09:27:12.33+01       2014-07 3</span><br><span class="line">10104043514061  2014-05-01 09:03:12.324+01      2014-07 3</span><br><span class="line">Time taken: 0.053 seconds, Fetched: 5 row(s)</span><br></pre></td></tr></table></figure>
@@ -500,11 +515,6 @@ row format delimited fields terminated by ‘\t’;</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hive (db_hive1)&gt; load data local inpath &apos;/home/hadoop/data/order_created.txt&apos; into table</span><br><span class="line"> order_mulit_partition partition(month=&apos;2014-08&apos;,step=&apos;4&apos;);</span><br></pre></td></tr></table></figure>
 <p>3、查询数据</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hive (db_hive1)&gt; select * from order_mulit_partition where month=&apos;2014-08&apos; and step=&apos;4&apos;;</span><br></pre></td></tr></table></figure>
-<h4 id="修改表">修改表</h4>
-<p>语法</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ALTER TABLE table_name RENAME TO new_table_name</span><br></pre></td></tr></table></figure>
-<p>操作</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hive (db_hive1)&gt; alter table emp_test3 rename to emp_test_new;</span><br></pre></td></tr></table></figure>
 <h2 id="dml操作">DML操作</h2>
 <p>LOAD DATA : 加载数据<br>
 LOCAL: “本地”  没有的话就HDFS<br>
@@ -519,43 +529,43 @@ OVERWRITE：数据覆盖  没有的话就是追加</p>
 <h4 id="覆盖表中已有的数据">覆盖表中已有的数据</h4>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hive (db_hive1)&gt; load data local inpath &apos;/home/hadoop/data/emp.txt&apos; overwrite into table emp_test2;</span><br></pre></td></tr></table></figure>
 <h3 id="通过insert语句插入数据">通过insert语句插入数据</h3>
-<ul>
-<li>基本插入数据<br>
-1、创建分区表</li>
-</ul>
+<h4 id="基本插入数据">基本插入数据</h4>
+<p>1、创建分区表</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">create table order_partition1(</span><br><span class="line">order_no string,</span><br><span class="line">event_time string</span><br><span class="line">)</span><br><span class="line">PARTITIONED BY (event_month string)</span><br><span class="line">ROW FORMAT DELIMITED FIELDS TERMINATED BY &apos;\t&apos;;</span><br></pre></td></tr></table></figure>
 <p>2、插入数据</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hive (db_hive1)&gt; insert into table order_partition1 partition(event_month=&apos;2014-05&apos;) values(&apos;1&apos;,&apos;1111&apos;),(&apos;2&apos;,&apos;2222&apos;);</span><br></pre></td></tr></table></figure>
-<ul>
-<li>根据查询结果插入数据<br>
-insert into： 以追加数据的方式插入到表或分区，原有数据不会删除<br>
+<h4 id="根据查询结果插入数据">根据查询结果插入数据</h4>
+<p>insert into： 以追加数据的方式插入到表或分区，原有数据不会删除<br>
 insert overwrite： 会覆盖表或分区中已存在的数据<br>
-注意： insert不支持插入部分字段</li>
-</ul>
+注意： insert不支持插入部分字段</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hive (db_hive1)&gt; insert overwrite table order_partition1 partition(event_month=&apos;2014-06&apos;) select order_no,event_time from order_partition1 where event_month=&apos;2014-05&apos;;</span><br></pre></td></tr></table></figure>
 <ul>
 <li>多表（多分区）插入模式（根据多张表查询结果）</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">hive (db_hive1)&gt; from order_partition1</span><br><span class="line">              insert overwrite table order_partition1 partition(month=&apos;2014-07&apos;)</span><br><span class="line">              select id, name where month=&apos;2014-05&apos;</span><br><span class="line">              insert overwrite table order_partition1 partition(month=&apos;2014-08&apos;)</span><br><span class="line">              select id, name where month=&apos;2014-05&apos;;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>根据查询结果创建表</li>
-</ul>
+<h4 id="ctas-create-table-as-select">CTAS create table … as select…</h4>
+<p>根据查询结果创建表并导入数据（工作常用），表不能事先存在</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create table if not exists student3 as select id, name from student;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>创建表时通过Location指定加载数据路径<br>
-1、先hdfs上传数据</li>
-</ul>
+<h4 id="insert表必须事先存在">insert：表必须事先存在</h4>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">根据查询结果向表中插入数据</span><br><span class="line">insert overwrite table emp4 select * from emp;</span><br><span class="line"></span><br><span class="line">或者还有一种反人类的语法</span><br><span class="line">from emp insert into table emp4 select *;</span><br></pre></td></tr></table></figure>
+<h4 id="创建表时通过location指定加载数据路径">创建表时通过Location指定加载数据路径</h4>
+<p>1、先hdfs上传数据</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@JD ~]$ hadoop fs -mkdir /emp;</span><br><span class="line">[hadoop@JD ~]hadoop fs -put /home/hadoop/data/emp.txt /emp;</span><br></pre></td></tr></table></figure>
 <p>2、建表并指定路径</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">hive (default)&gt; create external table if not exists emp(</span><br><span class="line">              id int, </span><br><span class="line">			  name string</span><br><span class="line">              )</span><br><span class="line">              row format delimited fields terminated by &apos;\t&apos;</span><br><span class="line">              location &apos;/emp;</span><br></pre></td></tr></table></figure>
 <p>3、查询</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hive (default)&gt; select * from emp;</span><br></pre></td></tr></table></figure>
-<h2 id="dql">DQL</h2>
-<h3 id="hive-dql">Hive DQL</h3>
+<h3 id="数据导出">数据导出</h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">导入到本地文件，并指定分隔符</span><br><span class="line">INSERT OVERWRITE local DIRECTORY &apos;/hivetmp&apos; ROW FORMAT DELIMITED FIELDS TERMINATED BY &apos;\t&apos; SELECT empno,ename FROM emp;	 </span><br><span class="line"></span><br><span class="line">导入到HDFS文件，并指定分隔符</span><br><span class="line">INSERT OVERWRITE DIRECTORY &apos;/hivetmp&apos; ROW FORMAT DELIMITED FIELDS TERMINATED BY &apos;\t&apos; SELECT empno,ename FROM emp;	</span><br><span class="line"></span><br><span class="line">或者直接使用hdfs fs -get 命令</span><br><span class="line"></span><br><span class="line">或者使用hive的交互式命令，然后重定向到本地</span><br><span class="line">hive -e &apos;select empno,ename from emp&apos;&gt; 1.txt</span><br><span class="line"></span><br><span class="line">如果过滤查询结果,使用grep</span><br><span class="line">hive -e &apos;select empno,ename from emp | grep xxx&apos;&gt; 1.txt</span><br></pre></td></tr></table></figure>
+<h2 id="hive-dql">Hive DQL</h2>
 <p>语法：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">SELECT [ALL | DISTINCT] select_expr, select_expr, ...</span><br><span class="line">  FROM table_reference</span><br><span class="line">  [WHERE where_condition]</span><br><span class="line">  [GROUP BY col_list]</span><br><span class="line">  [ORDER BY col_list]</span><br><span class="line">  [CLUSTER BY col_list</span><br><span class="line">    | [DISTRIBUTE BY col_list] [SORT BY col_list]</span><br><span class="line">  ]</span><br><span class="line"> [LIMIT [offset,] rows]</span><br></pre></td></tr></table></figure>
 <h3 id="where">WHERE</h3>
-<p>过滤筛选。分区表必须加分区限制</p>
+<p>过滤筛选<br>
+查询区间使用between<br>
+查字符串在xxx之间使用in<br>
+查询为空的字段 is null<br>
+分区表必须加分区限制</p>
 <h3 id="all和distinct">ALL和DISTINCT</h3>
 <p>ALL和DISTINCT选项指定了是否返回重复值，默认是ALL，指定DISTINCT时会剔除重复的结果。注意，从Hive1.1.0开始，Hive支持SELECT DISTINCT *。ALL and DISTINCT can also be used in a UNION clause – see Union Syntax for more information.</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; SELECT col1, col2 FROM t1</span><br><span class="line">    1 3</span><br><span class="line">    1 3</span><br><span class="line">    1 4</span><br><span class="line">    2 5</span><br><span class="line">hive&gt; SELECT DISTINCT col1, col2 FROM t1</span><br><span class="line">    1 3</span><br><span class="line">    1 4</span><br><span class="line">    2 5</span><br><span class="line">hive&gt; SELECT DISTINCT col1 FROM t1</span><br><span class="line">    1</span><br><span class="line">    2</span><br></pre></td></tr></table></figure>
@@ -586,6 +596,8 @@ sum</p>
 <p>了解一个参数：hive.fetch.task.conversion,默认值是more.<br>
 以下面语句为例：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SQL1 : select * from live_info;</span><br><span class="line">SQL2 : select * from live_info where traffic in (&quot;1&quot;, &quot;3&quot;);</span><br><span class="line">SQL3 : select count(1) from live_info;</span><br><span class="line">SQL4 : select user, count(1) as user_count from live_info group by user;</span><br><span class="line">SQL5 : select user, count(1) as user_count from live_info group by user order by user desc;</span><br></pre></td></tr></table></figure>
+<h2 id="fetch">fetch</h2>
+<p>参数：hive.fetch.task.conversion</p>
 <table>
 <thead>
 <tr>
@@ -608,7 +620,7 @@ sum</p>
 <tr>
 <td>more</td>
 <td>SELECT, FILTER, LIMIT only (including TABLESAMPLE, virtual columns)</td>
-<td>仅SQL1、SQL2不走MR</td>
+<td>仅SQL1、SQL2不走MR ，过滤条件是某一个字段的内容或limit或分区条件不跑mr</td>
 </tr>
 </tbody>
 </table>
@@ -675,7 +687,7 @@ sum</p>
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#欢迎来到stefanboy的博客感谢大家对我的支持"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">&#x6B22;&#x8FCE;&#x6765;&#x5230;Stefanboy&#x7684;&#x535A;&#x5BA2;&#xFF0C;&#x611F;&#x8C22;&#x5927;&#x5BB6;&#x5BF9;&#x6211;&#x7684;&#x652F;&#x6301;.</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#hive的ddl操作"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">Hive&#x7684;DDL&#x64CD;&#x4F5C;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#创建数据库"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text">&#x521B;&#x5EFA;&#x6570;&#x636E;&#x5E93;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#数据库操作"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text">&#x6570;&#x636E;&#x5E93;&#x64CD;&#x4F5C;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#创建表"><span class="toc-nav-number">2.3.</span> <span class="toc-nav-text">&#x521B;&#x5EFA;&#x8868;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#创建普通表指定列分隔符为t并指定存储路径"><span class="toc-nav-number">2.3.1.</span> <span class="toc-nav-text">&#x521B;&#x5EFA;&#x666E;&#x901A;&#x8868;&#x6307;&#x5B9A;&#x5217;&#x5206;&#x9694;&#x7B26;&#x4E3A;&#x2018;\t&#x2019;,&#x5E76;&#x6307;&#x5B9A;&#x5B58;&#x50A8;&#x8DEF;&#x5F84;</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#根据查询结果创建表"><span class="toc-nav-number">2.3.2.</span> <span class="toc-nav-text">&#x6839;&#x636E;&#x67E5;&#x8BE2;&#x7ED3;&#x679C;&#x521B;&#x5EFA;&#x8868;</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#使用like创建表"><span class="toc-nav-number">2.3.3.</span> <span class="toc-nav-text">&#x4F7F;&#x7528;like&#x521B;&#x5EFA;&#x8868;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#外部表和内部表"><span class="toc-nav-number">2.4.</span> <span class="toc-nav-text">&#x5916;&#x90E8;&#x8868;&#x548C;&#x5185;&#x90E8;&#x8868;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#分区表"><span class="toc-nav-number">2.5.</span> <span class="toc-nav-text">&#x5206;&#x533A;&#x8868;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#概念"><span class="toc-nav-number">2.5.1.</span> <span class="toc-nav-text">&#x6982;&#x5FF5;</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#优点"><span class="toc-nav-number">2.5.2.</span> <span class="toc-nav-text">&#x4F18;&#x70B9;</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#建表语句"><span class="toc-nav-number">2.5.3.</span> <span class="toc-nav-text">&#x5EFA;&#x8868;&#x8BED;&#x53E5;</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#把emp的数据加载到emp分区表中去分区字段是deptno"><span class="toc-nav-number">2.5.4.</span> <span class="toc-nav-text">&#x628A;emp&#x7684;&#x6570;&#x636E;&#x52A0;&#x8F7D;&#x5230;emp&#x5206;&#x533A;&#x8868;&#x4E2D;&#x53BB;&#xFF0C;&#x5206;&#x533A;&#x5B57;&#x6BB5;&#x662F;deptno</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#动态分区"><span class="toc-nav-number">2.5.5.</span> <span class="toc-nav-text">&#x52A8;&#x6001;&#x5206;&#x533A;</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#把数据直接上传到分区目录上让分区表和数据产生关联的三种方式"><span class="toc-nav-number">2.5.6.</span> <span class="toc-nav-text">&#x628A;&#x6570;&#x636E;&#x76F4;&#x63A5;&#x4E0A;&#x4F20;&#x5230;&#x5206;&#x533A;&#x76EE;&#x5F55;&#x4E0A;&#xFF0C;&#x8BA9;&#x5206;&#x533A;&#x8868;&#x548C;&#x6570;&#x636E;&#x4EA7;&#x751F;&#x5173;&#x8054;&#x7684;&#x4E09;&#x79CD;&#x65B9;&#x5F0F;</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#修改表"><span class="toc-nav-number">2.5.7.</span> <span class="toc-nav-text">&#x4FEE;&#x6539;&#x8868;</span></a></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#dml操作"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">DML&#x64CD;&#x4F5C;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#向表中load数据"><span class="toc-nav-number">3.1.</span> <span class="toc-nav-text">&#x5411;&#x8868;&#x4E2D;load&#x6570;&#x636E;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#导入本地文件"><span class="toc-nav-number">3.1.1.</span> <span class="toc-nav-text">&#x5BFC;&#x5165;&#x672C;&#x5730;&#x6587;&#x4EF6;</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#导入hdfs上的文件"><span class="toc-nav-number">3.1.2.</span> <span class="toc-nav-text">&#x5BFC;&#x5165;hdfs&#x4E0A;&#x7684;&#x6587;&#x4EF6;</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#覆盖表中已有的数据"><span class="toc-nav-number">3.1.3.</span> <span class="toc-nav-text">&#x8986;&#x76D6;&#x8868;&#x4E2D;&#x5DF2;&#x6709;&#x7684;&#x6570;&#x636E;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#通过insert语句插入数据"><span class="toc-nav-number">3.2.</span> <span class="toc-nav-text">&#x901A;&#x8FC7;insert&#x8BED;&#x53E5;&#x63D2;&#x5165;&#x6570;&#x636E;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#dql"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">DQL</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#hive-dql"><span class="toc-nav-number">4.1.</span> <span class="toc-nav-text">Hive DQL</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#where"><span class="toc-nav-number">4.2.</span> <span class="toc-nav-text">WHERE</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#all和distinct"><span class="toc-nav-number">4.3.</span> <span class="toc-nav-text">ALL&#x548C;DISTINCT</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#基于分区的查询"><span class="toc-nav-number">4.4.</span> <span class="toc-nav-text">&#x57FA;&#x4E8E;&#x5206;&#x533A;&#x7684;&#x67E5;&#x8BE2;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#having"><span class="toc-nav-number">4.5.</span> <span class="toc-nav-text">HAVING</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#聚合函数"><span class="toc-nav-number">4.6.</span> <span class="toc-nav-text">&#x805A;&#x5408;&#x51FD;&#x6570;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#hive-sql-什么情况跑mr什么情况不跑mr"><span class="toc-nav-number">4.7.</span> <span class="toc-nav-text">Hive SQL &#xFF0C;&#x4EC0;&#x4E48;&#x60C5;&#x51B5;&#x8DD1;MR&#xFF0C;&#x4EC0;&#x4E48;&#x60C5;&#x51B5;&#x4E0D;&#x8DD1;MR&#xFF1F;</span></a></li></ol></li></ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#欢迎来到stefanboy的博客感谢大家对我的支持"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">&#x6B22;&#x8FCE;&#x6765;&#x5230;Stefanboy&#x7684;&#x535A;&#x5BA2;&#xFF0C;&#x611F;&#x8C22;&#x5927;&#x5BB6;&#x5BF9;&#x6211;&#x7684;&#x652F;&#x6301;.</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#hive的ddl操作"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">Hive&#x7684;DDL&#x64CD;&#x4F5C;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#创建数据库"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text">&#x521B;&#x5EFA;&#x6570;&#x636E;&#x5E93;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#数据库操作"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text">&#x6570;&#x636E;&#x5E93;&#x64CD;&#x4F5C;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#表操作"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">&#x8868;&#x64CD;&#x4F5C;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#创建普通表指定列分隔符为t并指定存储路径"><span class="toc-nav-number">3.1.</span> <span class="toc-nav-text">&#x521B;&#x5EFA;&#x666E;&#x901A;&#x8868;&#x6307;&#x5B9A;&#x5217;&#x5206;&#x9694;&#x7B26;&#x4E3A;&#x2018;\t&#x2019;,&#x5E76;&#x6307;&#x5B9A;&#x5B58;&#x50A8;&#x8DEF;&#x5F84;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#查看表"><span class="toc-nav-number">3.2.</span> <span class="toc-nav-text">&#x67E5;&#x770B;&#x8868;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#根据查询结果创建表创建的表和数据都有"><span class="toc-nav-number">3.2.1.</span> <span class="toc-nav-text">&#x6839;&#x636E;&#x67E5;&#x8BE2;&#x7ED3;&#x679C;&#x521B;&#x5EFA;&#x8868;(&#x521B;&#x5EFA;&#x7684;&#x8868;&#x548C;&#x6570;&#x636E;&#x90FD;&#x6709;)</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#使用like创建表只复制表结构"><span class="toc-nav-number">3.2.2.</span> <span class="toc-nav-text">&#x4F7F;&#x7528;like&#x521B;&#x5EFA;&#x8868;&#xFF08;&#x53EA;&#x590D;&#x5236;&#x8868;&#x7ED3;&#x6784;&#xFF09;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#修改表"><span class="toc-nav-number">3.3.</span> <span class="toc-nav-text">&#x4FEE;&#x6539;&#x8868;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#删除表"><span class="toc-nav-number">3.4.</span> <span class="toc-nav-text">&#x5220;&#x9664;&#x8868;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#清除表"><span class="toc-nav-number">3.5.</span> <span class="toc-nav-text">&#x6E05;&#x9664;&#x8868;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#外部表和内部表"><span class="toc-nav-number">3.6.</span> <span class="toc-nav-text">&#x5916;&#x90E8;&#x8868;&#x548C;&#x5185;&#x90E8;&#x8868;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#分区表"><span class="toc-nav-number">3.7.</span> <span class="toc-nav-text">&#x5206;&#x533A;&#x8868;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#概念"><span class="toc-nav-number">3.7.1.</span> <span class="toc-nav-text">&#x6982;&#x5FF5;</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#优点"><span class="toc-nav-number">3.7.2.</span> <span class="toc-nav-text">&#x4F18;&#x70B9;</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#建表语句"><span class="toc-nav-number">3.7.3.</span> <span class="toc-nav-text">&#x5EFA;&#x8868;&#x8BED;&#x53E5;</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#把emp的数据加载到emp分区表中去分区字段是deptno"><span class="toc-nav-number">3.7.4.</span> <span class="toc-nav-text">&#x628A;emp&#x7684;&#x6570;&#x636E;&#x52A0;&#x8F7D;&#x5230;emp&#x5206;&#x533A;&#x8868;&#x4E2D;&#x53BB;&#xFF0C;&#x5206;&#x533A;&#x5B57;&#x6BB5;&#x662F;deptno</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#动态分区"><span class="toc-nav-number">3.7.5.</span> <span class="toc-nav-text">&#x52A8;&#x6001;&#x5206;&#x533A;</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#把数据直接上传到分区目录上让分区表和数据产生关联的三种方式"><span class="toc-nav-number">3.7.6.</span> <span class="toc-nav-text">&#x628A;&#x6570;&#x636E;&#x76F4;&#x63A5;&#x4E0A;&#x4F20;&#x5230;&#x5206;&#x533A;&#x76EE;&#x5F55;&#x4E0A;&#xFF0C;&#x8BA9;&#x5206;&#x533A;&#x8868;&#x548C;&#x6570;&#x636E;&#x4EA7;&#x751F;&#x5173;&#x8054;&#x7684;&#x4E09;&#x79CD;&#x65B9;&#x5F0F;</span></a></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#dml操作"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">DML&#x64CD;&#x4F5C;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#向表中load数据"><span class="toc-nav-number">4.1.</span> <span class="toc-nav-text">&#x5411;&#x8868;&#x4E2D;load&#x6570;&#x636E;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#导入本地文件"><span class="toc-nav-number">4.1.1.</span> <span class="toc-nav-text">&#x5BFC;&#x5165;&#x672C;&#x5730;&#x6587;&#x4EF6;</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#导入hdfs上的文件"><span class="toc-nav-number">4.1.2.</span> <span class="toc-nav-text">&#x5BFC;&#x5165;hdfs&#x4E0A;&#x7684;&#x6587;&#x4EF6;</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#覆盖表中已有的数据"><span class="toc-nav-number">4.1.3.</span> <span class="toc-nav-text">&#x8986;&#x76D6;&#x8868;&#x4E2D;&#x5DF2;&#x6709;&#x7684;&#x6570;&#x636E;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#通过insert语句插入数据"><span class="toc-nav-number">4.2.</span> <span class="toc-nav-text">&#x901A;&#x8FC7;insert&#x8BED;&#x53E5;&#x63D2;&#x5165;&#x6570;&#x636E;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#基本插入数据"><span class="toc-nav-number">4.2.1.</span> <span class="toc-nav-text">&#x57FA;&#x672C;&#x63D2;&#x5165;&#x6570;&#x636E;</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#根据查询结果插入数据"><span class="toc-nav-number">4.2.2.</span> <span class="toc-nav-text">&#x6839;&#x636E;&#x67E5;&#x8BE2;&#x7ED3;&#x679C;&#x63D2;&#x5165;&#x6570;&#x636E;</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#ctas-create-table-as-select"><span class="toc-nav-number">4.2.3.</span> <span class="toc-nav-text">CTAS create table &#x2026; as select&#x2026;</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#insert表必须事先存在"><span class="toc-nav-number">4.2.4.</span> <span class="toc-nav-text">insert&#xFF1A;&#x8868;&#x5FC5;&#x987B;&#x4E8B;&#x5148;&#x5B58;&#x5728;</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#创建表时通过location指定加载数据路径"><span class="toc-nav-number">4.2.5.</span> <span class="toc-nav-text">&#x521B;&#x5EFA;&#x8868;&#x65F6;&#x901A;&#x8FC7;Location&#x6307;&#x5B9A;&#x52A0;&#x8F7D;&#x6570;&#x636E;&#x8DEF;&#x5F84;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#数据导出"><span class="toc-nav-number">4.3.</span> <span class="toc-nav-text">&#x6570;&#x636E;&#x5BFC;&#x51FA;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#hive-dql"><span class="toc-nav-number">5.</span> <span class="toc-nav-text">Hive DQL</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#where"><span class="toc-nav-number">5.1.</span> <span class="toc-nav-text">WHERE</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#all和distinct"><span class="toc-nav-number">5.2.</span> <span class="toc-nav-text">ALL&#x548C;DISTINCT</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#基于分区的查询"><span class="toc-nav-number">5.3.</span> <span class="toc-nav-text">&#x57FA;&#x4E8E;&#x5206;&#x533A;&#x7684;&#x67E5;&#x8BE2;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#having"><span class="toc-nav-number">5.4.</span> <span class="toc-nav-text">HAVING</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#聚合函数"><span class="toc-nav-number">5.5.</span> <span class="toc-nav-text">&#x805A;&#x5408;&#x51FD;&#x6570;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#hive-sql-什么情况跑mr什么情况不跑mr"><span class="toc-nav-number">5.6.</span> <span class="toc-nav-text">Hive SQL &#xFF0C;&#x4EC0;&#x4E48;&#x60C5;&#x51B5;&#x8DD1;MR&#xFF0C;&#x4EC0;&#x4E48;&#x60C5;&#x51B5;&#x4E0D;&#x8DD1;MR&#xFF1F;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#fetch"><span class="toc-nav-number">6.</span> <span class="toc-nav-text">fetch</span></a></li></ol>
         
         </div>
       </aside>
