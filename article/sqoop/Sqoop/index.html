@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/ironman-draw.png">
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <title>
+        
+          Sqoop安装&amp;导入导出 - Stefanboy | Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://yoursite.com/article/sqoop/Sqoop/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS --> 
+    <link rel="stylesheet" href="/css/beantech.min.css">
+
+    <link rel="stylesheet" href="/css/donate.css">
+    
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <link rel="stylesheet" href="/css/widget.css">
+
+    <link rel="stylesheet" href="/css/rocket.css">
+
+    <link rel="stylesheet" href="/css/signature.css">
+
+    <link rel="stylesheet" href="/css/toc.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+	<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        
+            background-image: url('/img/article_header/article_header.png')
+            /*post*/
+        
+    }
+    
+</style>
+
+<header class="intro-header" >
+    <!-- Signature -->
+    <div id="signature">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                
+                    <div class="post-heading">
+                        <div class="tags">
+                            
+                              <a class="tag" href="/tags/#Sqoop" title="Sqoop">Sqoop</a>
+                            
+                        </div>
+                        <h1>Sqoop安装&amp;导入导出</h1>
+                        <h2 class="subheading">How to use Sqoop</h2>
+                        <span class="meta">
+                            Posted by Stefanboy on
+                            2016-12-27
+                        </span>
+                    </div>
+                
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+	
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">StefanboyBlog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archive/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Modify by Yu-Hsuan Yen -->
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h2 id="欢迎来到stefanboy的博客感谢大家对我的支持">欢迎来到Stefanboy的博客，感谢大家对我的支持.</h2>
+<h2 id="sqoop">Sqoop</h2>
+<h3 id="概念">概念</h3>
+<p>数据从传统数据库和Hadoop之间进行导入导出，底层就是使用MapReduce来实现的，不过只有Map没有Reduce，因为不需要进行聚合操作</p>
+<h3 id="使用场景">使用场景</h3>
+<p>1）数据数据在RDBMS中，你想使用Hive进行处理<br>
+2）使用Hive统计分析好了，数据还在Hive中，如何导到mysql中，并将<br>
+	统计结果最终是通过报表可视化展示的</p>
+<ul>
+<li>
+<p>解决方案<br>
+可以使用mapreduce进行输出文件，但是编写很麻烦，所以出现Sqoop这种工具</p>
+</li>
+<li>
+<p>需要的参数<br>
+	RDBMS：url、driver、db、table、user、password<br>
+	HDFS：path<br>
+	Hive：databse、table、partition</p>
+</li>
+</ul>
+<h3 id="版本">版本</h3>
+<p>1.4.*  Sqoop1  ***<br>
+1.99.*  Sqoop2<br>
+主流使用1.4.x版本</p>
+<h3 id="参照点">参照点</h3>
+<p>基于Hadoop作为参考点/基准点</p>
+<ul>
+<li>导入: import<br>
+	RDBMS ==&gt; Hadoop</li>
+<li>导出: export<br>
+	Hadoop ==&gt; RDBMS</li>
+</ul>
+<h3 id="安装部署">安装部署</h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">下载</span><br><span class="line">wget http://archive.cloudera.com/cdh5/cdh/5/sqoop-1.4.6-cdh5.16.2.tar.gz</span><br><span class="line"></span><br><span class="line">移动到sofaware目录下</span><br><span class="line">[root@JD ~]# mv sqoop-1.4.6-cdh5.16.2.tar.gz /home/hadoop/sofaware/</span><br><span class="line"></span><br><span class="line">切换hadoop用户</span><br><span class="line">[root@JD software]# su - hadoop</span><br><span class="line"></span><br><span class="line">解压</span><br><span class="line">[hadoop@JD software]$ tar -zxvf sqoop-1.4.6-cdh5.16.2.tar.gz -C ~/app/</span><br><span class="line"></span><br><span class="line">解压完后需要向Sqoop的lib目录下添加jar包</span><br><span class="line">mysql-connector-java-5.1.27-bin.jar</span><br><span class="line">java-json.jar</span><br><span class="line">hive-common-1.1.0-cdh5.16.2.jar</span><br><span class="line">hive-exec-1.1.0-cdh5.16.2.jar</span><br><span class="line"></span><br><span class="line">配置环境变量</span><br><span class="line">[hadoop@JD ~]$ vi ~/.bashrc</span><br><span class="line">export SQOOP_HOME=/home/hadoop/app/sqoop-1.4.6-cdh5.16.2</span><br><span class="line">export PATH=$SQOOP_HOME/bin:$PATH</span><br><span class="line"></span><br><span class="line">加载环境变量</span><br><span class="line">[hadoop@JD ~]$ source ~/.bashrc</span><br><span class="line"></span><br><span class="line">进入Sqoop的conf目录下，复制sqoop-env-template.sh为sqoop-env.sh</span><br><span class="line">[hadoop@JD conf]$ cp sqoop-env-template.sh sqoop-env.sh </span><br><span class="line"></span><br><span class="line">配置增加hadoop和hive的路径</span><br><span class="line">[hadoop@JD conf]$ vi sqoop-env.sh</span><br><span class="line">export HADOOP_COMMON_HOME=/home/hadoop/app/hadoop-2.6.0-cdh5.16.2</span><br><span class="line">export HADOOP_MAPRED_HOME=/home/hadoop/app/hadoop-2.6.0-cdh5.16.2</span><br><span class="line">export HIVE_HOME=/home/hadoop/app/hive-1.1.0-cdh5.16.2</span><br><span class="line"></span><br><span class="line">将mysql驱动包复制到lib目录下</span><br><span class="line">[hadoop@JD lib]$ cp mysql-connector-java-5.1.27-bin.jar /home/hadoop/app/sqoop-1.4.6-cdh5.16.2/lib</span><br></pre></td></tr></table></figure>
+<h3 id="简单使用">简单使用</h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">查看命令帮助</span><br><span class="line">[hadoop@JD sqoop-1.4.6-cdh5.16.2]$ sqoop help</span><br><span class="line">usage: sqoop COMMAND [ARGS]</span><br><span class="line">Available commands:</span><br><span class="line">  codegen            Generate code to interact with database records</span><br><span class="line">  create-hive-table  Import a table definition into Hive</span><br><span class="line">  eval               Evaluate a SQL statement and display the results</span><br><span class="line">  export             Export an HDFS directory to a database table</span><br><span class="line">  help               List available commands</span><br><span class="line">  import             Import a table from a database to HDFS</span><br><span class="line">  import-all-tables  Import tables from a database to HDFS</span><br><span class="line">  import-mainframe   Import datasets from a mainframe server to HDFS</span><br><span class="line">  job                Work with saved jobs</span><br><span class="line">  list-databases     List available databases on a server</span><br><span class="line">  list-tables        List available tables in a database</span><br><span class="line">  merge              Merge results of incremental imports</span><br><span class="line">  metastore          Run a standalone Sqoop metastore</span><br><span class="line">  version            Display version information</span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line">  查看某一个命令的使用</span><br><span class="line">  [hadoop@JD sqoop-1.4.6-cdh5.16.2]$ sqoop help list-databases</span><br><span class="line">  </span><br><span class="line">  查看mysql中有多少个数据库</span><br><span class="line">  [hadoop@JD sqoop-1.4.6-cdh5.16.2]$ sqoop list-databases --connect jdbc:mysql://JD:3306 --username root --password xxx</span><br><span class="line">  information_schema</span><br><span class="line">  bigdata</span><br><span class="line">  mysql</span><br><span class="line">  performance_schema</span><br><span class="line">  ruozedata_erp</span><br><span class="line">  ruozedata_hive</span><br><span class="line">  test</span><br><span class="line"> </span><br><span class="line">查看mysql中某一数据库有多少张表</span><br><span class="line">[hadoop@JD sqoop-1.4.6-cdh5.16.2]$ sqoop list-tables --connect jdbc:mysql://JD:3306/bigdata --username root --password xxx</span><br><span class="line">dept</span><br><span class="line">emp</span><br><span class="line">sal</span><br><span class="line">salgrade</span><br><span class="line">testdata</span><br></pre></td></tr></table></figure>
+<h3 id="数据导入表的数据导入到hdfs">数据导入（表的数据导入到HDFS）</h3>
+<p>参数介绍<br>
+–connect mysql数据库地址<br>
+–username 数据库用户名<br>
+–password 数据库密码<br>
+–table 表名<br>
+–delete-target-dir 导入前先删除HDFS上的文件夹<br>
+–mapreduce-job-name mr任务的名称<br>
+–columns 指定mysql的字段<br>
+–target-dir 指定存储在HDFS的路径<br>
+–fields-terminated-by 指定分割标识，默认是，<br>
+–null-string 指定字符串型的null为默认值<br>
+–null-non-string 指定非字符串的null为默认值<br>
+-m 指定mr的任务数，默认为4个<br>
+–query 指定sql语句进行查询</p>
+<p>–incremental append <br>
+–check-column EMPNO <br>
+–last-value 7788 <br>
+按照EMPNO字段在7788以后进行数据追加</p>
+<p>sqoop --options-file sqoop执行文件命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br></pre></td><td class="code"><pre><span class="line">1、在数据库的emp表导出字段EMPNO,ENAME,JOB,SAL,COMM，并按\t进行分割，如果字符串为null则为‘’，如果非字符串为null则为0，运行一个task，任务名称为FromMySQL2HDFS</span><br><span class="line">sqoop import \</span><br><span class="line">--connect jdbc:mysql://JD:3306/bigdata \</span><br><span class="line">--password mysqladmin --username root \</span><br><span class="line">--table emp  \</span><br><span class="line">--delete-target-dir --mapreduce-job-name FromMySQL2HDFS \</span><br><span class="line">--columns &quot;EMPNO,ENAME,JOB,SAL,COMM&quot; \</span><br><span class="line">--target-dir EMP_COLUMN_QUERY \</span><br><span class="line">--fields-terminated-by &apos;\t&apos; \</span><br><span class="line">--null-string &apos;&apos; \</span><br><span class="line">--null-non-string &apos;0&apos; \</span><br><span class="line">-m 1</span><br><span class="line"></span><br><span class="line">查看导入到hdfs的文件</span><br><span class="line">[hadoop@JD bin]$ hadoop fs -cat /user/hadoop/EMP_COLUMN_QUERY/part*</span><br><span class="line"></span><br><span class="line">7369    SMITH   CLERK   800.00  0</span><br><span class="line">7499    ALLEN   SALESMAN        1600.00 300.00</span><br><span class="line">7521    WARD    SALESMAN        1250.00 500.00</span><br><span class="line">7566    JONES   MANAGER 2975.00 0</span><br><span class="line">7654    MARTIN  SALESMAN        1250.00 1400.00</span><br><span class="line">7698    BLAKE   MANAGER 2850.00 0</span><br><span class="line">7782    CLARK   MANAGER 2450.00 0</span><br><span class="line">7788    SCOTT   ANALYST 3000.00 0</span><br><span class="line">7839    KING    PRESIDENT       5000.00 0</span><br><span class="line">7844    TURNER  SALESMAN        1500.00 0.00</span><br><span class="line">7876    ADAMS   CLERK   1100.00 0</span><br><span class="line">7902    FORD    ANALYST 3000.00 0</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">2、自己写sql语句导入到hdfs时，在sql语句中需加入</span><br><span class="line">$CONDITIONS，并且sql语句需要用&apos;&apos;进行修饰</span><br><span class="line"></span><br><span class="line">sqoop import \</span><br><span class="line">--connect jdbc:mysql://JD:3306/bigdata \</span><br><span class="line">--password mysqladmin --username root \</span><br><span class="line">--delete-target-dir --mapreduce-job-name FromMySQL2HDFS \</span><br><span class="line">--target-dir JOIN \</span><br><span class="line">--fields-terminated-by &apos;\t&apos; \</span><br><span class="line">--null-string &apos;&apos; \</span><br><span class="line">--null-non-string &apos;0&apos; \</span><br><span class="line">--query &apos;select e.empno,e.ename,e.deptno,d.dname from emp e join dept d on e.deptno=d.deptno and $CONDITIONS&apos; \</span><br><span class="line">-m 1</span><br><span class="line"></span><br><span class="line">查看数据</span><br><span class="line">[hadoop@JD bin]$ hadoop fs -cat JOIN/part*</span><br><span class="line">7369    SMITH   20      RESEARCH</span><br><span class="line">7499    ALLEN   30      SALES</span><br><span class="line">7521    WARD    30      SALES</span><br><span class="line">7566    JONES   20      RESEARCH</span><br><span class="line">7654    MARTIN  30      SALES</span><br><span class="line">7698    BLAKE   30      SALES</span><br><span class="line">7782    CLARK   10      ACCOUNTING</span><br><span class="line">7788    SCOTT   20      RESEARCH</span><br><span class="line">7839    KING    10      ACCOUNTING</span><br><span class="line">7844    TURNER  30      SALES</span><br><span class="line">7876    ADAMS   20      RESEARCH</span><br><span class="line">7902    FORD    20      RESEARCH</span><br><span class="line"></span><br><span class="line">3、向hdfs中的emp中追加数据</span><br><span class="line">sqoop import \</span><br><span class="line">--connect jdbc:mysql://JD:3306/bigdata \</span><br><span class="line">--password mysqladmin --username root \</span><br><span class="line">--table emp  \</span><br><span class="line">--mapreduce-job-name FromMySQL2HDFS \</span><br><span class="line">--target-dir EMP_APPEND \</span><br><span class="line">--fields-terminated-by &apos;\t&apos; \</span><br><span class="line">--null-string &apos;&apos; \</span><br><span class="line">--incremental append \</span><br><span class="line">--check-column EMPNO \</span><br><span class="line">--last-value 7788 \</span><br><span class="line">--null-non-string &apos;0&apos; \</span><br><span class="line">-m 1</span><br><span class="line"></span><br><span class="line">查看数据</span><br><span class="line">[hadoop@JD bin]$ hadoop fs -cat emp/part*</span><br><span class="line">7839    KING    PRESIDENT       0       1981-11-17 00:00:00.0   5000.00 0       10</span><br><span class="line">7844    TURNER  SALESMAN        7698    1981-09-08 00:00:00.0   1500.00 0.00    30</span><br><span class="line">7876    ADAMS   CLERK   7788    1983-01-12 00:00:00.0   1100.00 0       20</span><br><span class="line">7902    FORD    ANALYST 7566    1981-12-03 00:00:00.0   3000.00 0       20</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">4、对于没有主键的表来说，运行导入数据到hdfs中时，要指定map任务是按照什么字段来分配</span><br><span class="line"></span><br><span class="line">sqoop import \</span><br><span class="line">--connect jdbc:mysql://JD:3306/bigdata \</span><br><span class="line">--password mysqladmin \</span><br><span class="line">--username root \</span><br><span class="line">--delete-target-dir \</span><br><span class="line">--table salgrade \</span><br><span class="line">--split-by &apos;GRADE&apos;</span><br><span class="line"></span><br><span class="line">[hadoop@JD bin]$ hadoop fs -ls salgrade/</span><br><span class="line">-rw-r--r--   1 hadoop supergroup          0 2019-12-26 23:09 salgrade/_SUCCESS</span><br><span class="line">-rw-r--r--   1 hadoop supergroup         11 2019-12-26 23:09 salgrade/part-m-00000</span><br><span class="line">-rw-r--r--   1 hadoop supergroup         12 2019-12-26 23:09 salgrade/part-m-00001</span><br><span class="line">-rw-r--r--   1 hadoop supergroup         12 2019-12-26 23:09 salgrade/part-m-00002</span><br><span class="line">-rw-r--r--   1 hadoop supergroup         24 2019-12-26 23:09 salgrade/part-m-00003</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">5、mysql原始数据</span><br><span class="line">mysql&gt; select * from dept;</span><br><span class="line">+--------+------------+----------+</span><br><span class="line">| deptno | dname      | loc      |</span><br><span class="line">+--------+------------+----------+</span><br><span class="line">|     10 | ACCOUNTING | NEW YORK |</span><br><span class="line">|     20 | RESEARCH   | DALLAS   |</span><br><span class="line">|     30 | SALES      | CHICAGO  |</span><br><span class="line">|     40 | OPERATIONS | BOSTON   |</span><br><span class="line">+--------+------------+----------+</span><br><span class="line">4 rows in set (0.00 sec)</span><br><span class="line"></span><br><span class="line">使用sqoop向mysql某表中插入一条数据</span><br><span class="line">[hadoop@JD bin]$ sqoop eval --connect jdbc:mysql://JD:3306/bigdata --password mysqladmin --username root --query &quot;insert into dept values (60,&apos;RD&apos;, &apos;BEIJING&apos;)&quot;</span><br><span class="line"></span><br><span class="line">查看mysql的数据</span><br><span class="line">mysql&gt; select * from dept;</span><br><span class="line">+--------+------------+----------+</span><br><span class="line">| deptno | dname      | loc      |</span><br><span class="line">+--------+------------+----------+</span><br><span class="line">|     10 | ACCOUNTING | NEW YORK |</span><br><span class="line">|     20 | RESEARCH   | DALLAS   |</span><br><span class="line">|     30 | SALES      | CHICAGO  |</span><br><span class="line">|     40 | OPERATIONS | BOSTON   |</span><br><span class="line">|     60 | RD         | BEIJING  |</span><br><span class="line">+--------+------------+----------+</span><br><span class="line">5 rows in set (0.01 sec)</span><br><span class="line"></span><br><span class="line">执行文件</span><br><span class="line"></span><br><span class="line">建立文件emp.opt内容如下</span><br><span class="line">import</span><br><span class="line">--connect</span><br><span class="line">jdbc:mysql://ruozedata001:3306/bigdata</span><br><span class="line">--password</span><br><span class="line">mysqladmin</span><br><span class="line">--username</span><br><span class="line">root</span><br><span class="line">--target-dir</span><br><span class="line">EMP_OPTIONS_FILE2</span><br><span class="line">--delete-target-dir</span><br><span class="line">--table</span><br><span class="line">emp</span><br><span class="line">-m</span><br><span class="line">2</span><br><span class="line"></span><br><span class="line">执行</span><br><span class="line">[hadoop@JD bin]$ sqoop --options-file ./emp.opt</span><br></pre></td></tr></table></figure>
+<h3 id="hdfs导出到mysql">HDFS导出到mysql</h3>
+<p>导出前需要自己创建表，如果表不存在，不会自动创建<br>
+sqoop export 导出<br>
+Dsqoop.export.records.per.statement 批量导出,每隔xx条提交一次<br>
+–export-dir 导出的文件夹<br>
+–columns  导出的字段<br>
+–fields-terminated-by  指定导出数据的分隔符<br>
+-m  map任务的个数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">进入mysql创建emp_demo表</span><br><span class="line">mysql&gt; create table emp_demo as select * from emp where 1=2</span><br><span class="line"></span><br><span class="line">导入数据</span><br><span class="line">sqoop export \</span><br><span class="line">-Dsqoop.export.records.per.statement=10 \</span><br><span class="line">--connect jdbc:mysql://JD:3306/bigdata \</span><br><span class="line">--password mysqladmin \</span><br><span class="line">--username root \</span><br><span class="line">--table emp_demo \</span><br><span class="line">--export-dir /user/hadoop/EMP_COLUMN_QUERY \</span><br><span class="line">--columns &quot;EMPNO,ENAME,JOB,SAL,COMM&quot; \</span><br><span class="line">--fields-terminated-by &apos;\t&apos; \</span><br><span class="line">-m 1</span><br><span class="line"></span><br><span class="line">在mysql查询是否导入成功</span><br><span class="line">mysql&gt; select * from emp_demo;</span><br><span class="line">+-------+--------+-----------+------+----------+---------+---------+--------+</span><br><span class="line">| empno | ename  | job       | mgr  | hiredate | sal     | comm    | deptno |</span><br><span class="line">+-------+--------+-----------+------+----------+---------+---------+--------+</span><br><span class="line">|  7369 | SMITH  | CLERK     | NULL | NULL     |  800.00 |    0.00 |   NULL |</span><br><span class="line">|  7499 | ALLEN  | SALESMAN  | NULL | NULL     | 1600.00 |  300.00 |   NULL |</span><br><span class="line">|  7521 | WARD   | SALESMAN  | NULL | NULL     | 1250.00 |  500.00 |   NULL |</span><br><span class="line">|  7566 | JONES  | MANAGER   | NULL | NULL     | 2975.00 |    0.00 |   NULL |</span><br><span class="line">|  7654 | MARTIN | SALESMAN  | NULL | NULL     | 1250.00 | 1400.00 |   NULL |</span><br><span class="line">|  7698 | BLAKE  | MANAGER   | NULL | NULL     | 2850.00 |    0.00 |   NULL |</span><br><span class="line">|  7782 | CLARK  | MANAGER   | NULL | NULL     | 2450.00 |    0.00 |   NULL |</span><br><span class="line">|  7788 | SCOTT  | ANALYST   | NULL | NULL     | 3000.00 |    0.00 |   NULL |</span><br><span class="line">|  7839 | KING   | PRESIDENT | NULL | NULL     | 5000.00 |    0.00 |   NULL |</span><br><span class="line">|  7844 | TURNER | SALESMAN  | NULL | NULL     | 1500.00 |    0.00 |   NULL |</span><br><span class="line">|  7876 | ADAMS  | CLERK     | NULL | NULL     | 1100.00 |    0.00 |   NULL |</span><br><span class="line">|  7902 | FORD   | ANALYST   | NULL | NULL     | 3000.00 |    0.00 |   NULL |</span><br><span class="line">+-------+--------+-----------+------+----------+---------+---------+--------+</span><br><span class="line">12 rows in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+<h3 id="mysql导入hive">MySQL导入Hive</h3>
+<p>MySQL导入Hive的时候，首先<strong>必须要在Hive中创建表</strong><br>
+–hive-overwrite  覆盖已存在的数据  默认是追加<br>
+hive-import  向Hive导入数据的标识<br>
+–hive-table  Hive的表名<br>
+–hive-partition-key  分区字段的key<br>
+–hive-partition-value  分区字段的value<br>
+–fields-terminated-by  字段分割符，默认为，</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br></pre></td><td class="code"><pre><span class="line">1、导入普通表</span><br><span class="line"></span><br><span class="line">在Hive中创建数据库</span><br><span class="line">CREATE TABLE emp_import(</span><br><span class="line">empno int,</span><br><span class="line">ename string,</span><br><span class="line">job string,</span><br><span class="line">mgr int,</span><br><span class="line">hiredate string,</span><br><span class="line">sal double,</span><br><span class="line">comm double,</span><br><span class="line">deptno int</span><br><span class="line">)</span><br><span class="line">ROW FORMAT DELIMITED FIELDS TERMINATED BY &apos;\t&apos;;</span><br><span class="line"></span><br><span class="line">将mysql数据导入hive的普通表中</span><br><span class="line">sqoop import \</span><br><span class="line">--connect jdbc:mysql://JD:3306/bigdata \</span><br><span class="line">--password mysqladmin \</span><br><span class="line">--username root \</span><br><span class="line">--table emp \</span><br><span class="line">--hive-overwrite \</span><br><span class="line">--delete-target-dir \</span><br><span class="line">--hive-import --hive-database db_hive1 \</span><br><span class="line">--hive-table emp_import \</span><br><span class="line">--fields-terminated-by &apos;\t&apos; \</span><br><span class="line">-m 1</span><br><span class="line"></span><br><span class="line">在hive中查询</span><br><span class="line">hive (db_hive1)&gt; select * from emp_import;</span><br><span class="line">OK</span><br><span class="line">emp_import.empno        emp_import.ename        emp_import.job  emp_import.mgr  emp_import.hiredate     emp_import.sal  emp_import.comm emp_import.deptno</span><br><span class="line">7369    SMITH   CLERK   7902    1980-12-17 00:00:00.0   800.0   NULL    20</span><br><span class="line">7499    ALLEN   SALESMAN        7698    1981-02-20 00:00:00.0   1600.0  300.0   30</span><br><span class="line">7521    WARD    SALESMAN        7698    1981-02-22 00:00:00.0   1250.0  500.0   30</span><br><span class="line">7566    JONES   MANAGER 7839    1981-04-02 00:00:00.0   2975.0  NULL    20</span><br><span class="line">7654    MARTIN  SALESMAN        7698    1981-09-28 00:00:00.0   1250.0  1400.0  30</span><br><span class="line">7698    BLAKE   MANAGER 7839    1981-05-01 00:00:00.0   2850.0  NULL    30</span><br><span class="line">7782    CLARK   MANAGER 7839    1981-06-09 00:00:00.0   2450.0  NULL    10</span><br><span class="line">7788    SCOTT   ANALYST 7566    1982-12-09 00:00:00.0   3000.0  NULL    20</span><br><span class="line">7839    KING    PRESIDENT       NULL    1981-11-17 00:00:00.0   5000.0  NULL    10</span><br><span class="line">7844    TURNER  SALESMAN        7698    1981-09-08 00:00:00.0   1500.0  0.0     30</span><br><span class="line">7876    ADAMS   CLERK   7788    1983-01-12 00:00:00.0   1100.0  NULL    20</span><br><span class="line">7902    FORD    ANALYST 7566    1981-12-03 00:00:00.0   3000.0  NULL    20</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">2、导入mysql数据到hive的分区表中</span><br><span class="line"></span><br><span class="line">在hive中创建分区表</span><br><span class="line">CREATE TABLE emp_import_partition(</span><br><span class="line">empno int,</span><br><span class="line">ename string,</span><br><span class="line">job string,</span><br><span class="line">mgr int,</span><br><span class="line">hiredate string,</span><br><span class="line">sal double,</span><br><span class="line">comm double,</span><br><span class="line">deptno int</span><br><span class="line">)</span><br><span class="line">partitioned by (pt string)</span><br><span class="line">ROW FORMAT DELIMITED FIELDS TERMINATED BY &apos;\t&apos;;</span><br><span class="line"></span><br><span class="line">导入数据</span><br><span class="line">sqoop import \</span><br><span class="line">--connect jdbc:mysql://JD:3306/bigdata \</span><br><span class="line">--password mysqladmin \</span><br><span class="line">--username root \</span><br><span class="line">--table emp \</span><br><span class="line">--hive-overwrite \</span><br><span class="line">--delete-target-dir \</span><br><span class="line">--hive-import --hive-database db_hive1 \</span><br><span class="line">--hive-table emp_import_partition \</span><br><span class="line">--hive-partition-key &apos;pt&apos; \</span><br><span class="line">--hive-partition-value &apos;2019-12-30&apos; \</span><br><span class="line">--fields-terminated-by &apos;\t&apos; \</span><br><span class="line">-m 1</span><br><span class="line"></span><br><span class="line">查看数据</span><br><span class="line">hive (db_hive1)&gt; select * from emp_import_partition where pt=&apos;2019-12-30&apos;;</span><br><span class="line"></span><br><span class="line">emp_import_partition.empno      emp_import_partition.ename      emp_import_partition.job        emp_import_partition.mgr        emp_import_partition.hiredate   emp_import_partition.sal    emp_import_partition.comm       emp_import_partition.deptno     emp_import_partition.pt</span><br><span class="line">7369    SMITH   CLERK   7902    1980-12-17 00:00:00.0   800.0   NULL    20      2019-12-30</span><br><span class="line">7499    ALLEN   SALESMAN        7698    1981-02-20 00:00:00.0   1600.0  300.0   30      2019-12-30</span><br><span class="line">7521    WARD    SALESMAN        7698    1981-02-22 00:00:00.0   1250.0  500.0   30      2019-12-30</span><br><span class="line">7566    JONES   MANAGER 7839    1981-04-02 00:00:00.0   2975.0  NULL    20      2019-12-30</span><br><span class="line">7654    MARTIN  SALESMAN        7698    1981-09-28 00:00:00.0   1250.0  1400.0  30      2019-12-30</span><br><span class="line">7698    BLAKE   MANAGER 7839    1981-05-01 00:00:00.0   2850.0  NULL    30      2019-12-30</span><br><span class="line">7782    CLARK   MANAGER 7839    1981-06-09 00:00:00.0   2450.0  NULL    10      2019-12-30</span><br><span class="line">7788    SCOTT   ANALYST 7566    1982-12-09 00:00:00.0   3000.0  NULL    20      2019-12-30</span><br><span class="line">7839    KING    PRESIDENT       NULL    1981-11-17 00:00:00.0   5000.0  NULL    10      2019-12-30</span><br><span class="line">7844    TURNER  SALESMAN        7698    1981-09-08 00:00:00.0   1500.0  0.0     30      2019-12-30</span><br><span class="line">7876    ADAMS   CLERK   7788    1983-01-12 00:00:00.0   1100.0  NULL    20      2019-12-30</span><br><span class="line">7902    FORD    ANALYST 7566    1981-12-03 00:00:00.0   3000.0  NULL    20      2019-12-30</span><br></pre></td></tr></table></figure>
+<h3 id="hive导出mysql">Hive导出MySQL</h3>
+<p>首先要在mysql创建表<br>
+默认是追加数据<br>
+–export-dir  指定要导出的数据在HDFS的位置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line">在hive中导出数据</span><br><span class="line">sqoop export \</span><br><span class="line">--connect jdbc:mysql://JD:3306/bigdata \</span><br><span class="line">--password mysqladmin \</span><br><span class="line">--username root \</span><br><span class="line">--table emp_demo \</span><br><span class="line">--export-dir /user/hive/warehouse/db_hive1.db/emp \</span><br><span class="line">-m 1</span><br><span class="line"></span><br><span class="line">查看mysql,查出数据</span><br><span class="line">mysql&gt; select * from emp_demo;</span><br><span class="line">mysql&gt; select * from emp_demo;</span><br><span class="line">+-------+--------+-----------+------+---------------------+---------+---------+--------+</span><br><span class="line">| empno | ename  | job       | mgr  | hiredate            | sal     | comm    | deptno |</span><br><span class="line">+-------+--------+-----------+------+---------------------+---------+---------+--------+</span><br><span class="line">|  7369 | SMITH  | CLERK     | NULL | NULL                |  800.00 |    0.00 |   NULL |</span><br><span class="line">|  7499 | ALLEN  | SALESMAN  | NULL | NULL                | 1600.00 |  300.00 |   NULL |</span><br><span class="line">|  7521 | WARD   | SALESMAN  | NULL | NULL                | 1250.00 |  500.00 |   NULL |</span><br><span class="line">|  7566 | JONES  | MANAGER   | NULL | NULL                | 2975.00 |    0.00 |   NULL |</span><br><span class="line">|  7654 | MARTIN | SALESMAN  | NULL | NULL                | 1250.00 | 1400.00 |   NULL |</span><br><span class="line">|  7698 | BLAKE  | MANAGER   | NULL | NULL                | 2850.00 |    0.00 |   NULL |</span><br><span class="line">|  7782 | CLARK  | MANAGER   | NULL | NULL                | 2450.00 |    0.00 |   NULL |</span><br><span class="line">|  7788 | SCOTT  | ANALYST   | NULL | NULL                | 3000.00 |    0.00 |   NULL |</span><br><span class="line">|  7839 | KING   | PRESIDENT | NULL | NULL                | 5000.00 |    0.00 |   NULL |</span><br><span class="line">|  7844 | TURNER | SALESMAN  | NULL | NULL                | 1500.00 |    0.00 |   NULL |</span><br><span class="line">|  7876 | ADAMS  | CLERK     | NULL | NULL                | 1100.00 |    0.00 |   NULL |</span><br><span class="line">|  7902 | FORD   | ANALYST   | NULL | NULL                | 3000.00 |    0.00 |   NULL |</span><br><span class="line">|  7369 | SMITH  | CLERK     | 7902 | 1980-12-17 00:00:00 |  800.00 |    NULL |     20 |</span><br><span class="line">|  7499 | ALLEN  | SALESMAN  | 7698 | 1981-02-20 00:00:00 | 1600.00 |  300.00 |     30 |</span><br><span class="line">|  7521 | WARD   | SALESMAN  | 7698 | 1981-02-22 00:00:00 | 1250.00 |  500.00 |     30 |</span><br><span class="line">|  7566 | JONES  | MANAGER   | 7839 | 1981-04-02 00:00:00 | 2975.00 |    NULL |     20 |</span><br><span class="line">|  7654 | MARTIN | SALESMAN  | 7698 | 1981-09-28 00:00:00 | 1250.00 | 1400.00 |     30 |</span><br><span class="line">|  7698 | BLAKE  | MANAGER   | 7839 | 1981-05-01 00:00:00 | 2850.00 |    NULL |     30 |</span><br><span class="line">|  7782 | CLARK  | MANAGER   | 7839 | 1981-06-09 00:00:00 | 2450.00 |    NULL |     10 |</span><br><span class="line">|  7788 | SCOTT  | ANALYST   | 7566 | 1982-12-09 00:00:00 | 3000.00 |    NULL |     20 |</span><br><span class="line">|  7839 | KING   | PRESIDENT | NULL | 1981-11-17 00:00:00 | 5000.00 |    NULL |     10 |</span><br><span class="line">|  7844 | TURNER | SALESMAN  | 7698 | 1981-09-08 00:00:00 | 1500.00 |    0.00 |     30 |</span><br><span class="line">|  7876 | ADAMS  | CLERK     | 7788 | 1983-01-12 00:00:00 | 1100.00 |    NULL |     20 |</span><br><span class="line">|  7902 | FORD   | ANALYST   | 7566 | 1981-12-03 00:00:00 | 3000.00 |    NULL |     20 |</span><br><span class="line">+-------+--------+-----------+------+---------------------+---------+---------+--------+</span><br><span class="line"></span><br><span class="line">2、封装导出命令，使用job运行</span><br><span class="line"></span><br><span class="line">	创建job</span><br><span class="line">	sqoop job --create bigdata-sqoop-job -- \</span><br><span class="line">import --connect jdbc:mysql://JD:3306/bigdata \</span><br><span class="line">--password mysqladmin \</span><br><span class="line">--username root \</span><br><span class="line">--table emp \</span><br><span class="line">--delete-target-dir</span><br><span class="line">	执行job</span><br><span class="line">	sqoop job --exec bigdata-sqoop-job</span><br><span class="line">	删除job</span><br><span class="line">	sqoop job --delete bigdata-sqoop-job</span><br><span class="line">	</span><br><span class="line">	查询job</span><br><span class="line">[hadoop@JD bin]$ sqoop job --list</span><br><span class="line">Available jobs:</span><br><span class="line">  bigdata-sqoop-job</span><br></pre></td></tr></table></figure>
+<h3 id="综合案例">综合案例</h3>
+<p>1、需求：<br>
+	emp和dept表是在MySQL，把MySQL数据抽取到Hive进行统计分析，然后将统计结果回写到MySQL中<br>
+2、思路：<br>
+	Hive：创建emp_etl和dept_etl和结果表result_etl；统计：select e.empno, e.ename, e.deptno, e.dname from emp_etl e join dept_etl d on e.deptno=d.deptno;MySQL: 创建一个result_etl结果表</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br></pre></td><td class="code"><pre><span class="line">在hive中创建emp_etl和dept_etl表</span><br><span class="line">CREATE TABLE emp_etl(</span><br><span class="line">empno int,</span><br><span class="line">ename string,</span><br><span class="line">job string,</span><br><span class="line">mgr int,</span><br><span class="line">hiredate string,</span><br><span class="line">sal double,</span><br><span class="line">comm double,</span><br><span class="line">deptno int</span><br><span class="line">)</span><br><span class="line">ROW FORMAT DELIMITED FIELDS TERMINATED BY &apos;\t&apos;;</span><br><span class="line"></span><br><span class="line">CREATE TABLE dept_etl(</span><br><span class="line">deptno int,</span><br><span class="line">dname string,</span><br><span class="line">loc string</span><br><span class="line">)</span><br><span class="line">ROW FORMAT DELIMITED FIELDS TERMINATED BY &apos;\t&apos;;</span><br><span class="line"></span><br><span class="line">从mysql向hive导入数据</span><br><span class="line">sqoop import \</span><br><span class="line">--connect jdbc:mysql://JD:3306/bigdata \</span><br><span class="line">--password mysqladmin \</span><br><span class="line">--username root \</span><br><span class="line">--table dept \</span><br><span class="line">--hive-overwrite \</span><br><span class="line">--delete-target-dir \</span><br><span class="line">--hive-import --hive-database db_hive1 \</span><br><span class="line">--hive-table dept_etl \</span><br><span class="line">--fields-terminated-by &apos;\t&apos; \</span><br><span class="line">-m 1</span><br><span class="line"></span><br><span class="line">sqoop import \</span><br><span class="line">--connect jdbc:mysql://JD:3306/bigdata \</span><br><span class="line">--password mysqladmin \</span><br><span class="line">--username root \</span><br><span class="line">--table emp \</span><br><span class="line">--hive-overwrite \</span><br><span class="line">--delete-target-dir \</span><br><span class="line">--hive-import --hive-database db_hive1 \</span><br><span class="line">--hive-table emp_etl \</span><br><span class="line">--fields-terminated-by &apos;\t&apos; \</span><br><span class="line">-m 1</span><br><span class="line"></span><br><span class="line">在hive中创建中间表</span><br><span class="line">CREATE TABLE result_etl(</span><br><span class="line">empno int,</span><br><span class="line">ename string,</span><br><span class="line">deptno int,</span><br><span class="line">dname string</span><br><span class="line">)</span><br><span class="line">ROW FORMAT DELIMITED FIELDS TERMINATED BY &apos;\t&apos;;</span><br><span class="line"></span><br><span class="line">向结果表中插入结果数据</span><br><span class="line">insert overwrite table result_etl select e.empno, e.ename, e.deptno, d.dname from emp_etl e join dept_etl d on e.deptno=d.deptno;	</span><br><span class="line"></span><br><span class="line">mysql中创建结果表</span><br><span class="line">create table etl_result(</span><br><span class="line">empno int,</span><br><span class="line">ename varchar(10),</span><br><span class="line">deptno int,</span><br><span class="line">dname varchar(20)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">从hive中导出结果到mysql中</span><br><span class="line">sqoop export \</span><br><span class="line">--connect jdbc:mysql://JD:3306/bigdata \</span><br><span class="line">--password mysqladmin \</span><br><span class="line">--username root \</span><br><span class="line">--table etl_result \</span><br><span class="line">--export-dir /user/hive/warehouse/db_hive1.db/result_etl \</span><br><span class="line">--fields-terminated-by &apos;\t&apos; \</span><br><span class="line">-m 1</span><br><span class="line"></span><br><span class="line">查看数据，导入成功</span><br><span class="line">mysql&gt; select * from etl_result;</span><br><span class="line">+-------+--------+--------+------------+</span><br><span class="line">| empno | ename  | deptno | dname      |</span><br><span class="line">+-------+--------+--------+------------+</span><br><span class="line">|  7369 | SMITH  |     20 | RESEARCH   |</span><br><span class="line">|  7499 | ALLEN  |     30 | SALES      |</span><br><span class="line">|  7521 | WARD   |     30 | SALES      |</span><br><span class="line">|  7566 | JONES  |     20 | RESEARCH   |</span><br><span class="line">|  7654 | MARTIN |     30 | SALES      |</span><br><span class="line">|  7698 | BLAKE  |     30 | SALES      |</span><br><span class="line">|  7782 | CLARK  |     10 | ACCOUNTING |</span><br><span class="line">|  7788 | SCOTT  |     20 | RESEARCH   |</span><br><span class="line">|  7839 | KING   |     10 | ACCOUNTING |</span><br><span class="line">|  7844 | TURNER |     30 | SALES      |</span><br><span class="line">|  7876 | ADAMS  |     20 | RESEARCH   |</span><br><span class="line">|  7902 | FORD   |     20 | RESEARCH   |</span><br><span class="line">+-------+--------+--------+------------+</span><br><span class="line">12 rows in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+<p>4、封装到shell脚本中<br>
+4.1shell脚本内容</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/sh</span><br><span class="line">set -x</span><br><span class="line"></span><br><span class="line">sqoop import \</span><br><span class="line">--connect jdbc:mysql://JD:3306/bigdata \</span><br><span class="line">--password mysqladmin \</span><br><span class="line">--username root \</span><br><span class="line">--table dept \</span><br><span class="line">--hive-overwrite \</span><br><span class="line">--delete-target-dir \</span><br><span class="line">--hive-import --hive-database db_hive1 \</span><br><span class="line">--hive-table dept_etl \</span><br><span class="line">--fields-terminated-by &apos;\t&apos; \</span><br><span class="line">-m 1</span><br><span class="line"></span><br><span class="line">sqoop import \</span><br><span class="line">--connect jdbc:mysql://JD:3306/bigdata \</span><br><span class="line">--password mysqladmin \</span><br><span class="line">--username root \</span><br><span class="line">--table emp \</span><br><span class="line">--hive-overwrite \</span><br><span class="line">--delete-target-dir \</span><br><span class="line">--hive-import --hive-database db_hive1 \</span><br><span class="line">--hive-table emp_etl \</span><br><span class="line">--fields-terminated-by &apos;\t&apos; \</span><br><span class="line">-m 1</span><br><span class="line"></span><br><span class="line">sql=&quot;insert overwrite table result_etl select e.empno, e.ename, e.deptno, d.dname from emp_etl e join dept_etl d on e.deptno=d.deptno&quot;</span><br><span class="line"></span><br><span class="line">hive -e &quot;$sql&quot;</span><br><span class="line"></span><br><span class="line">mysql -uroot -pruozedata &lt;&lt;EOF</span><br><span class="line">	use sqoop;</span><br><span class="line">	truncate etl_result;</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">sqoop export \</span><br><span class="line">--connect jdbc:mysql://JD:3306/bigdata \</span><br><span class="line">--password mysqladmin \</span><br><span class="line">--username root \</span><br><span class="line">--table etl_result \</span><br><span class="line">--export-dir /user/hive/warehouse/db_hive1.db/result_etl \</span><br><span class="line">--fields-terminated-by &apos;\t&apos; \</span><br><span class="line">-m 1</span><br></pre></td></tr></table></figure>
+                
+
+                <hr>
+                <!-- Pager -->
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/article/DataNode抛内存溢出oom的error/" data-toggle="tooltip" data-placement="top" title="DataNode抛内存溢出oom的error">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/article/hive/hive3/" data-toggle="tooltip" data-placement="top" title="Hive DDL&DML&DQL">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                <br>
+
+                <!--打赏-->
+                
+                <!--打赏-->
+
+                <br>
+                <!--分享-->
+                
+                    <div class="social-share"  data-wechat-qrcode-helper="" align="center"></div>
+                    <!--  css & js -->
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+                
+                <!--分享-->
+                <br>                       
+                
+                <!-- require APlayer -->
+                
+
+                <!-- duoshuo Share start -->
+                
+                <!-- 多说 Share end-->
+
+                <!-- 多说评论框 start -->
+                
+                <!-- 多说评论框 end -->
+
+                <!-- disqus comment start -->
+                
+                <!-- disqus comment end -->
+
+                
+
+            </div>
+            
+            <!-- Tabe of Content -->
+            <!-- Table of Contents -->
+
+  
+    
+      <aside id="sidebar">
+        <div id="toc" class="toc-article">
+        <strong class="toc-title">Contents</strong>
+        
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#欢迎来到stefanboy的博客感谢大家对我的支持"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">&#x6B22;&#x8FCE;&#x6765;&#x5230;Stefanboy&#x7684;&#x535A;&#x5BA2;&#xFF0C;&#x611F;&#x8C22;&#x5927;&#x5BB6;&#x5BF9;&#x6211;&#x7684;&#x652F;&#x6301;.</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#sqoop"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">Sqoop</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#概念"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text">&#x6982;&#x5FF5;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#使用场景"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text">&#x4F7F;&#x7528;&#x573A;&#x666F;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#版本"><span class="toc-nav-number">2.3.</span> <span class="toc-nav-text">&#x7248;&#x672C;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#参照点"><span class="toc-nav-number">2.4.</span> <span class="toc-nav-text">&#x53C2;&#x7167;&#x70B9;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#安装部署"><span class="toc-nav-number">2.5.</span> <span class="toc-nav-text">&#x5B89;&#x88C5;&#x90E8;&#x7F72;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#简单使用"><span class="toc-nav-number">2.6.</span> <span class="toc-nav-text">&#x7B80;&#x5355;&#x4F7F;&#x7528;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#数据导入表的数据导入到hdfs"><span class="toc-nav-number">2.7.</span> <span class="toc-nav-text">&#x6570;&#x636E;&#x5BFC;&#x5165;&#xFF08;&#x8868;&#x7684;&#x6570;&#x636E;&#x5BFC;&#x5165;&#x5230;HDFS&#xFF09;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#hdfs导出到mysql"><span class="toc-nav-number">2.8.</span> <span class="toc-nav-text">HDFS&#x5BFC;&#x51FA;&#x5230;mysql</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#mysql导入hive"><span class="toc-nav-number">2.9.</span> <span class="toc-nav-text">MySQL&#x5BFC;&#x5165;Hive</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#hive导出mysql"><span class="toc-nav-number">2.10.</span> <span class="toc-nav-text">Hive&#x5BFC;&#x51FA;MySQL</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#综合案例"><span class="toc-nav-number">2.11.</span> <span class="toc-nav-text">&#x7EFC;&#x5408;&#x6848;&#x4F8B;</span></a></li></ol></li></ol>
+        
+        </div>
+      </aside>
+    
+
+                
+            <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#Sqoop" title="Sqoop">Sqoop</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                        <li><a href="" target="_blank"></a></li>
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'hover',
+          placement: 'left',
+          icon: 'rz'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+<!-- chrome Firefox 中文锚点定位失效-->
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+<!-- smooth scroll behavior polyfill  -->
+<script type="text/javascript" src="/js/smoothscroll.js"></script>
+<script>
+        $('#toc').on('click','a',function(a){
+            // var isChrome = window.navigator.userAgent.indexOf("Chrome") !== -1;
+            // console.log(window.navigator.userAgent,isChrome)
+                // if(isChrome) {
+                    // console.log(a.currentTarget.outerHTML);
+                    // console.log($(a.currentTarget).attr("href"));
+                    //跳转到指定锚点
+                    // document.getElementById(a.target.innerText.toLowerCase()).scrollIntoView(true);
+                    document.getElementById($(a.currentTarget).attr("href").replace("#","")).scrollIntoView({behavior: 'smooth' });
+                // }
+        })  
+</script>
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/Stefanboy">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Stefanboy 2019 
+                    By <a href="#">Stefanboy</a> | BigData
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=ruozedata&repo=Bigdata&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://yoursite.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-XXXXXXXX-X';
+    var _gaDomain = 'yoursite';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    var _baId = 'xxx';
+
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+
+
+
+
+	<a id="rocket" href="#top" class=""></a>
+	<script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+    <script type="text/javascript" src="/js/toc.js?v=1.0.0" async=""></script>
+<!-- Image to hack wechat -->
+<img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>
