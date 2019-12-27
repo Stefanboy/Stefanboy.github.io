@@ -18,7 +18,7 @@
         
     </title>
 
-    <link rel="canonical" href="http://yoursite.com/archives/2/">
+    <link rel="canonical" href="http://yoursite.com/page/3/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -134,14 +134,14 @@
 
                         
                         <li>
-                            <a href="/about/">About</a>
+                            <a href="/archive/">Archives</a>
                         </li>
                         
                     
 
                         
                         <li>
-                            <a href="/archive/">Archives</a>
+                            <a href="/about/">About</a>
                         </li>
                         
                     
@@ -211,152 +211,40 @@
 
 <div class="post-preview">
 
-    <a href="/article/hadoop/hadoop1/">
+    <a href="/article/linux/linux1/">
         <h2 class="post-title">
                                  
-            配置hosts和jdk和ssh&HDFS部署使用&如何保证数据质量
+            linux基本命令一
         </h2>
         <h3 class="post-subtitle">
-            How to use HDFS
+            How to use Linux
         </h3>
         <div class="post-content-preview">
             欢迎来到Stefanboy的博客，感谢大家对我的支持.
-安装配置jdk、hosts、ssh
-安装配置jdk
-上传tar.gz包
-[root@JD /]# cd /usr/java
-[root@JD java]# ll
-total 355840
-drwxr-xr-x 8 root root      4096 Nov 17 00:24 jdk1.8.0_121
--rw-r--r-- 1 roo......
+linux
+基本概念
+[root@JD ~]# 
+登录的用户名  机器的名称（hostname） 家目录
+root用户 家目录 /root 
+xxx用户  家目录 /home/xxx 
+
+查看当前光标所在的目录
+[root@JD ~]# pwd
+/root
+
+切换目录
+[root@JD ~]# cd /home
+[root@JD hom......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by Stefanboy on
-            2016-11-28
+            2016-11-11
         </p>
         <div class="tags">
             
-              <a href="/tags/#Hadoop" title="Hadoop">Hadoop</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/article/rundeck/">
-        <h2 class="post-title">
-                                 
-            Rundeck部署使用
-        </h2>
-        <h3 class="post-subtitle">
-            How to use Rundeck
-        </h3>
-        <div class="post-content-preview">
-            欢迎来到Stefanboy的博客，感谢大家对我的支持.
-rundeck的部署
-
-
-部署jdk
-rundeck要求jdk1.8，查看jdk的命令which jdk
-
-
-
-下载上传
-rundeck-launcher-2.10.1.jar
-
-
-
-运行停止命令
-java -jar rundeck-launcher-2.10.1.jar
-后台运行
-nohup java -jar rundeck-lau......
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by Stefanboy on
-            2016-11-27
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#Rundeck" title="Rundeck">Rundeck</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/article/mysql/mysquser2/">
-        <h2 class="post-title">
-                                 
-            MySQL使用二
-        </h2>
-        <h3 class="post-subtitle">
-            How to use MySQL
-        </h3>
-        <div class="post-content-preview">
-            欢迎来到Stefanboy的博客，感谢大家对我的支持.
-MySQL使用二
-单表查询
-*表结构
-
-求年龄大于20，各个名称的年龄和
-select name,sum(age) from testdata where age &gt; 20 group by name;
-
-求各个名称的年龄和大于25岁
-select name,sum(age) from testdata group by name......
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by Stefanboy on
-            2016-11-25
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#MySQL" title="MySQL">MySQL</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/article/mysql/mysquser1/">
-        <h2 class="post-title">
-                                 
-            MySQL使用一
-        </h2>
-        <h3 class="post-subtitle">
-            How to use MySQL
-        </h3>
-        <div class="post-content-preview">
-            欢迎来到Stefanboy的博客，感谢大家对我的支持.
-MySQL使用
-允许外面机器（各种客户端）连接mysql
-允许用户root从任意ip的主机连接到mysql服务器，并使用mysqladmin作为密码
-mysql&gt; grant all privileges on *.* to root@'%' identified by 'mysqladmin';
-Query OK, 0 rows......
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by Stefanboy on
-            2016-11-24
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#MySQL" title="MySQL">MySQL</a>
+              <a href="/tags/#Linux" title="Linux">Linux</a>
             
         </div>
     
@@ -405,195 +293,28 @@ npm config set registry http://registry.np......
 
 <div class="post-preview">
 
-    <a href="/article/mysql/mysqlinstall/">
+    <a href="/article/hexo-theme-jepson/">
         <h2 class="post-title">
                                  
-            MySQL安装部署
+            [Hexo] Theme Jepson
         </h2>
         <h3 class="post-subtitle">
-            How to install MySQL
+            This is hexo theme Demo.
         </h3>
         <div class="post-content-preview">
-            欢迎来到Stefanboy的博客，感谢大家对我的支持.
-MySQL安装配置
-上传tar包到/uar/local目录下
-[root@JD ~]# cd /usr/local
-[root@JD local]# ll
-total 43856
--rw-r--r--  1 root root 44908544 Nov 22 23:56 mysql-5.6.23-linux-glibc2.5-x86_6......
+            Install Hexo
+Install Node.js  and Git
+12345678#For windowNode.js https://nodejs.org/dist/v12.13.0/node-v12.13.0-x64.msiGit https://github.com/git-for-windows/git/releases/download/v2.24.0.windows.2......
         </div>
     </a>
     
         <p class="post-meta" style="margin: 10px 0;">
             Posted by Stefanboy on
-            2016-11-23
+            2015-07-10
         </p>
         <div class="tags">
             
-              <a href="/tags/#MySQL" title="MySQL">MySQL</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/article/linux/linux5/">
-        <h2 class="post-title">
-                                 
-            linux基本命令五
-        </h2>
-        <h3 class="post-subtitle">
-            How to use Linux
-        </h3>
-        <div class="post-content-preview">
-            欢迎来到Stefanboy的博客，感谢大家对我的支持.
-该文章内容包括四部分，分别为
-1、调度工具crontab
-2、后台执行nohup
-3、软连接
-调度工具
-现在主要的调度工具有
-1、airflow
-2、azkaban
-3、rundeck
-4、linux自带的crontab
-
-crontab介绍
-	1.1在编写脚本的时候，按照规范；执行脚本的时候，注意要有执行x权限
-	第一行写上解释器 #......
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by Stefanboy on
-            2016-11-21
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#Linux" title="Linux">Linux</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/article/linux/linux4/">
-        <h2 class="post-title">
-                                 
-            linux基本命令四
-        </h2>
-        <h3 class="post-subtitle">
-            How to use Linux
-        </h3>
-        <div class="post-content-preview">
-            欢迎来到Stefanboy的博客，感谢大家对我的支持.
-该文章内容包括四部分，分别为
-1.vi命令
-2.系统信息 进程 ps -ef|grep xxx 端口号 netstat -nlp |grep xxx
-3.连接拒绝 (权限受限 ping telnet )
-4.高危命令 rm -rf /
-5.常用的命令 wget yum rpm  压缩解压
-vi命令
-
-1.1命令模式
-常见快捷键
-删除当前......
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by Stefanboy on
-            2016-11-19
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#Linux" title="Linux">Linux</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/article/linux/linux3/">
-        <h2 class="post-title">
-                                 
-            linux基本命令三
-        </h2>
-        <h3 class="post-subtitle">
-            How to use Linux
-        </h3>
-        <div class="post-content-preview">
-            欢迎来到Stefanboy的博客，感谢大家对我的支持.
-该文章内容包括四部分，分别为
-1、用户和用户组
-2、sudo命令
-3、用户无法登录	 passwd文件
-4、权限 chmod chown
-5、其他命令 su find du 命令
-用户和用户组
-1.1查看用户命令的目录
-[root@JD ~]# ll /usr/sbin/user*
--rwxr-x--- 1 root root 1181......
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by Stefanboy on
-            2016-11-18
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#Linux" title="Linux">Linux</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/article/linux/linux2/">
-        <h2 class="post-title">
-                                 
-            linux基本命令二
-        </h2>
-        <h3 class="post-subtitle">
-            How to use Linux
-        </h3>
-        <div class="post-content-preview">
-            欢迎来到Stefanboy的博客，感谢大家对我的支持.
-该文章内容包括四部分，分别为
-1、全局环境变量，个人环境变量，which理解
-2、别名
-3、删除
-4、history
-echo打印
-[root@JD ~]# echo &quot;hello world&quot;
-hello world
-
-查看配置好的环境变量名称
-[root@JD ~]# echo $PATH
-/usr/local/......
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by Stefanboy on
-            2016-11-17
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#Linux" title="Linux">Linux</a>
+              <a href="/tags/#Hexo" title="Hexo">Hexo</a>
             
         </div>
     
@@ -608,13 +329,9 @@ hello world
 <ul class="pager">
     
         <li class="previous">
-            <a href="/">&larr; Newer Posts</a>
+            <a href="/page/2/">&larr; Newer Posts</a>
         </li>
     
-    
-        <li class="next">
-            <a href="/archives/3/">Older Posts &rarr;</a>
-        </li>
     
 </ul>
 
@@ -646,11 +363,11 @@ hello world
     <div class="tags">
         
             
-            <a href="/tags/#Hadoop" title="Hadoop" rel="6">Hadoop</a>
+            <a href="/tags/#Hexo" title="Hexo" rel="2">Hexo</a>
             
         
             
-            <a href="/tags/#Hexo" title="Hexo" rel="2">Hexo</a>
+            <a href="/tags/#Hadoop" title="Hadoop" rel="6">Hadoop</a>
             
         
             
@@ -662,15 +379,15 @@ hello world
             
         
             
-            <a href="/tags/#MySQL" title="MySQL" rel="3">MySQL</a>
-            
-        
-            
-            <a href="/tags/#Hive" title="Hive" rel="3">Hive</a>
+            <a href="/tags/#Hive" title="Hive" rel="4">Hive</a>
             
         
             
             <a href="/tags/#Linux" title="Linux" rel="5">Linux</a>
+            
+        
+            
+            <a href="/tags/#MySQL" title="MySQL" rel="3">MySQL</a>
             
         
             
@@ -734,6 +451,10 @@ hello world
         </li>
       
         <li>
+          <a href="/article/hive/hive4/">Hive排序和分区</a>
+        </li>
+      
+        <li>
           <a href="/article/sqoop/Sqoop/">Sqoop安装&amp;导入导出</a>
         </li>
       
@@ -743,10 +464,6 @@ hello world
       
         <li>
           <a href="/article/hive/hive2/">Hive DDL&amp;DML&amp;DQL</a>
-        </li>
-      
-        <li>
-          <a href="/article/hive/hive1/">Hive介绍&amp;部署&amp;配置&amp;简单使用</a>
         </li>
       
     </ul>
@@ -769,7 +486,7 @@ hello world
         
     <h5>ARCHIVES</h5>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">1</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">1</span></li></ul>
     </div>
 
         <hr>

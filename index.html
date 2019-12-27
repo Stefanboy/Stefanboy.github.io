@@ -134,14 +134,14 @@
 
                         
                         <li>
-                            <a href="/about/">About</a>
+                            <a href="/archive/">Archives</a>
                         </li>
                         
                     
 
                         
                         <li>
-                            <a href="/archive/">Archives</a>
+                            <a href="/about/">About</a>
                         </li>
                         
                     
@@ -235,6 +235,43 @@ DataNode报错信息
         <div class="tags">
             
               <a href="/tags/#Hadoop" title="Hadoop">Hadoop</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/article/hive/hive4/">
+        <h2 class="post-title">
+                                 
+            Hive排序和分区
+        </h2>
+        <h3 class="post-subtitle">
+            How to use Hive
+        </h3>
+        <div class="post-content-preview">
+            欢迎来到Stefanboy的博客，感谢大家对我的支持.
+Hive中的排序问题
+order by 全局排序（慎用）
+默认是升序asc，可指定降序desc。
+order by是全局排序 只能有一个reduce作业来完成才能保证数据有序，这也是慎用的原因，数据太多容易导致计算
+hive默认是非严格模式
+hive.mapred.mode改为strict,则使用order by的时候有以下限制:
+
+如......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by Stefanboy on
+            2016-12-27
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#Hive" title="Hive">Hive</a>
             
         </div>
     
@@ -560,48 +597,6 @@ dfs.blocksize
 </div>
 <hr>
 
-<div class="post-preview">
-
-    <a href="/article/hadoop/hadoop2/">
-        <h2 class="post-title">
-                                 
-            YARN部署&jps&Linux的oom及过期清理
-        </h2>
-        <h3 class="post-subtitle">
-            How to use YARN
-        </h3>
-        <div class="post-content-preview">
-            欢迎来到Stefanboy的博客，感谢大家对我的支持.
-YARN部署使用
-yarn伪分布式部署，主从架构
-
-
-切换hadoop用户
-[root@JD ~]# su - hadoop
-Last login: Sun Dec  1 15:09:50 CST 2019 on pts/0
-
-
-
-配置mapred-site.xml
-进入hadoop目录下
-[hadoop@JD ~]$ cd app/h......
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by Stefanboy on
-            2016-12-01
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#Hadoop Linux" title="Hadoop Linux">Hadoop Linux</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
 
 
 <!-- Pager -->
@@ -610,7 +605,7 @@ Last login: Sun Dec  1 15:09:50 CST 2019 on pts/0
     
     
         <li class="next">
-            <a href="/archives/2/">Older Posts &rarr;</a>
+            <a href="/page/2/">Older Posts &rarr;</a>
         </li>
     
 </ul>
@@ -643,11 +638,11 @@ Last login: Sun Dec  1 15:09:50 CST 2019 on pts/0
     <div class="tags">
         
             
-            <a href="/tags/#Hadoop" title="Hadoop" rel="6">Hadoop</a>
+            <a href="/tags/#Hexo" title="Hexo" rel="2">Hexo</a>
             
         
             
-            <a href="/tags/#Hexo" title="Hexo" rel="2">Hexo</a>
+            <a href="/tags/#Hadoop" title="Hadoop" rel="6">Hadoop</a>
             
         
             
@@ -659,15 +654,15 @@ Last login: Sun Dec  1 15:09:50 CST 2019 on pts/0
             
         
             
-            <a href="/tags/#MySQL" title="MySQL" rel="3">MySQL</a>
-            
-        
-            
-            <a href="/tags/#Hive" title="Hive" rel="3">Hive</a>
+            <a href="/tags/#Hive" title="Hive" rel="4">Hive</a>
             
         
             
             <a href="/tags/#Linux" title="Linux" rel="5">Linux</a>
+            
+        
+            
+            <a href="/tags/#MySQL" title="MySQL" rel="3">MySQL</a>
             
         
             
@@ -731,6 +726,10 @@ Last login: Sun Dec  1 15:09:50 CST 2019 on pts/0
         </li>
       
         <li>
+          <a href="/article/hive/hive4/">Hive排序和分区</a>
+        </li>
+      
+        <li>
           <a href="/article/sqoop/Sqoop/">Sqoop安装&amp;导入导出</a>
         </li>
       
@@ -740,10 +739,6 @@ Last login: Sun Dec  1 15:09:50 CST 2019 on pts/0
       
         <li>
           <a href="/article/hive/hive2/">Hive DDL&amp;DML&amp;DQL</a>
-        </li>
-      
-        <li>
-          <a href="/article/hive/hive1/">Hive介绍&amp;部署&amp;配置&amp;简单使用</a>
         </li>
       
     </ul>
@@ -766,7 +761,7 @@ Last login: Sun Dec  1 15:09:50 CST 2019 on pts/0
         
     <h5>ARCHIVES</h5>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">1</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">1</span></li></ul>
     </div>
 
         <hr>
