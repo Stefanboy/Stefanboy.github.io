@@ -141,14 +141,14 @@
 
                         
                         <li>
-                            <a href="/about/">About</a>
+                            <a href="/tags/">Tags</a>
                         </li>
                         
                     
 
                         
                         <li>
-                            <a href="/tags/">Tags</a>
+                            <a href="/about/">About</a>
                         </li>
                         
                     
@@ -244,6 +244,140 @@ DataNode报错信息
 
 <div class="post-preview">
 
+    <a href="/article/mysql/mysquser3/">
+        <h2 class="post-title">
+                                 
+            MySQL行转列&列转行
+        </h2>
+        <h3 class="post-subtitle">
+            How to use MySQL
+        </h3>
+        <div class="post-content-preview">
+            欢迎来到Stefanboy的博客，感谢大家对我的支持.
+行转列
+即将原本同一列下多行的不同内容作为多个字段，输出对应内容。
+建表语句
+12345678910DROP TABLE IF EXISTS tb_score; CREATE TABLE tb_score(    id INT(11) NOT NULL auto_increment,    userid VARCHAR(20) NOT ......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by Stefanboy on
+            2017-01-08
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#MySQL" title="MySQL">MySQL</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/article/hive/hive5/">
+        <h2 class="post-title">
+                                 
+            Hive concat函数和concat_ws函数和concat_group函数&row_number over()和sum() over()&列转行,行转列
+        </h2>
+        <h3 class="post-subtitle">
+            How to use Hive Function
+        </h3>
+        <div class="post-content-preview">
+            欢迎来到Stefanboy的博客，感谢大家对我的支持.
+Hive的常用函数
+concat函数,concat_ws函数，concat_group函数
+hivesql中的concat函数,concat_ws函数，concat_group函数之间的区别
+CONCAT（）函数
+CONCAT（）函数用于将多个字符串连接成一个字符串。
+
+使用数据表Info作为示例，其中
+SELECT id,name F......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by Stefanboy on
+            2017-01-08
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#Hive" title="Hive">Hive</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/article/offlineDW/rundeck/">
+        <h2 class="post-title">
+                                 
+            Rundeck3.2.0安装部署
+        </h2>
+        <h3 class="post-subtitle">
+            How to use Superset
+        </h3>
+        <div class="post-content-preview">
+            欢迎来到Stefanboy的博客，感谢大家对我的支持.
+rundeck3.2.0安装部署
+下载解压
+1234[root@JD /]# su - hadoop[hadoop@JD ~]$ cd app/[hadoop@JD app]$ mkdir rundeck[hadoop@JD rundeck]$ wget https://dl.bintray.com/rundeck/rundeck-ma......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by Stefanboy on
+            2016-12-30
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#Superset" title="Superset">Superset</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/article/offlineDW/superset/">
+        <h2 class="post-title">
+                                 
+            Superset安装部署
+        </h2>
+        <h3 class="post-subtitle">
+            How to use Superset
+        </h3>
+        <div class="post-content-preview">
+            欢迎来到Stefanboy的博客，感谢大家对我的支持.
+superset安装部署
+安装Python3环境准备的包
+1234567[root@JD /]# yum -y install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-de......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by Stefanboy on
+            2016-12-30
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#Superset" title="Superset">Superset</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
     <a href="/article/hive/hive4/">
         <h2 class="post-title">
                                  
@@ -317,7 +451,7 @@ Sqoop
 
 <div class="post-preview">
 
-    <a href="/article/hive/hive3/">
+    <a href="/article/hive/hive2/">
         <h2 class="post-title">
                                  
             Hive DDL&DML&DQL
@@ -327,11 +461,13 @@ Sqoop
         </h3>
         <div class="post-content-preview">
             欢迎来到Stefanboy的博客，感谢大家对我的支持.
-join操作
-hive中有两张表，分别为emp和dept表
-hive支持innert join，left join, rigth join,full join；
-hive的join操作的on条件仅支持等值连接，即e.deptno = d.deptno，不支持&lt;或者&gt;
-12345678910inner join：只返回连接条件......
+Hive的DDL操作
+创建数据库
+语法
+CREATE (DATABASE|SCHEMA) [IF NOT EXISTS] database_name
+  [COMMENT database_comment]
+  [LOCATION hdfs_path]
+  [WITH DBPROPERTIES (property_name=proper......
         </div>
     </a>
     
@@ -351,7 +487,7 @@ hive的join操作的on条件仅支持等值连接，即e.deptno = d.deptno，不
 
 <div class="post-preview">
 
-    <a href="/article/hive/hive2/">
+    <a href="/article/hive/hive3/">
         <h2 class="post-title">
                                  
             Hive DDL&DML&DQL
@@ -361,13 +497,11 @@ hive的join操作的on条件仅支持等值连接，即e.deptno = d.deptno，不
         </h3>
         <div class="post-content-preview">
             欢迎来到Stefanboy的博客，感谢大家对我的支持.
-Hive的DDL操作
-创建数据库
-语法
-CREATE (DATABASE|SCHEMA) [IF NOT EXISTS] database_name
-  [COMMENT database_comment]
-  [LOCATION hdfs_path]
-  [WITH DBPROPERTIES (property_name=proper......
+join操作
+hive中有两张表，分别为emp和dept表
+hive支持innert join，left join, rigth join,full join；
+hive的join操作的on条件仅支持等值连接，即e.deptno = d.deptno，不支持&lt;或者&gt;
+12345678910inner join：只返回连接条件......
         </div>
     </a>
     
@@ -425,178 +559,6 @@ Hive概述
 </div>
 <hr>
 
-<div class="post-preview">
-
-    <a href="/article/hadoop/hadoop6/">
-        <h2 class="post-title">
-                                 
-            yarn资源调优参数&yarn的调度器&yarn的常用命令
-        </h2>
-        <h3 class="post-subtitle">
-            How to use Hadoop
-        </h3>
-        <div class="post-content-preview">
-            欢迎来到Stefanboy的博客，感谢大家对我的支持.
-yarn资源调优参数
-概念介绍
-
-container
-是一个虚拟化的容器，包括memory和vcore两个维度，作用是运行appmaster和task任务
-物理核pcore
-服务器上实际的物理CPU的核数
-虚拟核vcore
-yarn引入的一个概念，设计的初衷是考虑到每台服务器的性能不一样，比如某一个物理CPU是另一个物理CPU的两倍，通......
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by Stefanboy on
-            2016-12-14
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#Hadoop" title="Hadoop">Hadoop</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/article/hadoop/hadoop5/">
-        <h2 class="post-title">
-                                 
-            MR架构&文件格式优缺点&压缩格式优缺点&spilt -> map task关系&wordcount&shuffle的理解
-        </h2>
-        <h3 class="post-subtitle">
-            How to use Hadoop
-        </h3>
-        <div class="post-content-preview">
-            欢迎来到Stefanboy的博客，感谢大家对我的支持.
-MapReduce是什么
-mapreduce分为map阶段和reduce阶段
-map阶段是映射 生产上可以对于此进行调优，比如合并小文件
-reduce阶段是聚合 生产上默认是生成1个文件
-mr2.x架构设计（mr on yarn 流程）
-Yarn介绍
-yarn包括RM和NM
-
-RM
-RM包括两部分
-1、applications Mana......
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by Stefanboy on
-            2016-12-10
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#Hadoop" title="Hadoop">Hadoop</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/article/hadoop/hadoop4/">
-        <h2 class="post-title">
-                                 
-            HDFS的副本放置策略&读写流程&pid文件&多节点和单节点磁盘均衡&安全模式&常用命令和设置回收站
-        </h2>
-        <h3 class="post-subtitle">
-            How to use Hadoop
-        </h3>
-        <div class="post-content-preview">
-            欢迎来到Stefanboy的博客，感谢大家对我的支持.
-HDFS副本放置策略
-客户端：执行put命令所在的机器称为客户端
-
-
-第一副本
-假如上传节点为dn节点，优先放置在本节点；否则会随机找一个磁盘不太慢、CPU不太繁忙的节点
-第二副本
-放置于第一副本不同的机架上
-第三副本
-放置于第二副本的相同机架的不同节点上
-
-CDH机架有一个默认的机架，虚拟的概念，CDH一般不调整这种默认机架
-HDFS......
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by Stefanboy on
-            2016-12-05
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#Hadoop" title="Hadoop">Hadoop</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/article/hadoop/hadoop3/">
-        <h2 class="post-title">
-                                 
-            刀片机和机架&块副本数&HDFS架构&块损坏修复&小文件&配置修改存储目录
-        </h2>
-        <h3 class="post-subtitle">
-            How to use Hadoop
-        </h3>
-        <div class="post-content-preview">
-            欢迎来到Stefanboy的博客，感谢大家对我的支持.
-机架和刀片机
-
-块 副本数
-块的理解
-
-存储处理数据的最小单元，其中在hadoop1.x中默认大小为64M，hadoop2.0默认大小为128M，块的大小是由hdfs-site.xml文件中的dfs.blocksize 属性控制
-
-
-
-
-key
-value
-
-
-
-
-dfs.blocksize
-134217728
-
-
-
-
-块大小为什么要设......
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by Stefanboy on
-            2016-12-02
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#Hadoop" title="Hadoop">Hadoop</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
 
 
 <!-- Pager -->
@@ -638,11 +600,11 @@ dfs.blocksize
     <div class="tags">
         
             
-            <a href="/tags/#Hexo" title="Hexo" rel="2">Hexo</a>
+            <a href="/tags/#Hadoop" title="Hadoop" rel="6">Hadoop</a>
             
         
             
-            <a href="/tags/#Hadoop" title="Hadoop" rel="6">Hadoop</a>
+            <a href="/tags/#Hexo" title="Hexo" rel="2">Hexo</a>
             
         
             
@@ -650,11 +612,11 @@ dfs.blocksize
             
         
             
-            <a href="/tags/#Hadoop Linux" title="Hadoop Linux" rel="1">Hadoop Linux</a>
+            <a href="/tags/#Hive" title="Hive" rel="5">Hive</a>
             
         
             
-            <a href="/tags/#Hive" title="Hive" rel="4">Hive</a>
+            <a href="/tags/#Hadoop Linux" title="Hadoop Linux" rel="1">Hadoop Linux</a>
             
         
             
@@ -662,7 +624,11 @@ dfs.blocksize
             
         
             
-            <a href="/tags/#MySQL" title="MySQL" rel="3">MySQL</a>
+            <a href="/tags/#MySQL" title="MySQL" rel="4">MySQL</a>
+            
+        
+            
+            <a href="/tags/#Superset" title="Superset" rel="2">Superset</a>
             
         
             
@@ -726,19 +692,19 @@ dfs.blocksize
         </li>
       
         <li>
-          <a href="/article/hive/hive4/">Hive排序和分区</a>
+          <a href="/article/mysql/mysquser3/">MySQL行转列&amp;列转行</a>
         </li>
       
         <li>
-          <a href="/article/sqoop/Sqoop/">Sqoop安装&amp;导入导出</a>
+          <a href="/article/hive/hive5/">Hive concat函数和concat_ws函数和concat_group函数&amp;row_number over()和sum() over()&amp;列转行,行转列</a>
         </li>
       
         <li>
-          <a href="/article/hive/hive3/">Hive DDL&amp;DML&amp;DQL</a>
+          <a href="/article/offlineDW/rundeck/">Rundeck3.2.0安装部署</a>
         </li>
       
         <li>
-          <a href="/article/hive/hive2/">Hive DDL&amp;DML&amp;DQL</a>
+          <a href="/article/offlineDW/superset/">Superset安装部署</a>
         </li>
       
     </ul>
@@ -761,7 +727,7 @@ dfs.blocksize
         
     <h5>ARCHIVES</h5>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">1</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">1</span></li></ul>
     </div>
 
         <hr>
@@ -803,7 +769,7 @@ dfs.blocksize
 
                 </ul>
                 <p class="copyright text-muted">
-                    Copyright &copy; Stefanboy 2019 
+                    Copyright &copy; Stefanboy 2020 
                     By <a href="#">Stefanboy</a> | BigData
                     <iframe
                         style="margin-left: 2px; margin-bottom:-5px;"

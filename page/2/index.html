@@ -141,14 +141,14 @@
 
                         
                         <li>
-                            <a href="/about/">About</a>
+                            <a href="/tags/">Tags</a>
                         </li>
                         
                     
 
                         
                         <li>
-                            <a href="/tags/">Tags</a>
+                            <a href="/about/">About</a>
                         </li>
                         
                     
@@ -208,6 +208,178 @@
             
                 <!-- Main Content -->
 
+
+<div class="post-preview">
+
+    <a href="/article/hadoop/hadoop6/">
+        <h2 class="post-title">
+                                 
+            yarn资源调优参数&yarn的调度器&yarn的常用命令
+        </h2>
+        <h3 class="post-subtitle">
+            How to use Hadoop
+        </h3>
+        <div class="post-content-preview">
+            欢迎来到Stefanboy的博客，感谢大家对我的支持.
+yarn资源调优参数
+概念介绍
+
+container
+是一个虚拟化的容器，包括memory和vcore两个维度，作用是运行appmaster和task任务
+物理核pcore
+服务器上实际的物理CPU的核数
+虚拟核vcore
+yarn引入的一个概念，设计的初衷是考虑到每台服务器的性能不一样，比如某一个物理CPU是另一个物理CPU的两倍，通......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by Stefanboy on
+            2016-12-14
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#Hadoop" title="Hadoop">Hadoop</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/article/hadoop/hadoop5/">
+        <h2 class="post-title">
+                                 
+            MR架构&文件格式优缺点&压缩格式优缺点&spilt -> map task关系&wordcount&shuffle的理解
+        </h2>
+        <h3 class="post-subtitle">
+            How to use Hadoop
+        </h3>
+        <div class="post-content-preview">
+            欢迎来到Stefanboy的博客，感谢大家对我的支持.
+MapReduce是什么
+mapreduce分为map阶段和reduce阶段
+map阶段是映射 生产上可以对于此进行调优，比如合并小文件
+reduce阶段是聚合 生产上默认是生成1个文件
+mr2.x架构设计（mr on yarn 流程）
+Yarn介绍
+yarn包括RM和NM
+
+RM
+RM包括两部分
+1、applications Mana......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by Stefanboy on
+            2016-12-10
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#Hadoop" title="Hadoop">Hadoop</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/article/hadoop/hadoop4/">
+        <h2 class="post-title">
+                                 
+            HDFS的副本放置策略&读写流程&pid文件&多节点和单节点磁盘均衡&安全模式&常用命令和设置回收站
+        </h2>
+        <h3 class="post-subtitle">
+            How to use Hadoop
+        </h3>
+        <div class="post-content-preview">
+            欢迎来到Stefanboy的博客，感谢大家对我的支持.
+HDFS副本放置策略
+客户端：执行put命令所在的机器称为客户端
+
+
+第一副本
+假如上传节点为dn节点，优先放置在本节点；否则会随机找一个磁盘不太慢、CPU不太繁忙的节点
+第二副本
+放置于第一副本不同的机架上
+第三副本
+放置于第二副本的相同机架的不同节点上
+
+CDH机架有一个默认的机架，虚拟的概念，CDH一般不调整这种默认机架
+HDFS......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by Stefanboy on
+            2016-12-05
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#Hadoop" title="Hadoop">Hadoop</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/article/hadoop/hadoop3/">
+        <h2 class="post-title">
+                                 
+            刀片机和机架&块副本数&HDFS架构&块损坏修复&小文件&配置修改存储目录
+        </h2>
+        <h3 class="post-subtitle">
+            How to use Hadoop
+        </h3>
+        <div class="post-content-preview">
+            欢迎来到Stefanboy的博客，感谢大家对我的支持.
+机架和刀片机
+
+块 副本数
+块的理解
+
+存储处理数据的最小单元，其中在hadoop1.x中默认大小为64M，hadoop2.0默认大小为128M，块的大小是由hdfs-site.xml文件中的dfs.blocksize 属性控制
+
+
+
+
+key
+value
+
+
+
+
+dfs.blocksize
+134217728
+
+
+
+
+块大小为什么要设......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by Stefanboy on
+            2016-12-02
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#Hadoop" title="Hadoop">Hadoop</a>
+            
+        </div>
+    
+
+</div>
+<hr>
 
 <div class="post-preview">
 
@@ -441,169 +613,6 @@ total 43856
 </div>
 <hr>
 
-<div class="post-preview">
-
-    <a href="/article/linux/linux5/">
-        <h2 class="post-title">
-                                 
-            linux基本命令五
-        </h2>
-        <h3 class="post-subtitle">
-            How to use Linux
-        </h3>
-        <div class="post-content-preview">
-            欢迎来到Stefanboy的博客，感谢大家对我的支持.
-该文章内容包括四部分，分别为
-1、调度工具crontab
-2、后台执行nohup
-3、软连接
-调度工具
-现在主要的调度工具有
-1、airflow
-2、azkaban
-3、rundeck
-4、linux自带的crontab
-
-crontab介绍
-	1.1在编写脚本的时候，按照规范；执行脚本的时候，注意要有执行x权限
-	第一行写上解释器 #......
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by Stefanboy on
-            2016-11-21
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#Linux" title="Linux">Linux</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/article/linux/linux4/">
-        <h2 class="post-title">
-                                 
-            linux基本命令四
-        </h2>
-        <h3 class="post-subtitle">
-            How to use Linux
-        </h3>
-        <div class="post-content-preview">
-            欢迎来到Stefanboy的博客，感谢大家对我的支持.
-该文章内容包括四部分，分别为
-1.vi命令
-2.系统信息 进程 ps -ef|grep xxx 端口号 netstat -nlp |grep xxx
-3.连接拒绝 (权限受限 ping telnet )
-4.高危命令 rm -rf /
-5.常用的命令 wget yum rpm  压缩解压
-vi命令
-
-1.1命令模式
-常见快捷键
-删除当前......
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by Stefanboy on
-            2016-11-19
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#Linux" title="Linux">Linux</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/article/linux/linux3/">
-        <h2 class="post-title">
-                                 
-            linux基本命令三
-        </h2>
-        <h3 class="post-subtitle">
-            How to use Linux
-        </h3>
-        <div class="post-content-preview">
-            欢迎来到Stefanboy的博客，感谢大家对我的支持.
-该文章内容包括四部分，分别为
-1、用户和用户组
-2、sudo命令
-3、用户无法登录	 passwd文件
-4、权限 chmod chown
-5、其他命令 su find du 命令
-用户和用户组
-1.1查看用户命令的目录
-[root@JD ~]# ll /usr/sbin/user*
--rwxr-x--- 1 root root 1181......
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by Stefanboy on
-            2016-11-18
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#Linux" title="Linux">Linux</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/article/linux/linux2/">
-        <h2 class="post-title">
-                                 
-            linux基本命令二
-        </h2>
-        <h3 class="post-subtitle">
-            How to use Linux
-        </h3>
-        <div class="post-content-preview">
-            欢迎来到Stefanboy的博客，感谢大家对我的支持.
-该文章内容包括四部分，分别为
-1、全局环境变量，个人环境变量，which理解
-2、别名
-3、删除
-4、history
-echo打印
-[root@JD ~]# echo &quot;hello world&quot;
-hello world
-
-查看配置好的环境变量名称
-[root@JD ~]# echo $PATH
-/usr/local/......
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by Stefanboy on
-            2016-11-17
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#Linux" title="Linux">Linux</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
 
 
 <!-- Pager -->
@@ -649,11 +658,11 @@ hello world
     <div class="tags">
         
             
-            <a href="/tags/#Hexo" title="Hexo" rel="2">Hexo</a>
+            <a href="/tags/#Hadoop" title="Hadoop" rel="6">Hadoop</a>
             
         
             
-            <a href="/tags/#Hadoop" title="Hadoop" rel="6">Hadoop</a>
+            <a href="/tags/#Hexo" title="Hexo" rel="2">Hexo</a>
             
         
             
@@ -661,11 +670,11 @@ hello world
             
         
             
-            <a href="/tags/#Hadoop Linux" title="Hadoop Linux" rel="1">Hadoop Linux</a>
+            <a href="/tags/#Hive" title="Hive" rel="5">Hive</a>
             
         
             
-            <a href="/tags/#Hive" title="Hive" rel="4">Hive</a>
+            <a href="/tags/#Hadoop Linux" title="Hadoop Linux" rel="1">Hadoop Linux</a>
             
         
             
@@ -673,7 +682,11 @@ hello world
             
         
             
-            <a href="/tags/#MySQL" title="MySQL" rel="3">MySQL</a>
+            <a href="/tags/#MySQL" title="MySQL" rel="4">MySQL</a>
+            
+        
+            
+            <a href="/tags/#Superset" title="Superset" rel="2">Superset</a>
             
         
             
@@ -737,19 +750,19 @@ hello world
         </li>
       
         <li>
-          <a href="/article/hive/hive4/">Hive排序和分区</a>
+          <a href="/article/mysql/mysquser3/">MySQL行转列&amp;列转行</a>
         </li>
       
         <li>
-          <a href="/article/sqoop/Sqoop/">Sqoop安装&amp;导入导出</a>
+          <a href="/article/hive/hive5/">Hive concat函数和concat_ws函数和concat_group函数&amp;row_number over()和sum() over()&amp;列转行,行转列</a>
         </li>
       
         <li>
-          <a href="/article/hive/hive3/">Hive DDL&amp;DML&amp;DQL</a>
+          <a href="/article/offlineDW/rundeck/">Rundeck3.2.0安装部署</a>
         </li>
       
         <li>
-          <a href="/article/hive/hive2/">Hive DDL&amp;DML&amp;DQL</a>
+          <a href="/article/offlineDW/superset/">Superset安装部署</a>
         </li>
       
     </ul>
@@ -772,7 +785,7 @@ hello world
         
     <h5>ARCHIVES</h5>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">1</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">1</span></li></ul>
     </div>
 
         <hr>
@@ -814,7 +827,7 @@ hello world
 
                 </ul>
                 <p class="copyright text-muted">
-                    Copyright &copy; Stefanboy 2019 
+                    Copyright &copy; Stefanboy 2020 
                     By <a href="#">Stefanboy</a> | BigData
                     <iframe
                         style="margin-left: 2px; margin-bottom:-5px;"

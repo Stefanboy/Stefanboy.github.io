@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/ironman-draw.png">
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <title>
+        
+          Hive concat函数和concat_ws函数和concat_group函数&amp;row_number over()和sum() over()&amp;列转行,行转列 - Stefanboy | Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://yoursite.com/article/hive/hive5/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS --> 
+    <link rel="stylesheet" href="/css/beantech.min.css">
+
+    <link rel="stylesheet" href="/css/donate.css">
+    
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <link rel="stylesheet" href="/css/widget.css">
+
+    <link rel="stylesheet" href="/css/rocket.css">
+
+    <link rel="stylesheet" href="/css/signature.css">
+
+    <link rel="stylesheet" href="/css/toc.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+	<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        
+            background-image: url('/img/article_header/article_header.png')
+            /*post*/
+        
+    }
+    
+</style>
+
+<header class="intro-header" >
+    <!-- Signature -->
+    <div id="signature">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                
+                    <div class="post-heading">
+                        <div class="tags">
+                            
+                              <a class="tag" href="/tags/#Hive" title="Hive">Hive</a>
+                            
+                        </div>
+                        <h1>Hive concat函数和concat_ws函数和concat_group函数&amp;row_number over()和sum() over()&amp;列转行,行转列</h1>
+                        <h2 class="subheading">How to use Hive Function</h2>
+                        <span class="meta">
+                            Posted by Stefanboy on
+                            2017-01-08
+                        </span>
+                    </div>
+                
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+	
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">StefanboyBlog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archive/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Modify by Yu-Hsuan Yen -->
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h2 id="欢迎来到stefanboy的博客感谢大家对我的支持">欢迎来到Stefanboy的博客，感谢大家对我的支持.</h2>
+<h2 id="hive的常用函数">Hive的常用函数</h2>
+<h3 id="concat函数concat_ws函数concat_group函数">concat函数,concat_ws函数，concat_group函数</h3>
+<p>hivesql中的concat函数,concat_ws函数，concat_group函数之间的区别</p>
+<h4 id="concat函数">CONCAT（）函数</h4>
+<pre><code>CONCAT（）函数用于将多个字符串连接成一个字符串。
+</code></pre>
+<p>使用数据表Info作为示例，其中<br>
+SELECT id,name FROM info LIMIT 1;的返回结果为</p>
+<p>±—±-------+<br>
+| id | name   |<br>
+±—±-------+<br>
+|  1 | BioCyc |<br>
+±—±-------+</p>
+<p>1.1、语法及使用特点：<br>
+CONCAT(str1,str2,…)<br>
+返回结果为连接参数产生的字符串。如有任何一个参数为NULL ，则返回值为 NULL。可以有一个或多个参数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">使用示例：</span><br><span class="line">SELECT CONCAT(id, ‘，’, name) AS con FROM info LIMIT 1;返回结果为</span><br><span class="line"></span><br><span class="line">+----------+</span><br><span class="line">| con      |</span><br><span class="line">+----------+</span><br><span class="line">| 1,BioCyc |</span><br><span class="line">+----------+</span><br><span class="line"></span><br><span class="line">SELECT CONCAT(‘My’, NULL, ‘QL’);返回结果为</span><br><span class="line"></span><br><span class="line">+--------------------------+</span><br><span class="line">| CONCAT(&apos;My&apos;, NULL, &apos;QL&apos;) |</span><br><span class="line">+--------------------------+</span><br><span class="line">| NULL                     |</span><br><span class="line">+--------------------------+</span><br></pre></td></tr></table></figure>
+<h4 id="concat_ws函数">CONCAT_WS函数</h4>
+<p>如何指定参数之间的分隔符，使用函数CONCAT_WS（）。使用语法为：CONCAT_WS(separator,str1,str2,…)<br>
+CONCAT_WS() 代表 CONCAT With Separator ，是CONCAT()的特殊形式。第一个参数是其它参数的分隔符。分隔符的位置放在要连接的两个字符串之间。分隔符可以是一个字符串，也可以是其它参数。如果分隔符为 NULL，则结果为 NULL。函数会忽略任何分隔符参数后的 NULL 值。但是CONCAT_WS()不会忽略任何空字符串。 (然而会忽略所有的 NULL）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">如SELECT CONCAT_WS(&apos;_&apos;,id,name) AS con_ws FROM info LIMIT 1;返回结果为</span><br><span class="line"></span><br><span class="line">+----------+</span><br><span class="line">| con_ws   |</span><br><span class="line">+----------+</span><br><span class="line">| 1_BioCyc |</span><br><span class="line">+----------+</span><br><span class="line"></span><br><span class="line">SELECT CONCAT_WS(&apos;,&apos;,&apos;First name&apos;,NULL,&apos;Last Name&apos;);返回结果为</span><br><span class="line"></span><br><span class="line">+----------------------------------------------+</span><br><span class="line">| CONCAT_WS(&apos;,&apos;,&apos;First name&apos;,NULL,&apos;Last Name&apos;) |</span><br><span class="line">+----------------------------------------------+</span><br><span class="line">| First name,Last Name                         |</span><br><span class="line">+----------------------------------------------+</span><br></pre></td></tr></table></figure>
+<h4 id="group_concat函数">GROUP_CONCAT（）函数</h4>
+<p>GROUP_CONCAT函数返回一个字符串结果，该结果由分组中的值连接组合而成。<br>
+使用表info作为示例，其中语句SELECT locus,id,journal FROM info WHERE locus IN(‘AB086827’,‘AF040764’);的返回结果为</p>
+<p>±---------±—±-------------------------+<br>
+| locus    | id | journal                  |<br>
+±---------±—±-------------------------+<br>
+| AB086827 |  1 | Unpublished              |<br>
+| AB086827 |  2 | Submitted (20-JUN-2002)  |<br>
+| AF040764 | 23 | Unpublished              |<br>
+| AF040764 | 24 | Submitted (31-DEC-1997)  |<br>
+±---------±—±-------------------------+</p>
+<p>1、使用语法及特点：</p>
+<p>GROUP_CONCAT([DISTINCT] expr [,expr …]<br>
+[ORDER BY {unsigned_integer | col_name | formula} [ASC | DESC] [,col …]]<br>
+[SEPARATOR str_val])<br>
+在 MySQL 中，你可以得到表达式结合体的连结值。通过使用 DISTINCT 可以排除重复值。如果希望对结果中的值进行排序，可以使用 ORDER BY 子句。<br>
+SEPARATOR 是一个字符串值，它被用于插入到结果值中。缺省为一个逗号 (&quot;,&quot;)，可以通过指定 SEPARATOR “” 完全地移除这个分隔符。<br>
+可以通过变量 group_concat_max_len 设置一个最大的长度。在运行时执行的句法如下： SET [SESSION | GLOBAL] group_concat_max_len = unsigned_integer;<br>
+如果最大长度被设置，结果值被剪切到这个最大长度。如果分组的字符过长，可以对系统参数进行设置：SET @@global.group_concat_max_len=40000;</p>
+<p>2、使用示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">语句 SELECT locus,GROUP_CONCAT(id) FROM info WHERE locus IN(&apos;AB086827&apos;,&apos;AF040764&apos;) GROUP BY locus; 的返回结果为</span><br><span class="line"></span><br><span class="line">+----------+------------------+</span><br><span class="line">| locus    | GROUP_CONCAT(id) |</span><br><span class="line">+----------+------------------+</span><br><span class="line">| AB086827 | 1,2              |</span><br><span class="line">| AF040764 | 23,24            |</span><br><span class="line">+----------+------------------+</span><br><span class="line"></span><br><span class="line">语句 SELECT locus,GROUP_CONCAT(distinct id ORDER BY id DESC SEPARATOR &apos;_&apos;) FROM info WHERE locus IN(&apos;AB086827&apos;,&apos;AF040764&apos;) GROUP BY locus;的返回结果为</span><br><span class="line"></span><br><span class="line">+----------+----------------------------------------------------------+</span><br><span class="line">| locus    | GROUP_CONCAT(distinct id ORDER BY id DESC SEPARATOR &apos;_&apos;) |</span><br><span class="line">+----------+----------------------------------------------------------+</span><br><span class="line">| AB086827 | 2_1                                                      |</span><br><span class="line">| AF040764 | 24_23                                                    |</span><br><span class="line">+----------+----------------------------------------------------------+</span><br><span class="line"></span><br><span class="line">语句SELECT locus,GROUP_CONCAT(concat_ws(&apos;, &apos;,id,journal) ORDER BY id DESC SEPARATOR &apos;. &apos;) FROM info WHERE locus IN(&apos;AB086827&apos;,&apos;AF040764&apos;) GROUP BY locus;的返回结果为</span><br><span class="line"></span><br><span class="line">+----------+--------------------------------------------------------------------------+</span><br><span class="line">| locus    | GROUP_CONCAT(concat_ws(&apos;, &apos;,id,journal) ORDER BY id DESC SEPARATOR &apos;. &apos;) |</span><br><span class="line">+----------+--------------------------------------------------------------------------+</span><br><span class="line">| AB086827 | 2, Submitted (20-JUN-2002). 1, Unpublished                               |</span><br><span class="line">| AF040764 | 24, Submitted (31-DEC-1997) . 23, Unpublished</span><br></pre></td></tr></table></figure>
+<h3 id="窗口函数-row_number-over和sum-over">窗口函数 row_number over()和sum() over()</h3>
+<h4 id="row_number-over的使用">row_number over()的使用：</h4>
+<p>假如我们有这样一组数据，我们需要求出不同性别的年龄top2的人的信息。这个时候怎么做？</p>
+<p>可能我们会首先想到分组，但是分组只能值top1，怎么样能求出top2，top3呢？这时候我们想如果分组后能够按照年龄排序然后标出来序号就好了！</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">id   age  name sex</span><br><span class="line"></span><br><span class="line">1，18，xiaoli,male</span><br><span class="line">2，19，wang,male</span><br><span class="line">3，22，liu,female</span><br><span class="line">4，16，dawei,male</span><br><span class="line">5，30，erbao,male</span><br><span class="line">6，26，xiao,female</span><br><span class="line">7，18，chengua,male</span><br></pre></td></tr></table></figure>
+<p>下面就介绍一个非常有用的函数：row_number() over()他的作用就是分组排序加上序号标记</p>
+<p>比如以上求解不同性别的年龄top2，我们可以这样做：</p>
+<p>建表导入数据：</p>
+<p>create table rownumber(id string,age int,name string,sex string)<br>
+row format delimited<br>
+fields terminated by ‘,’;<br>
+load data local inpath ‘xxx’ into table rownumber;</p>
+<p><img src="/img/mysql3/11.png" alt=""></p>
+<p>select id,age,name,sex,<br>
+row_number() over(partition by sex order by age desc) as rownumber<br>
+from rownumber;<br>
+<img src="/img/mysql3/12.png" alt=""><br>
+我们可以清楚的看到 row_number() over(partition by sex order by age desc) as rownumber</p>
+<p>就相当于增加了一列序号,over()中partition by sex是按照sex分组，order by age desc按照年龄降序排序，然后row_number()在加上序号。</p>
+<p>select id,age,name,sex<br>
+from<br>
+(select id,age,name,sex,<br>
+row_number() over(partition by sex order by age desc) as rownumber<br>
+from rownumber ) temp<br>
+where rownumber&lt;3;<br>
+<img src="/img/mysql3/13.png" alt=""><br>
+这样就求出分组topn了，很方便！</p>
+<h4 id="sum-over">sum() over()</h4>
+<p>有这样的数据：第一列name，第二列月份mon，第三列金额jine</p>
+<p>A,2015-01,5<br>
+A,2015-01,15<br>
+B,2015-01,5<br>
+A,2015-01,8<br>
+B,2015-01,25<br>
+A,2015-01,5<br>
+C,2015-01,10<br>
+C,2015-01,20<br>
+A,2015-02,4<br>
+A,2015-02,6<br>
+C,2015-02,30<br>
+C,2015-02,10<br>
+B,2015-02,10<br>
+B,2015-02,5<br>
+A,2015-03,14<br>
+A,2015-03,6<br>
+B,2015-03,20<br>
+B,2015-03,25<br>
+C,2015-03,10<br>
+C,2015-03,20</p>
+<p>我们需要求出对于每个人的一个月的总额和累计到当前月的总额。</p>
+<p>传统方法非常的麻烦，具体思路是；先求出月总额表(name,mon,amount)，然后讲月总额表自联结，在过滤当前月份后面的月份，最终在求和。</p>
+<p>使用sum() over()可以轻松给解决，sum()首先我们都知道是求和，加上over()就是针对某个窗口求和了，具体哪个窗口呢？</p>
+<p>具体实现：</p>
+<p>求出每月的总额 放到表中，先将数据加载到表中，在求月总额</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">create table monsum(name string,mon string,jine string)</span><br><span class="line">row format delimited</span><br><span class="line">fields terminated by &apos;,&apos;;</span><br><span class="line">load data local inpath &apos;/root/mytest/sumreport.dat&apos; into table monsum;</span><br><span class="line"> </span><br><span class="line">--求出月总额</span><br><span class="line">create table monamount </span><br><span class="line">as</span><br><span class="line">select name,mon,sum(jine) as amount</span><br><span class="line">from monsum</span><br><span class="line">group by name,mon;</span><br></pre></td></tr></table></figure>
+<p><img src="/img/mysql3/14.png" alt=""><br>
+然后使用窗口函数求出累计当前月总额，</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select name,mon,amount,</span><br><span class="line">sum(amount) over(partition by name order by mon rows between unbounded preceding and current row) as account</span><br><span class="line">from monamount;</span><br></pre></td></tr></table></figure>
+<p><img src="/img/mysql3/15.png" alt=""><br>
+sum(amount)的求和是针对后面over()窗口的求和，</p>
+<p>over中partition by name order by mon   针对name这一组按照月份排序，<br>
+rows between unbounded preceding and current  限定了行是按照在当前行不限定的往前处理，通俗就是处理当前以及之前的所有行的sum，即3月时sum(amount)求的时123月的和，2月时sum(amount)求的是12月的和。<br>
+unbounded意思无限的 preceding在之前的，current row当前行。</p>
+<h3 id="hive之列转行行转列">Hive之列转行,行转列</h3>
+<h3 id="列转行">列转行</h3>
+<p>测试数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; select * from col_lie limit 10;</span><br><span class="line">OK</span><br><span class="line">col_lie.user_id    col_lie.order_id</span><br><span class="line">104399    1715131</span><br><span class="line">104399    2105395</span><br><span class="line">104399    1758844</span><br><span class="line">104399    981085</span><br><span class="line">104399    2444143</span><br><span class="line">104399    1458638</span><br><span class="line">104399    968412</span><br><span class="line">104400    1609001</span><br><span class="line">104400    2986088</span><br><span class="line">104400    1795054</span><br></pre></td></tr></table></figure>
+<p>把相同user_id的order_id按照逗号转为一行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">select user_id,</span><br><span class="line">concat_ws(&apos;,&apos;,collect_list(order_id)) as order_value </span><br><span class="line">from col_lie</span><br><span class="line">group by user_id</span><br><span class="line">limit 10;</span><br><span class="line"></span><br><span class="line">//结果(简写)</span><br><span class="line">user_id    order_value</span><br><span class="line">104399    1715131,2105395,1758844,981085,2444143</span><br></pre></td></tr></table></figure>
+<p>总结<br>
+使用函数：concat_ws(’,’,collect_set(column))</p>
+<p>说明：collect_list 不去重，collect_set 去重。 column的数据类型要求是string</p>
+<h3 id="行转列">行转列</h3>
+<p>测试数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; select * from lie_col;</span><br><span class="line">OK</span><br><span class="line">lie_col.user_id    lie_col.order_value</span><br><span class="line">104408    2909888,2662805,2922438,674972,2877863,190237</span><br><span class="line">104407    2982655,814964,1484250,2323912,2689723,2034331,1692373,677498,156562,2862492,338128</span><br><span class="line">104406    1463273,2351480,1958037,2606570,3226561,3239512,990271,1436056,2262338,2858678</span><br><span class="line">104405    153023,2076625,1734614,2796812,1633995,2298856,2833641,3286778,2402946,2944051,181577,464232</span><br><span class="line">104404    1815641,108556,3110738,2536910,1977293,424564</span><br><span class="line">104403    253936,2917434,2345879,235401,2268252,2149562,2910478,375109,932923,1989353</span><br><span class="line">104402    3373196,1908678,291757,1603657,1807247,573497,1050134,3402420</span><br><span class="line">104401    814760,213922,2008045,3305934,2130994,1602245,419609,2502539,3040058,2828163,3063469</span><br><span class="line">104400    1609001,2986088,1795054,429550,1812893</span><br><span class="line">104399    1715131,2105395,1758844,981085,2444143,1458638,968412</span><br><span class="line">Time taken: 0.065 seconds, Fetched: 10 row(s)</span><br></pre></td></tr></table></figure>
+<p>将order_value的每条记录切割为单元素</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">select user_id,order_value,order_id</span><br><span class="line">from lie_col</span><br><span class="line">lateral view explode(split(order_value,&apos;,&apos;)) num as order_id</span><br><span class="line">limit 10;</span><br><span class="line"></span><br><span class="line">//结果</span><br><span class="line">user_id    order_value    order_id</span><br><span class="line">104408    2909888,2662805,2922438,674972,2877863,190237    2909888</span><br><span class="line">104408    2909888,2662805,2922438,674972,2877863,190237    2662805</span><br><span class="line">104408    2909888,2662805,2922438,674972,2877863,190237    2922438</span><br><span class="line">104408    2909888,2662805,2922438,674972,2877863,190237    674972</span><br><span class="line">104408    2909888,2662805,2922438,674972,2877863,190237    2877863</span><br><span class="line">104408    2909888,2662805,2922438,674972,2877863,190237    190237</span><br><span class="line">104407    2982655,814964,1484250,2323912,2689723,2034331,1692373,677498,156562,2862492,338128    2982655</span><br><span class="line">104407    2982655,814964,1484250,2323912,2689723,2034331,1692373,677498,156562,2862492,338128    814964</span><br><span class="line">104407    2982655,814964,1484250,2323912,2689723,2034331,1692373,677498,156562,2862492,338128    1484250</span><br><span class="line">104407    2982655,814964,1484250,2323912,2689723,2034331,1692373,677498,156562,2862492,338128    2323912</span><br><span class="line">Time taken: 0.096 seconds, Fetched: 10 row(s)</span><br></pre></td></tr></table></figure>
+                
+
+                <hr>
+                <!-- Pager -->
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/article/mysql/mysquser3/" data-toggle="tooltip" data-placement="top" title="MySQL行转列&列转行">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/article/offlineDW/rundeck/" data-toggle="tooltip" data-placement="top" title="Rundeck3.2.0安装部署">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                <br>
+
+                <!--打赏-->
+                
+                <!--打赏-->
+
+                <br>
+                <!--分享-->
+                
+                    <div class="social-share"  data-wechat-qrcode-helper="" align="center"></div>
+                    <!--  css & js -->
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+                
+                <!--分享-->
+                <br>                       
+                
+                <!-- require APlayer -->
+                
+
+                <!-- duoshuo Share start -->
+                
+                <!-- 多说 Share end-->
+
+                <!-- 多说评论框 start -->
+                
+                <!-- 多说评论框 end -->
+
+                <!-- disqus comment start -->
+                
+                <!-- disqus comment end -->
+
+                
+
+            </div>
+            
+            <!-- Tabe of Content -->
+            <!-- Table of Contents -->
+
+  
+    
+      <aside id="sidebar">
+        <div id="toc" class="toc-article">
+        <strong class="toc-title">Contents</strong>
+        
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#欢迎来到stefanboy的博客感谢大家对我的支持"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">&#x6B22;&#x8FCE;&#x6765;&#x5230;Stefanboy&#x7684;&#x535A;&#x5BA2;&#xFF0C;&#x611F;&#x8C22;&#x5927;&#x5BB6;&#x5BF9;&#x6211;&#x7684;&#x652F;&#x6301;.</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#hive的常用函数"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">Hive&#x7684;&#x5E38;&#x7528;&#x51FD;&#x6570;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#concat函数concat_ws函数concat_group函数"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text">concat&#x51FD;&#x6570;,concat_ws&#x51FD;&#x6570;&#xFF0C;concat_group&#x51FD;&#x6570;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#concat函数"><span class="toc-nav-number">2.1.1.</span> <span class="toc-nav-text">CONCAT&#xFF08;&#xFF09;&#x51FD;&#x6570;</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#concat_ws函数"><span class="toc-nav-number">2.1.2.</span> <span class="toc-nav-text">CONCAT_WS&#x51FD;&#x6570;</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#group_concat函数"><span class="toc-nav-number">2.1.3.</span> <span class="toc-nav-text">GROUP_CONCAT&#xFF08;&#xFF09;&#x51FD;&#x6570;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#窗口函数-row_number-over和sum-over"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text">&#x7A97;&#x53E3;&#x51FD;&#x6570; row_number over()&#x548C;sum() over()</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#row_number-over的使用"><span class="toc-nav-number">2.2.1.</span> <span class="toc-nav-text">row_number over()&#x7684;&#x4F7F;&#x7528;&#xFF1A;</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#sum-over"><span class="toc-nav-number">2.2.2.</span> <span class="toc-nav-text">sum() over()</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#hive之列转行行转列"><span class="toc-nav-number">2.3.</span> <span class="toc-nav-text">Hive&#x4E4B;&#x5217;&#x8F6C;&#x884C;,&#x884C;&#x8F6C;&#x5217;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#列转行"><span class="toc-nav-number">2.4.</span> <span class="toc-nav-text">&#x5217;&#x8F6C;&#x884C;</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#行转列"><span class="toc-nav-number">2.5.</span> <span class="toc-nav-text">&#x884C;&#x8F6C;&#x5217;</span></a></li></ol></li></ol>
+        
+        </div>
+      </aside>
+    
+
+                
+            <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#Hive" title="Hive">Hive</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                        <li><a href="" target="_blank"></a></li>
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'hover',
+          placement: 'left',
+          icon: 'rz'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+<!-- chrome Firefox 中文锚点定位失效-->
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+<!-- smooth scroll behavior polyfill  -->
+<script type="text/javascript" src="/js/smoothscroll.js"></script>
+<script>
+        $('#toc').on('click','a',function(a){
+            // var isChrome = window.navigator.userAgent.indexOf("Chrome") !== -1;
+            // console.log(window.navigator.userAgent,isChrome)
+                // if(isChrome) {
+                    // console.log(a.currentTarget.outerHTML);
+                    // console.log($(a.currentTarget).attr("href"));
+                    //跳转到指定锚点
+                    // document.getElementById(a.target.innerText.toLowerCase()).scrollIntoView(true);
+                    document.getElementById($(a.currentTarget).attr("href").replace("#","")).scrollIntoView({behavior: 'smooth' });
+                // }
+        })  
+</script>
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/Stefanboy">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Stefanboy 2020 
+                    By <a href="#">Stefanboy</a> | BigData
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=ruozedata&repo=Bigdata&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://yoursite.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-XXXXXXXX-X';
+    var _gaDomain = 'yoursite';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    var _baId = 'xxx';
+
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+
+
+
+
+	<a id="rocket" href="#top" class=""></a>
+	<script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+    <script type="text/javascript" src="/js/toc.js?v=1.0.0" async=""></script>
+<!-- Image to hack wechat -->
+<img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>
